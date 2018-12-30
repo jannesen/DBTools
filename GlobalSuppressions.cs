@@ -5,4 +5,4 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>", Scope = "member", Target = "~M:Jannesen.Lib.JDBTools.Library.Diff.CreateDiffs(Jannesen.Lib.JDBTools.Library.Diff.DiffData,Jannesen.Lib.JDBTools.Library.Diff.DiffData)~Jannesen.Lib.JDBTools.Library.Diff.Item[]")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>", Scope = "member", Target = "~M:Jannesen.Tools.DBTools.Library.Diff.CreateDiffs(Jannesen.Tools.DBTools.Library.Diff.DiffData,Jannesen.Tools.DBTools.Library.Diff.DiffData)~Jannesen.Tools.DBTools.Library.Diff.Item[]")]

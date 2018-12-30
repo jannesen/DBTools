@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using Jannesen.Lib.JDBTools.DBSchema;
-using Jannesen.Lib.JDBTools.Library;
+using Jannesen.Tools.DBTools.DBSchema;
+using Jannesen.Tools.DBTools.Library;
 
-namespace Jannesen.Lib.JDBTools.DBSchema.Item
+namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
     class SchemaDiagram: SchemaItemEntity<SchemaDiagram>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Jannesen.Lib.JDBTools.DBSchema
+namespace Jannesen.Tools.DBTools.DBSchema
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
     class DBSchemaException: Exception

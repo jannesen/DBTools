@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
-using Jannesen.Lib.JDBTools.DBSchema;
-using Jannesen.Lib.JDBTools.Library;
+using Jannesen.Tools.DBTools.DBSchema;
+using Jannesen.Tools.DBTools.Library;
 
-namespace Jannesen.Lib.JDBTools.DBSchema.Item
+namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
     enum SqlCodeObjectType
     {

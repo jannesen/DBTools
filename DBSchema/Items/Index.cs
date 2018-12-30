@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using Jannesen.Lib.JDBTools.Library;
+using Jannesen.Tools.DBTools.Library;
 
-namespace Jannesen.Lib.JDBTools.DBSchema.Item
+namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
     enum SchemaIndexFunction
     {

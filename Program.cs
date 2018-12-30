@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Jannesen.Lib.JDBTools.DBSchema;
+using Jannesen.Tools.DBTools.DBSchema;
 
-// JDBTools export         TVCN-SERVER-DEV\TAS2 "file:C:\Temp\TAS2-36-schema.xml"
-// JDBTools compare-report "file:C:\Temp\TAS2-36-schema.xml" "sql:TVCN-SERVER-DEV\TAS2" "C:\Temp\TAS2.36 to 2.37 report.txt"
-// JDBTools schema-update  "file:C:\Temp\TAS2-36-schema.xml" "sql:TVCN-SERVER-DEV\TAS2" "C:\Temp\TAS2.36 to 2.37 report.sql"
-// JDBTools code-update    N:\TVCN\TVCN-SERVER\TAS\2.38.01\Schema\TAS2.38.01-schema.xml "sql:TVCN-SERVER-DEV\TAS2" "C:\Temp\T.sql"
-namespace Jannesen.Lib.JDBTools
+// DBTools export         TVCN-SERVER-DEV\TAS2 "file:C:\Temp\TAS2-36-schema.xml"
+// DBTools compare-report "file:C:\Temp\TAS2-36-schema.xml" "sql:TVCN-SERVER-DEV\TAS2" "C:\Temp\TAS2.36 to 2.37 report.txt"
+// DBTools schema-update  "file:C:\Temp\TAS2-36-schema.xml" "sql:TVCN-SERVER-DEV\TAS2" "C:\Temp\TAS2.36 to 2.37 report.sql"
+// DBTools code-update    N:\TVCN\TVCN-SERVER\TAS\2.38.01\Schema\TAS2.38.01-schema.xml "sql:TVCN-SERVER-DEV\TAS2" "C:\Temp\T.sql"
+namespace Jannesen.Tools.DBTools
 {
     class Program
     {
@@ -100,7 +100,7 @@ namespace Jannesen.Lib.JDBTools
 
         static      void        CmdHelp()
         {
-            Console.WriteLine("JDBTools <cmd> <args>...");
+            Console.WriteLine("DBTools <cmd> <args>...");
             Console.WriteLine("    export sql:<server-name>\\<database-name> <outputfile-name>");
             Console.WriteLine("         Export the database schema and sql-code to xml file.");
             Console.WriteLine("");

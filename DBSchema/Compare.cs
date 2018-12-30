@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Jannesen.Lib.JDBTools.DBSchema;
-using Jannesen.Lib.JDBTools.DBSchema.Item;
+using Jannesen.Tools.DBTools.DBSchema;
+using Jannesen.Tools.DBTools.DBSchema.Item;
 
-namespace Jannesen.Lib.JDBTools.DBSchema
+namespace Jannesen.Tools.DBTools.DBSchema
 {
     class DBSchemaCompare
     {

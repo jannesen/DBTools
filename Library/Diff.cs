@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Jannesen.Lib.JDBTools.Library
+namespace Jannesen.Tools.DBTools.Library
 {
   /// <summary>
   /// This Class implements the Difference Algorithm published in

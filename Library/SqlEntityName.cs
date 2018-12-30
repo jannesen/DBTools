@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Jannesen.Lib.JDBTools.Library
+namespace Jannesen.Tools.DBTools.Library
 {
     class SqlEntityName: IComparable
     {

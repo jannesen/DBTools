@@ -29,7 +29,7 @@ select [name]       = db_name(),
        (
          select [@name]    = schema_name([schema_id]) + '.' + quotename([name]),
                 [@orgname] = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 1 and z.[major_id] = o.[object_id] and z.[name] = 'refactor:orgname'),
-                [*]        = dbo.[_jdbtools_sql_module_definition]([object_id], 'CREATE DEFAULT', schema_name([schema_id]), [name])
+                [*]        = dbo.[_jannesen_dbtools_sql_module_definition]([object_id], 'CREATE DEFAULT', schema_name([schema_id]), [name])
            from sys.objects o
           where [type]             = 'D'
             and [parent_object_id] = 0
@@ -40,7 +40,7 @@ select [name]       = db_name(),
        (
          select [@name]    = schema_name([schema_id]) + '.' + quotename([name]),
                 [@orgname] = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 1 and z.[major_id] = o.[object_id] and z.[name] = 'refactor:orgname'),
-                [*]        = dbo.[_jdbtools_sql_module_definition]([object_id], 'CREATE RULE', schema_name([schema_id]), [name])
+                [*]        = dbo.[_jannesen_dbtools_sql_module_definition]([object_id], 'CREATE RULE', schema_name([schema_id]), [name])
           from sys.objects o
          where [type]          in ('R')
            and [is_ms_shipped] = 0
@@ -348,7 +348,7 @@ select [name]       = db_name(),
               from sys.objects o
              where [type]          in ('FN', 'IF', 'TF', 'P', 'TR', 'V')
                and [is_ms_shipped] = 0
-               and not ([schema_id] = 1 and [name] in ('_jdbtools_sql_module_definition')
+               and not ([schema_id] = 1 and [name] in ('_jannesen_dbtools_sql_module_definition')
                       or exists (select * from sys.extended_properties z where z.[major_id] = o.[object_id] and z.[minor_id] = 0 and z.[class] = 1 and z.[name] = N'microsoft_database_tools_support'))
              order by case [type] when 'V'  then 1
                                   when 'FN' then 2

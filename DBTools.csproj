@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D065DE53-C381-4924-85E9-8A072D449E06}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Jannesen.Lib.JDBTools</RootNamespace>
-    <AssemblyName>JDBTools</AssemblyName>
+    <RootNamespace>Jannesen.Tools.DBTools</RootNamespace>
+    <AssemblyName>DBTools</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

@@ -6,11 +6,11 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Text.RegularExpressions;
 using System.Xml;
-using Jannesen.Lib.JDBTools.Library;
-using Jannesen.Lib.JDBTools.SqlScript;
-using Jannesen.Lib.JDBTools.DBSchema.Item;
+using Jannesen.Tools.DBTools.Library;
+using Jannesen.Tools.DBTools.SqlScript;
+using Jannesen.Tools.DBTools.DBSchema.Item;
 
-namespace Jannesen.Lib.JDBTools.DBSchema
+namespace Jannesen.Tools.DBTools.DBSchema
 {
     class DBSchemaDatabase
     {

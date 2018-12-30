@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 
-namespace Jannesen.Lib.JDBTools.Library
+namespace Jannesen.Tools.DBTools.Library
 {
     static class XmlReaderExtension
     {

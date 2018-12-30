@@ -7,7 +7,7 @@ using System.IO;
 using System.Xml;
 using System.Text;
 
-namespace Jannesen.Lib.JDBTools.Library
+namespace Jannesen.Tools.DBTools.Library
 {
     static class SqlConnectionExtension
     {
