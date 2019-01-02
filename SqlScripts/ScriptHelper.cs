@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Data.SqlClient;
 using Jannesen.Tools.DBTools.Library;
