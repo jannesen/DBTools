@@ -1,4 +1,4 @@
-﻿
+
 set nocount on
 
 select [name]       = db_name(),
