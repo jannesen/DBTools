@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -27,8 +27,7 @@ namespace Jannesen.Tools.DBTools.Library
                 if (!xmlReader.Read())
                     throw new XmlReaderException("Invalid XML: reading EOF.");
 
-                switch(xmlReader.NodeType)
-                {
+                switch(xmlReader.NodeType) {
                 case XmlNodeType.Element:
                     return true;
 
@@ -48,8 +47,7 @@ namespace Jannesen.Tools.DBTools.Library
                 if (!xmlReader.Read())
                     throw new XmlReaderException("Invalid XML: reading EOF.");
 
-                switch(xmlReader.NodeType)
-                {
+                switch(xmlReader.NodeType) {
                 case XmlNodeType.Comment:
                 case XmlNodeType.Whitespace:
                     break;
@@ -102,8 +100,7 @@ namespace Jannesen.Tools.DBTools.Library
         {
             string      value = xmlReader.GetValueString(name);
 
-            switch(value)
-            {
+            switch(value) {
             case "0":
             case "false":
                 return false;
@@ -123,8 +120,7 @@ namespace Jannesen.Tools.DBTools.Library
             if (value == null)
                 return defaultValue;
 
-            switch(value)
-            {
+            switch(value) {
             case "0":
             case "false":
                 return false;

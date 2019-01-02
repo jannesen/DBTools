@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Jannesen.Tools.DBTools.DBSchema;
 
@@ -21,8 +21,7 @@ namespace Jannesen.Tools.DBTools
                 int p = 0;
 
                 while (p < args.Length) {
-                    switch(args[p])
-                    {
+                    switch(args[p]) {
                     case "help":
                         CmdHelp();
                         p += 1;

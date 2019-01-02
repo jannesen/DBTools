@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Data.Sql;
@@ -104,8 +104,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
             if (xmlReader.HasChildren()) {
                 while (xmlReader.ReadNextElement()) {
-                    switch(xmlReader.Name)
-                    {
+                    switch(xmlReader.Name) {
                     case "role":        Roles      .Add(new SchemaRole(xmlReader));         break;
                     case "default":     Defaults   .Add(new SchemaDefault(xmlReader));      break;
                     case "rule":        Rules      .Add(new SchemaRule(xmlReader));         break;

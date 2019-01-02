@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,8 +15,7 @@ namespace Jannesen.Tools.DBTools.Library
             for (int p = 0 ; p < name.Length ; ++p) {
                 char c = name[p];
 
-                switch(c)
-                {
+                switch(c) {
                 case '[':
                     if (quote)
                         goto add;

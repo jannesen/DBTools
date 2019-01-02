@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -40,8 +40,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
                 if (xmlReader.HasChildren()) {
                     while (xmlReader.ReadNextElement()) {
-                        switch (xmlReader.Name)
-                        {
+                        switch (xmlReader.Name) {
                         case "code":                Code        = xmlReader.ReadContent();              break;
                         case "permission":          Permissions.Add(new SchemaPermission(xmlReader));   break;
                         default:                    xmlReader.UnexpectedElement();  break;
@@ -71,8 +70,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             writer.Write("IF EXISTS (SELECT * from sys.[objects] WHERE [object_id] = OBJECT_ID(");
                 writer.WriteString(Name);
                 writer.Write(", ");
-                switch(Type)
-                {
+                switch(Type) {
                 case SqlCodeObjectType.View:                        writer.WriteString("V");        break;
                 case SqlCodeObjectType.SqlScalarFunction:           writer.WriteString("FN");       break;
                 case SqlCodeObjectType.SqlInlineTableFunction:      writer.WriteString("IF");       break;
@@ -84,8 +82,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteNewLine();
 
             writer.Write("    ");
-                switch(Type)
-                {
+                switch(Type) {
                 case SqlCodeObjectType.View:                        writer.Write("DROP VIEW ");         break;
                 case SqlCodeObjectType.SqlScalarFunction:           writer.Write("DROP FUNCTION ");     break;
                 case SqlCodeObjectType.SqlInlineTableFunction:      writer.Write("DROP FUNCTION ");     break;
@@ -143,8 +140,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         private             SqlCodeObjectType                   _parseType(string s)
         {
             s = s.ToUpper();
-            switch(s)
-            {
+            switch(s) {
             case "V":   case "VIEW":                                return SqlCodeObjectType.View;
             case "FN":  case "SQL_SCALAR_FUNCTION":                 return SqlCodeObjectType.SqlScalarFunction;
             case "IF":  case "SQL_INLINE_TABLE_VALUED_FUNCTION":    return SqlCodeObjectType.SqlInlineTableFunction;
@@ -375,8 +371,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         private             string                              _typeToName(SqlCodeObjectType type)
         {
-            switch(type)
-            {
+            switch(type) {
             case SqlCodeObjectType.View:                    return "view";
             case SqlCodeObjectType.SqlScalarFunction:       return "function";
             case SqlCodeObjectType.SqlInlineTableFunction:  return "function";

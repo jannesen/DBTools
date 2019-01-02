@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using Jannesen.Tools.DBTools.Library;
@@ -34,8 +34,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 Type        = _strToIndexType    (xmlReader.GetValueString("type"));
                 FillFactor  = xmlReader.GetValueIntNullable    ("fill-factor");
 
-                switch(Function)
-                {
+                switch(Function) {
                 case SchemaIndexFunction.PrimaryKey:
                     Unique = true;
                     break;
@@ -57,8 +56,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
                 if (xmlReader.HasChildren()) {
                     while (xmlReader.ReadNextElement()) {
-                        switch(xmlReader.Name)
-                        {
+                        switch(xmlReader.Name) {
                         case "column":      Columns.Add(new SchemaIndexColumn(xmlReader));      break;
                         default:            xmlReader.UnexpectedElement();                      break;
                         }
@@ -85,8 +83,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         public              void                                WriteDrop(WriterHelper writer, SqlEntityName tableName)
         {
-            switch(Function)
-            {
+            switch(Function) {
             case SchemaIndexFunction.Index:
                 writer.Write("DROP INDEX ");
                 writer.Write(tableName);
@@ -121,8 +118,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.Write(" ADD ");
             }
 
-            switch(Function)
-            {
+            switch(Function) {
             case SchemaIndexFunction.PrimaryKey:
                 writer.Write("CONSTRAINT ");
                 writer.WriteWidth(WriterHelper.QuoteName(Name), 36);
@@ -198,8 +194,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         private             SchemaIndexFunction                 _strToIndexFunction(string s)
         {
-            switch(s)
-            {
+            switch(s) {
             case "primary-key":     return  SchemaIndexFunction.PrimaryKey;
             case "constraint":      return  SchemaIndexFunction.Constraint;
             case "index":           return  SchemaIndexFunction.Index;
@@ -209,8 +204,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
         private             SchemaIndexType                     _strToIndexType(string s)
         {
-            switch(s)
-            {
+            switch(s) {
             case "clustered":       return  SchemaIndexType.Clustered;
             case "nonclustered":    return  SchemaIndexType.Nonclustered;
             default:                throw new Exception("Unknown type '" + s + "'.");

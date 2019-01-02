@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using Jannesen.Tools.DBTools.Library;
@@ -25,8 +25,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
                 if (xmlReader.HasChildren()) {
                     while (xmlReader.ReadNextElement()) {
-                        switch(xmlReader.Name)
-                        {
+                        switch(xmlReader.Name) {
                         case "column":      Columns.Add(new SchemaReferenceColumn(xmlReader));      break;
                         default:            xmlReader.UnexpectedElement();                          break;
                         }

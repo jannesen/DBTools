@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using Jannesen.Tools.DBTools.Library;
@@ -51,8 +51,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 foreach (string sp in sperm.Split(' ')) {
                     string s = sp.Trim().ToLower();
 
-                    switch(s)
-                    {
+                    switch(s) {
                     case "select":      rtn |= SqlPermissions.Select;       break;
                     case "execute":     rtn |= SqlPermissions.Execute;      break;
                     case "insert":      rtn |= SqlPermissions.Insert;       break;
