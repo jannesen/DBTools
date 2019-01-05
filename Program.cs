@@ -109,6 +109,9 @@ namespace Jannesen.Tools.DBTools
             Console.WriteLine("    compare-diff <cur-source> <new-source> <outputfile-name>");
             Console.WriteLine("         Compare 2 version and generate a diff with the changes.");
             Console.WriteLine("");
+            Console.WriteLine("    schema-create <cur-source> <outputfile-name>");
+            Console.WriteLine("         Create sql script for creating a empty new database.");
+            Console.WriteLine("");
             Console.WriteLine("    schema-update <cur-source> <new-source> <outputfile-name>");
             Console.WriteLine("         Compare the current schema with a new schema and generate a sql");
             Console.WriteLine("         script to convert database schema to new schema.");
