@@ -285,7 +285,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     if (primaryKey != null) {
                         writer.Write(',');
                         writer.WriteNewLine();
-                        writer.Write('\t');
+                        writer.Write("    ");
                         primaryKey.WriteCreate(writer, New.Name, true);
                     }
                 }
@@ -295,7 +295,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                         if (index.Function == SchemaIndexFunction.Constraint) {
                             writer.Write(',');
                             writer.WriteNewLine();
-                            writer.Write('\t');
+                            writer.Write("    ");
                             index.WriteCreate(writer, New.Name, true);
                         }
                     }
@@ -461,7 +461,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     writer.Write(",");
 
                 writer.WriteNewLine();
-                writer.Write("\t");
+                writer.Write("    ");
                 writer.WriteWidth(WriterHelper.QuoteName(column.Name), 48);
                 writer.WriteWidth(column.Type, 32);
 
