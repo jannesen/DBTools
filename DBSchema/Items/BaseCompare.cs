@@ -40,8 +40,13 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 Flags = (Flags & ~(CompareFlags.Refactor | CompareFlags.Update)) | (CompareFlags.Drop|CompareFlags.Create);
             }
         }
+        public  virtual     void                                InitDepended(DBSchemaCompare compare)
+        {
+        }
         public              void                                Compare(DBSchemaCompare compare, CompareTable compareTable)
         {
+            InitDepended(compare);
+
             Flags = (New != null) ? ((Cur != null) ? CompareNewCur(compare, compareTable) : CompareFlags.Create)
                                   : ((Cur != null) ? CompareFlags.Drop                    : CompareFlags.None);
 
@@ -50,7 +55,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
         public  virtual     CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
         {
-            return New.CompareEqual(Cur, compareTable, CompareMode.Update) ? CompareFlags.None : CompareFlags.Rebuild;
+            return New.CompareEqual(Cur, compare, compareTable, CompareMode.Update) ? CompareFlags.None : CompareFlags.Rebuild;
         }
         public  virtual     bool                                CompareDepended(DBSchemaCompare dbCompare, CompareFlags status)
         {
@@ -103,7 +108,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public                                                  CompareItemCollection(CompareTable table, IReadOnlyList<TItem> curSchema, IReadOnlyList<TItem> newSchema)
+        public                                                  CompareItemCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<TItem> curSchema, IReadOnlyList<TItem> newSchema)
         {
             _items          = new List<TCompare>();
             _curDictionary = new Dictionary<TName, TCompare>();
@@ -121,12 +126,20 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             if (newSchema != null) {
                 foreach (var item in newSchema) {
                     if (!_curDictionary.TryGetValue(item.OrgName ?? item.Name, out var cur)) {
-                        cur = new TCompare() { Table = table, New = item };
-                        _items.Add(cur);
-                    }
-                    else
-                        cur.New = item;
+                        foreach (TCompare i in _items) {
+                            if (i.Cur != null && i.New == null &&
+                                i.Cur.CompareEqual(item, compare, table, CompareMode.UpdateWithRefactor)) {
+                                cur = i;
+                                break;
+                            }
+                        }
 
+                        if (cur == null) {
+                            _items.Add(cur = new TCompare() { Table = table });
+                        }
+                    }
+
+                    cur.New = item;
                     _newDictionary.Add(item.Name, cur);
                 }
             }
@@ -155,7 +168,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     if (cmp is CompareTable)
                         compareTable = (CompareTable)(object)cmp;
 
-                    if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, compareTable, CompareMode.Report)) {
+                    if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, compare, compareTable, CompareMode.Report)) {
                         cmp.ReportUpdate(compare, wr);
                     }
                 }
@@ -187,10 +200,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteReportSection("deleted " + sectionname, wr);
             }
         }
-        public              void                                ReportDepended(WriterHelper writer, CompareTable compareTable, string dependedname)
+        public              void                                ReportDepended(WriterHelper writer, DBSchemaCompare compare, CompareTable compareTable, string dependedname)
         {
             foreach(TCompare cmp in Items) {
-                if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, compareTable, CompareMode.Report)) {
+                if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, compare, compareTable, CompareMode.Report)) {
                     writer.WriteWidth(dependedname + WriterHelper.QuoteName(cmp.Cur.Name), 68);
                     writer.Write(": changed");
                     writer.WriteNewLine();

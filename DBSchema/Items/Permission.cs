@@ -33,7 +33,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaPermission other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaPermission other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             if (this.Name  != other.Name     ||
                 this.Grant != other.Grant    ||
@@ -88,7 +88,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class ComparePermissionCollection: CompareItemCollection<ComparePermission,SchemaPermission,string>
     {
-        public                                                  ComparePermissionCollection(CompareTable table, IReadOnlyList<SchemaPermission> curSchema, IReadOnlyList<SchemaPermission> newSchema): base(table, curSchema, newSchema)
+        public                                                  ComparePermissionCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<SchemaPermission> curSchema, IReadOnlyList<SchemaPermission> newSchema): base(compare, table, curSchema, newSchema)
         {
         }
 

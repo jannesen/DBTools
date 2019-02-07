@@ -44,14 +44,14 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaTable other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaTable other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
-            return base.CompareEqual(other, compareTable, mode)                         &&
-                   this.Columns.CompareEqual(other.Columns, compareTable, mode)         &&
-                   this.Checks.CompareEqual(other.Checks, compareTable, mode)           &&
-                   this.Indexes.CompareEqual(other.Indexes, compareTable, mode)         &&
-                   this.References.CompareEqual(other.References, compareTable, mode)   &&
-                   (mode != CompareMode.Update || !this.Permissions.CompareEqual(other.Permissions, compareTable, mode));
+            return base.CompareEqual(other, compare, compareTable, mode)                         &&
+                   this.Columns.CompareEqual(other.Columns, compare, compareTable, mode)         &&
+                   this.Checks.CompareEqual(other.Checks, compare, compareTable, mode)           &&
+                   this.Indexes.CompareEqual(other.Indexes, compare, compareTable, mode)         &&
+                   this.References.CompareEqual(other.References, compare, compareTable, mode)   &&
+                   (mode != CompareMode.Update || !this.Permissions.CompareEqual(other.Permissions, compare, compareTable, mode));
         }
 
         public              void                                WriteRefactor(WriterHelper writer)
@@ -84,9 +84,20 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public              CompareIndexCollection              Indexes         { get; private set; }
         public              CompareReferenceCollection          References      { get; private set; }
 
-        public  override    CompareFlags                        CompareNewCur(DBSchemaCompare dbCompare, CompareTable compareTable)
+        public  override    void                                InitDepended(DBSchemaCompare compare)
+        {
+            Constraints = new CompareCheckCollection    (compare, this, Cur?.Checks    , New?.Checks    );
+            Indexes     = new CompareIndexCollection    (compare, this, Cur?.Indexes   , New?.Indexes   );
+            References  = new CompareReferenceCollection(compare, this, Cur?.References, New?.References);
+        }
+
+        public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
         {
             CompareFlags    rtnFlags = CompareFlags.None;
+
+            if (Cur.Name != New.Name) {
+                rtnFlags = CompareFlags.Refactor;
+            }
 
             if (Cur.Columns.Count != New.Columns.Count)
                 return CompareFlags.Rebuild;
@@ -95,7 +106,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 var curColumn = Cur.Columns[i];
                 var newColumn = New.Columns[i];
 
-                if (!curColumn.CompareEqual(newColumn, compareTable, CompareMode.TableCompare))
+                if (!curColumn.CompareEqual(newColumn, compare, compareTable, CompareMode.TableCompare))
                     return CompareFlags.Rebuild;
 
                 if (curColumn.Name != newColumn.Name) {
@@ -106,15 +117,15 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 }
 
                 if (curColumn.Type != newColumn.Type) {
-                    if (dbCompare.NativeCurType(curColumn.Type) != dbCompare.NativeNewType(newColumn.Type))
+                    if (compare.NativeCurType(curColumn.Type) != compare.NativeNewType(newColumn.Type))
                         return CompareFlags.Rebuild;
 
                     rtnFlags |= CompareFlags.Update;
                 }
 
-                if ((                             curColumn.Type   .EndsWith("]") && (dbCompare.CompareTypes   .FindByCurName(new SqlEntityName(curColumn.Type   )).Flags & CompareFlags.Create) != 0) ||
-                    (curColumn.Default != null && curColumn.Default.EndsWith("]") && (dbCompare.CompareDefaults.FindByCurName(new SqlEntityName(curColumn.Default)).Flags & CompareFlags.Create) != 0) ||
-                    (curColumn.Rule    != null && curColumn.Rule   .EndsWith("]") && (dbCompare.CompareRules   .FindByCurName(new SqlEntityName(curColumn.Rule   )).Flags & CompareFlags.Create) != 0) )
+                if ((                             curColumn.Type   .EndsWith("]") && (compare.CompareTypes   .FindByCurName(new SqlEntityName(curColumn.Type   )).Flags & CompareFlags.Create) != 0) ||
+                    (curColumn.Default != null && curColumn.Default.EndsWith("]") && (compare.CompareDefaults.FindByCurName(new SqlEntityName(curColumn.Default)).Flags & CompareFlags.Create) != 0) ||
+                    (curColumn.Rule    != null && curColumn.Rule   .EndsWith("]") && (compare.CompareRules   .FindByCurName(new SqlEntityName(curColumn.Rule   )).Flags & CompareFlags.Create) != 0) )
                     return CompareFlags.Rebuild;
             }
 
@@ -123,17 +134,13 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             if ((curClusteredIndex != null && newClusteredIndex == null) ||
                 (curClusteredIndex == null && newClusteredIndex != null) ||
-                (curClusteredIndex != null && newClusteredIndex != null && !curClusteredIndex.CompareEqual(newClusteredIndex, this, CompareMode.Update)))
+                (curClusteredIndex != null && newClusteredIndex != null && !curClusteredIndex.CompareEqual(newClusteredIndex, compare, this, CompareMode.UpdateWithRefactor)))
                 return CompareFlags.Rebuild;
 
             return rtnFlags;
         }
         public  override    bool                                CompareDepended(DBSchemaCompare dbCompare, CompareFlags status)
         {
-            Constraints = new CompareCheckCollection    (this, Cur?.Checks    , New?.Checks    );
-            Indexes     = new CompareIndexCollection    (this, Cur?.Indexes   , New?.Indexes   );
-            References  = new CompareReferenceCollection(this, Cur?.References, New?.References);
-
             Constraints.Compare(dbCompare, this);
             Indexes    .Compare(dbCompare, this);
             References .Compare(dbCompare, this);
@@ -165,7 +172,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             foreach(SchemaColumn curColumn in Cur.Columns) {
                 SchemaColumn newColumn = New.Columns.Find(curColumn.Name);
 
-                if (newColumn != null && !newColumn.CompareEqual(curColumn, this, CompareMode.Report)) {
+                if (newColumn != null && !newColumn.CompareEqual(curColumn, compare, this, CompareMode.Report)) {
                     writer.Write("column ");
                     writer.WriteWidth(WriterHelper.QuoteName(curColumn.Name), 48);
                     writer.Write(": change");
@@ -230,9 +237,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 }
             }
 
-            Constraints .ReportDepended(writer, this, "check ");
-            Indexes     .ReportDepended(writer, this, "index ");
-            References  .ReportDepended(writer, this, "refer ");
+            Constraints .ReportDepended(writer, compare, this, "check ");
+            Indexes     .ReportDepended(writer, compare, this, "index ");
+            References  .ReportDepended(writer, compare, this, "refer ");
         }
         public  override    void                                Init(WriterHelper writer)
         {
@@ -268,7 +275,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 References .Refactor(writer);
             }
         }
-        public  override    void                                Process(DBSchemaCompare dbCompare, WriterHelper writer)
+        public  override    void                                Process(DBSchemaCompare compare, WriterHelper writer)
         {
             if ((Flags & CompareFlags.Create) != 0) {
                 writer.WriteSqlPrint(((Flags & CompareFlags.Drop) == 0 ? "create  table: " :  "rebuild table: ") + New.Name);
@@ -321,7 +328,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     var c = Cur.Columns[i];
                     var n = New.Columns[i];
 
-                    if (!dbCompare.TypeEqual(c.Type, n.Type)) {
+                    if (!compare.EqualType(c.Type, n.Type)) {
                         if (!alterTable) {
                             writer.WriteSqlPrint("alter   table: " + New.Name);
                             alterTable = true;
@@ -369,7 +376,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
                 for(int c=0 ; c < New.Columns.Count ; ++c) {
                     SchemaColumn    newColumn = New.Columns[c];
-                    SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.Name);
+                    SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.OrgName ?? newColumn.Name);
 
                     writer.Write((c == 0) ? "SELECT " : "       ");
                     writer.WriteWidth(WriterHelper.QuoteName(newColumn.Name), 40);
@@ -421,25 +428,25 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteSqlGo();
             }
         }
-        public              void                                ProcessChecks(DBSchemaCompare dbCompare, WriterHelper writer)
+        public              void                                ProcessChecks(DBSchemaCompare compare, WriterHelper writer)
         {
             if (New != null)
-                Constraints.Process(dbCompare, writer);
+                Constraints.Process(compare, writer);
         }
-        public              void                                ProcessIndexes(DBSchemaCompare dbCompare, WriterHelper writer)
+        public              void                                ProcessIndexes(DBSchemaCompare compare, WriterHelper writer)
         {
             if (New != null)
-                Indexes.Process(dbCompare, writer);
+                Indexes.Process(compare, writer);
         }
-        public              void                                ProcessReferences(DBSchemaCompare dbCompare, WriterHelper writer)
+        public              void                                ProcessReferences(DBSchemaCompare compare, WriterHelper writer)
         {
             if (New != null)
-                References.Process(dbCompare, writer);
+                References.Process(compare, writer);
         }
-        public              void                                ProcessPermissions(WriterHelper writer)
+        public              void                                ProcessPermissions(DBSchemaCompare compare, WriterHelper writer)
         {
             if (New != null) {
-                (new ComparePermissionCollection(this, Cur?.Permissions, New.Permissions)).WriteGrantRevoke(writer, Flags, New.Name, 30);
+                (new ComparePermissionCollection(compare, this, Cur?.Permissions, New.Permissions)).WriteGrantRevoke(writer, Flags, New.Name, 30);
             }
         }
         public  override    void                                Cleanup(WriterHelper writer)
@@ -452,6 +459,15 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
+        public              bool                                EqualColumn(string curName, string newName)
+        {
+            if (Cur != null && New != null) {
+                var c = New.Columns.Find(newName);
+                return curName == (c.OrgName ?? c.Name);
+            }
+
+            return false;
+        }
         private             void                                _writeColumns(WriterHelper writer)
         {
             for (int c = 0 ; c < New.Columns.Count ; ++c) {
@@ -497,7 +513,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareTableCollection: CompareItemCollection<CompareTable,SchemaTable,SqlEntityName>
     {
-        public                                                  CompareTableCollection(IReadOnlyList<SchemaTable> curSchema, IReadOnlyList<SchemaTable> newSchema): base(null, curSchema, newSchema)
+        public                                                  CompareTableCollection(DBSchemaCompare compare, IReadOnlyList<SchemaTable> curSchema, IReadOnlyList<SchemaTable> newSchema): base(compare, null, curSchema, newSchema)
         {
         }
 

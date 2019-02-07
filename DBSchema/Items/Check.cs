@@ -20,9 +20,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         }
 
-        public  override    bool                                CompareEqual(SchemaCheck other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaCheck other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
-            return base.CompareEqual(other, compareTable, mode) &&
+            return base.CompareEqual(other, compare, compareTable, mode) &&
                    this.Definition == other.Definition;
         }
 
@@ -75,7 +75,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     {
         public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
         {
-            if (!Cur.CompareEqual(New, compareTable, CompareMode.UpdateWithRefactor))
+            if (!Cur.CompareEqual(New, compare, compareTable, CompareMode.UpdateWithRefactor))
                 return CompareFlags.Rebuild;
 
             if (Cur.Name != New.Name)
@@ -110,7 +110,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareCheckCollection: CompareItemCollection<CompareCheck,SchemaCheck,SqlEntityName>
     {
-        public                                                  CompareCheckCollection(CompareTable table, IReadOnlyList<SchemaCheck> curSchema, IReadOnlyList<SchemaCheck> newSchema): base(table, curSchema, newSchema)
+        public                                                  CompareCheckCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<SchemaCheck> curSchema, IReadOnlyList<SchemaCheck> newSchema): base(compare, table, curSchema, newSchema)
         {
         }
     }

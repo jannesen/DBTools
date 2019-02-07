@@ -32,7 +32,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         {
             return type.EndsWith("]") ? CompareTypes.FindByNewName(new Library.SqlEntityName(type)).New.NativeType : type;
         }
-        public              bool                                TypeEqual(string curType, string newType)
+        public              bool                                EqualType(string curType, string newType)
         {
             if (curType == newType)
                 return true;
@@ -42,6 +42,11 @@ namespace Jannesen.Tools.DBTools.DBSchema
             }
 
             return false;
+        }
+        public              bool                                EqualTable(Library.SqlEntityName curName, Library.SqlEntityName newName)
+        {
+            var t = CompareTables.FindByNewName(newName).New;
+            return curName == (t.OrgName ?? t.Name);
         }
 
         public              void                                Report(string fileName, bool includediff)
@@ -151,7 +156,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 using (WriterHelper wr = new WriterHelper())
                 {
                     foreach (CompareTable compareTable in CompareTables.Items)
-                        compareTable.ProcessPermissions(wr);
+                        compareTable.ProcessPermissions(this, wr);
 
                     writer.WriteSqlSection("update table permissions.", wr);
                 }
@@ -219,11 +224,11 @@ namespace Jannesen.Tools.DBTools.DBSchema
         private             void                                _initSchema()
         {
             if (CompareRoles == null) {
-                CompareRoles    = new CompareRoleCollection   (CurSchema.Roles,    NewSchema.Roles   );
-                CompareDefaults = new CompareDefaultCollection(CurSchema.Defaults, NewSchema.Defaults);
-                CompareRules    = new CompareRuleCollection   (CurSchema.Rules,    NewSchema.Rules   );
-                CompareTypes    = new CompareTypeCollection   (CurSchema.Types,    NewSchema.Types   );
-                CompareTables   = new CompareTableCollection  (CurSchema.Tables,   NewSchema.Tables  );
+                CompareRoles    = new CompareRoleCollection   (this, CurSchema.Roles,    NewSchema.Roles   );
+                CompareDefaults = new CompareDefaultCollection(this, CurSchema.Defaults, NewSchema.Defaults);
+                CompareRules    = new CompareRuleCollection   (this, CurSchema.Rules,    NewSchema.Rules   );
+                CompareTypes    = new CompareTypeCollection   (this, CurSchema.Types,    NewSchema.Types   );
+                CompareTables   = new CompareTableCollection  (this, CurSchema.Tables,   NewSchema.Tables  );
 
                 CompareRoles   .Compare(this, null);
                 CompareDefaults.Compare(this, null);
@@ -236,7 +241,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         private             void                                _initCode()
         {
             if (CompareTypeCodeObject == null) {
-                (CompareTypeCodeObject    = new CompareTypeCodeObjectCollection()   ).Fill(CurSchema.CodeObjects,    NewSchema.CodeObjects   );
+                (CompareTypeCodeObject    = new CompareTypeCodeObjectCollection()   ).Fill(this, CurSchema.CodeObjects,    NewSchema.CodeObjects   );
 
                 CompareTypeCodeObject   .Compare(this);
             }
@@ -244,7 +249,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         private             void                                _initDiagram()
         {
             if (CompareDiagram == null) {
-                CompareDiagram = new CompareDiagramCollection(CurSchema.Diagrams, NewSchema.Diagrams);
+                CompareDiagram = new CompareDiagramCollection(this, CurSchema.Diagrams, NewSchema.Diagrams);
                 CompareDiagram.Compare(this, null);
             }
         }

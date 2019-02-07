@@ -21,12 +21,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaIndexColumn other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaIndexColumn other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
-            var newColumn = compareTable.New.Columns.Find(other.Name);
-
-            return newColumn  != null &&
-                   this.Name  == (newColumn.OrgName ?? newColumn.Name) &&
+            return compareTable.EqualColumn(this.Name, other.Name) &&
                    this.Order == other.Order;
         }
     }

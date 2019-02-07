@@ -55,14 +55,14 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaCodeObject other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaCodeObject other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             return this.Name                  == other.Name     &&
                    this.TableName             == other.TableName             &&
                    this.opt_ANSI_NULLS        == other.opt_ANSI_NULLS        &&
                    this.opt_QUOTED_IDENTIFIER == other.opt_QUOTED_IDENTIFIER &&
                    this.Code                  == other.Code                  &&
-                   (mode != CompareMode.Update || this.Permissions.CompareEqual(other.Permissions, compareTable, mode));
+                   (mode != CompareMode.Update || this.Permissions.CompareEqual(other.Permissions, compare, compareTable, mode));
         }
 
         public              void                                WriteDrop(WriterHelper writer)
@@ -95,7 +95,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             writer.WriteSqlGo();
         }
-        public              void                                WriteCreate(WriterHelper writer)
+        public              void                                WriteCreate(DBSchemaCompare compare, WriterHelper writer)
         {
             string code = Code.Replace("\r\n", "\n").Replace("\n", "\r\n");
 
@@ -123,11 +123,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteSqlGo();
             }
 
-            WriteGrantRevoke(writer, null);
+            WriteGrantRevoke(compare, writer, null);
         }
-        public              void                                WriteGrantRevoke(WriterHelper writer, SchemaPermissionCollection curPermissions)
+        public              void                                WriteGrantRevoke(DBSchemaCompare compare, WriterHelper writer, SchemaPermissionCollection curPermissions)
         {
-            (new ComparePermissionCollection(null, curPermissions, Permissions)).WriteGrantRevoke(writer, CompareFlags.Create, Name, 0);
+            (new ComparePermissionCollection(compare, null, curPermissions, Permissions)).WriteGrantRevoke(writer, CompareFlags.Create, Name, 0);
         }
 
         public              void                                CodeGrep(Regex regex)
@@ -178,30 +178,30 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 (Cur ?? New).WriteDrop(writer);
             }
         }
-        public              void                                CodeUpdateCreate(WriterHelper writer, SqlCodeObjectType type)
+        public              void                                CodeUpdateCreate(DBSchemaCompare compare, WriterHelper writer, SqlCodeObjectType type)
         {
-            if (New != null && (Cur == null || !New.CompareEqual(Cur, null, CompareMode.Code))) {
-                New.WriteCreate(writer);
+            if (New != null && (Cur == null || !New.CompareEqual(Cur, compare, null, CompareMode.Code))) {
+                New.WriteCreate(compare, writer);
             }
             else
-            if (New != null && Cur != null && !New.Permissions.CompareEqual(Cur.Permissions, null, CompareMode.Update)) {
-                New.WriteGrantRevoke(writer, Cur.Permissions);
+            if (New != null && Cur != null && !New.Permissions.CompareEqual(Cur.Permissions, compare, null, CompareMode.Update)) {
+                New.WriteGrantRevoke(compare, writer, Cur.Permissions);
             }
         }
     }
 
     class CompareCodeObjectCollection: CompareItemCollection<CompareCodeObject,SchemaCodeObject,SqlEntityName>
     {
-        public                                                  CompareCodeObjectCollection(IReadOnlyList<SchemaCodeObject> curSchema, IReadOnlyList<SchemaCodeObject> newSchema): base(null, curSchema, newSchema)
+        public                                                  CompareCodeObjectCollection(DBSchemaCompare compare, IReadOnlyList<SchemaCodeObject> curSchema, IReadOnlyList<SchemaCodeObject> newSchema): base(compare, null, curSchema, newSchema)
         {
         }
 
-        public              void                                ReportChanges(WriterHelper writer, string typeName, bool includediff)
+        public              void                                ReportChanges(DBSchemaCompare compare, WriterHelper writer, string typeName, bool includediff)
         {
             int     extralines = 3;
 
             foreach(CompareCodeObject cmp in Items) {
-                if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, null, CompareMode.Report)) {
+                if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, compare, null, CompareMode.Report)) {
                     if (includediff) {
                         writer.Write("------------------------------------------------------------------------------------------------------------------------");
                         writer.WriteNewLine();
@@ -291,10 +291,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             foreach(CompareCodeObject cmp in Items)
                 cmp.CodeUpdateDrop(writer, type);
         }
-        public              void                                CodeUpdateCreate(WriterHelper writer, SqlCodeObjectType type)
+        public              void                                CodeUpdateCreate(DBSchemaCompare compare, WriterHelper writer, SqlCodeObjectType type)
         {
             foreach(CompareCodeObject cmp in Items)
-                cmp.CodeUpdateCreate(writer, type);
+                cmp.CodeUpdateCreate(compare, writer, type);
         }
     }
 
@@ -313,7 +313,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
         }
 
-        public              void                                Fill(SchemaCodeObjectCollection curSchema, SchemaCodeObjectCollection newSchema)
+        public              void                                Fill(DBSchemaCompare compare, SchemaCodeObjectCollection curSchema, SchemaCodeObjectCollection newSchema)
         {
             var curSplitSchema = _split(curSchema);
             var newSplitSchema = _split(newSchema);
@@ -321,7 +321,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             CompareCollections = new CompareCodeObjectCollection[(int)SqlCodeObjectType._MaxValue];
 
             for (int i=0 ; i < (int)SqlCodeObjectType._MaxValue ; ++i)
-                CompareCollections[i] = new CompareCodeObjectCollection(curSplitSchema[i], newSplitSchema[i]);
+                CompareCollections[i] = new CompareCodeObjectCollection(compare, curSplitSchema[i], newSplitSchema[i]);
         }
         public              void                                Compare(DBSchemaCompare compare)
         {
@@ -349,7 +349,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             using (WriterHelper     wr = new WriterHelper())
             {
                 for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
-                    this[type].ReportChanges(wr, _typeToName(type), includediff);
+                    this[type].ReportChanges(compare, wr, _typeToName(type), includediff);
 
                 writer.WriteReportSection("updated code", wr);
             }
@@ -366,7 +366,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 this[type].CodeUpdateDrop(writer, type);
 
             for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
-                this[type].CodeUpdateCreate(writer, type);
+                this[type].CodeUpdateCreate(compare, writer, type);
         }
 
         private             string                              _typeToName(SqlCodeObjectType type)

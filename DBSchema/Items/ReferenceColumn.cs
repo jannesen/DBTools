@@ -21,17 +21,31 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaReferenceColumn other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaReferenceColumn other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
-            var newColumn = compareTable.New.Columns.Find(other.Name);
-
-            return newColumn != null &&
-                   this.Name       == (newColumn.OrgName ?? newColumn.Name) &&
-                   this.Referenced == other.Referenced;
+            throw new InvalidOperationException("SchemaReferenceColumn.CompareEqual not possible.");
+        }
+        public              bool                                CompareEqual(SchemaReferenceColumn other, DBSchemaCompare compare, CompareTable compareTable, CompareTable referenceTable)
+        {
+            return compareTable.EqualColumn(this.Name,       other.Name) &&
+                   referenceTable.EqualColumn(this.Referenced, other.Referenced);
         }
     }
 
     class SchemaReferenceColumnCollection: SchemaItemList<SchemaReferenceColumn,string>
     {
+        public              bool                                CompareEqual(SchemaReferenceColumnCollection other, DBSchemaCompare compare, CompareTable compareTable, CompareTable referenceTable)
+        {
+            if (this.Count != other.Count)
+                return false;
+
+            for (int i = 0 ; i < this.Count ; ++i) {
+                if (!this[i].CompareEqual(other[i], compare, compareTable, referenceTable))
+                    return false;
+            }
+
+            return true;
+        }
+
     }
 }

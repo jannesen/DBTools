@@ -112,14 +112,14 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaReference other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaReference other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
-            return base.CompareEqual(other, compareTable, mode)            &&
-                   this.Referenced    == other.Referenced    &&
+            return base.CompareEqual(other, compare, compareTable, mode)  &&
+                   compare.EqualTable(this.Referenced, other.Referenced)  && 
                    this.isDisabled    == other.isDisabled    &&
                    this.Update_action == other.Update_action &&
                    this.Delete_action == other.Delete_action &&
-                   this.Columns.CompareEqual(other.Columns, compareTable, mode);
+                   this.Columns.CompareEqual(other.Columns, compare, compareTable, compare.CompareTables.FindByNewName(other.Referenced));
         }
     }
 
@@ -127,11 +127,12 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     {
     }
 
+
     class CompareReference: CompareItem<SchemaReference,SqlEntityName>
     {
         public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
         {
-            if (!Cur.CompareEqual(New, compareTable, CompareMode.UpdateWithRefactor))
+            if (!Cur.CompareEqual(New, compare, compareTable, CompareMode.UpdateWithRefactor))
                 return CompareFlags.Rebuild;
 
             if (Cur.Name != New.Name)
@@ -166,7 +167,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareReferenceCollection: CompareItemCollection<CompareReference,SchemaReference,SqlEntityName>
     {
-        public                                                  CompareReferenceCollection(CompareTable table, IReadOnlyList<SchemaReference> curSchema, IReadOnlyList<SchemaReference> newSchema): base(table, curSchema, newSchema)
+        public                                                  CompareReferenceCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<SchemaReference> curSchema, IReadOnlyList<SchemaReference> newSchema): base(compare, table, curSchema, newSchema)
         {
         }
     }

@@ -17,7 +17,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             Definition = Convert.FromBase64String(xmlReader.ReadContent());
         }
 
-        public  override    bool                                CompareEqual(SchemaDiagram other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaDiagram other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             return this.Name    == other.Name     &&
                    this.Version == other.Version &&
@@ -74,7 +74,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareDiagramCollection: CompareItemCollection<CompareDiagram,SchemaDiagram,SqlEntityName>
     {
-        public                                                  CompareDiagramCollection(IReadOnlyList<SchemaDiagram> curSchema, IReadOnlyList<SchemaDiagram> newSchema): base(null, curSchema, newSchema)
+        public                                                  CompareDiagramCollection(DBSchemaCompare compare, IReadOnlyList<SchemaDiagram> curSchema, IReadOnlyList<SchemaDiagram> newSchema): base(compare, null, curSchema, newSchema)
         {
         }
     }

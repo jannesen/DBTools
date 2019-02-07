@@ -70,15 +70,15 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaIndex other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaIndex other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
-            return base.CompareEqual(other, compareTable, mode)     &&
+            return base.CompareEqual(other, compare, compareTable, mode)     &&
                    this.Function    == other.Function   &&
                    this.Type        == other.Type       &&
                    this.Unique      == other.Unique     &&
                    (mode != CompareMode.Update || this.FillFactor == other.FillFactor) &&
                    this.Filter      == other.Filter     &&
-                   this.Columns.CompareEqual(other.Columns, compareTable, mode);
+                   this.Columns.CompareEqual(other.Columns, compare, compareTable, mode);
         }
 
         public              void                                WriteDrop(WriterHelper writer, SqlEntityName tableName)
@@ -242,7 +242,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     {
         public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
         {
-            if (!Cur.CompareEqual(New, compareTable, CompareMode.UpdateWithRefactor))
+            if (!Cur.CompareEqual(New, compare, compareTable, CompareMode.UpdateWithRefactor))
                 return CompareFlags.Rebuild;
 
             if (Cur.Name != New.Name)
@@ -296,7 +296,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareIndexCollection: CompareItemCollection<CompareIndex,SchemaIndex,string>
     {
-        public                                                  CompareIndexCollection(CompareTable table, IReadOnlyList<SchemaIndex> curSchema, IReadOnlyList<SchemaIndex> newSchema): base(table, curSchema, newSchema)
+        public                                                  CompareIndexCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<SchemaIndex> curSchema, IReadOnlyList<SchemaIndex> newSchema): base(compare, table, curSchema, newSchema)
         {
         }
     }

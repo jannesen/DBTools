@@ -26,9 +26,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 throw new DBSchemaException("Reading of column '" + Name + "' failed.", err);
             }
         }
-        public  override    bool                                CompareEqual(SchemaType other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaType other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
-            return base.CompareEqual(other, compareTable, mode)        &&
+            return base.CompareEqual(other, compare, compareTable, mode)        &&
                    this._nativeType == other._nativeType;
         }
 
@@ -68,7 +68,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     {
         public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
         {
-            if (!Cur.CompareEqual(New, compareTable, CompareMode.UpdateWithRefactor))
+            if (!Cur.CompareEqual(New, compare, compareTable, CompareMode.UpdateWithRefactor))
                 return CompareFlags.Rebuild;
 
             if (Cur.Name != New.Name)
@@ -110,7 +110,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareTypeCollection: CompareItemCollection<CompareType,SchemaType,SqlEntityName>
     {
-        public                                                  CompareTypeCollection(IReadOnlyList<SchemaType> curSchema, IReadOnlyList<SchemaType> newSchema): base(null, curSchema, newSchema)
+        public                                                  CompareTypeCollection(DBSchemaCompare compare, IReadOnlyList<SchemaType> curSchema, IReadOnlyList<SchemaType> newSchema): base(compare, null, curSchema, newSchema)
         {
         }
     }

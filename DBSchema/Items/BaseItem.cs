@@ -17,10 +17,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             Name = name;
         }
 
-        public  abstract    bool                                CompareEqual(TItem other, CompareTable compareTable, CompareMode mode);
+        public  abstract    bool                                CompareEqual(TItem other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode);
         public  virtual     bool                                isCodeEqual(TItem other)
         {
-            return CompareEqual(other, null, CompareMode.Code);
+            return CompareEqual(other, null, null, CompareMode.Code);
         }
     }
 
@@ -49,7 +49,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
         }
 
-        public  override    bool                                CompareEqual(TItem other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(TItem other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             if (mode == CompareMode.UpdateWithRefactor)
                 return true;
@@ -71,7 +71,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
         }
 
-        public  override    bool                                CompareEqual(TItem other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(TItem other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             if (Name.Schema != other.Name.Schema)
                 return false;
@@ -86,13 +86,13 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     abstract class SchemaItemList<TItem,TName> : List<TItem> where TItem:SchemaItem<TItem,TName>
                                                              where TName:class
     {
-        public              bool                                CompareEqual(SchemaItemList<TItem,TName> other, CompareTable compareTable, CompareMode mode)
+        public              bool                                CompareEqual(SchemaItemList<TItem,TName> other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             if (this.Count != other.Count)
                 return false;
 
             for (int i = 0 ; i < this.Count ; ++i) {
-                if (!this[i].CompareEqual(other[i], compareTable, mode))
+                if (!this[i].CompareEqual(other[i], compare, compareTable, mode))
                     return false;
             }
 

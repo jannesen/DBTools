@@ -43,7 +43,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaColumn other, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaColumn other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             return (mode == CompareMode.TableCompare || this.Name == other.Name) &&
                    (mode == CompareMode.TableCompare || this.Type == other.Type) &&
