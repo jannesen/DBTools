@@ -74,7 +74,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareDiagramCollection: CompareItemCollection<CompareDiagram,SchemaDiagram,SqlEntityName>
     {
-        public                                                  CompareDiagramCollection(DBSchemaCompare compare, IReadOnlyList<SchemaDiagram> curSchema, IReadOnlyList<SchemaDiagram> newSchema): base(compare, null, curSchema, newSchema)
+        public                                                  CompareDiagramCollection(IReadOnlyList<SchemaDiagram> curSchema, IReadOnlyList<SchemaDiagram> newSchema): base(curSchema, newSchema)
         {
         }
     }

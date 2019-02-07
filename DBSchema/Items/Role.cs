@@ -131,7 +131,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareRoleCollection: CompareItemCollection<CompareRole,SchemaRole,string>
     {
-        public                                                  CompareRoleCollection(DBSchemaCompare compare, IReadOnlyList<SchemaRole> curSchema, IReadOnlyList<SchemaRole> newSchema): base(compare, null, curSchema, newSchema)
+        public                                                  CompareRoleCollection(IReadOnlyList<SchemaRole> curSchema, IReadOnlyList<SchemaRole> newSchema): base(curSchema, newSchema)
         {
         }
     }

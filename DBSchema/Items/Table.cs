@@ -513,7 +513,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareTableCollection: CompareItemCollection<CompareTable,SchemaTable,SqlEntityName>
     {
-        public                                                  CompareTableCollection(DBSchemaCompare compare, IReadOnlyList<SchemaTable> curSchema, IReadOnlyList<SchemaTable> newSchema): base(compare, null, curSchema, newSchema)
+        public                                                  CompareTableCollection(IReadOnlyList<SchemaTable> curSchema, IReadOnlyList<SchemaTable> newSchema): base(curSchema, newSchema)
         {
         }
 

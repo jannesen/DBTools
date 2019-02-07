@@ -205,7 +205,6 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
                     if (wr.hasData) {
                         writer.WriteSqlSection("restore refacor data.", wr);
-                        writer.WriteSqlGo();
                     }
                 }
             }
@@ -224,11 +223,11 @@ namespace Jannesen.Tools.DBTools.DBSchema
         private             void                                _initSchema()
         {
             if (CompareRoles == null) {
-                CompareRoles    = new CompareRoleCollection   (this, CurSchema.Roles,    NewSchema.Roles   );
-                CompareDefaults = new CompareDefaultCollection(this, CurSchema.Defaults, NewSchema.Defaults);
-                CompareRules    = new CompareRuleCollection   (this, CurSchema.Rules,    NewSchema.Rules   );
-                CompareTypes    = new CompareTypeCollection   (this, CurSchema.Types,    NewSchema.Types   );
-                CompareTables   = new CompareTableCollection  (this, CurSchema.Tables,   NewSchema.Tables  );
+                CompareRoles    = new CompareRoleCollection   (CurSchema.Roles,    NewSchema.Roles   );
+                CompareDefaults = new CompareDefaultCollection(CurSchema.Defaults, NewSchema.Defaults);
+                CompareRules    = new CompareRuleCollection   (CurSchema.Rules,    NewSchema.Rules   );
+                CompareTypes    = new CompareTypeCollection   (CurSchema.Types,    NewSchema.Types   );
+                CompareTables   = new CompareTableCollection  (CurSchema.Tables,   NewSchema.Tables  );
 
                 CompareRoles   .Compare(this, null);
                 CompareDefaults.Compare(this, null);
@@ -236,12 +235,13 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 CompareTypes   .Compare(this, null);
                 CompareTables  .Compare(this, null);
                 _compareRebuildReference();
+                _dropTypes();
             }
         }
         private             void                                _initCode()
         {
             if (CompareTypeCodeObject == null) {
-                (CompareTypeCodeObject    = new CompareTypeCodeObjectCollection()   ).Fill(this, CurSchema.CodeObjects,    NewSchema.CodeObjects   );
+                (CompareTypeCodeObject    = new CompareTypeCodeObjectCollection()   ).Fill(CurSchema.CodeObjects,    NewSchema.CodeObjects   );
 
                 CompareTypeCodeObject   .Compare(this);
             }
@@ -249,7 +249,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         private             void                                _initDiagram()
         {
             if (CompareDiagram == null) {
-                CompareDiagram = new CompareDiagramCollection(this, CurSchema.Diagrams, NewSchema.Diagrams);
+                CompareDiagram = new CompareDiagramCollection(CurSchema.Diagrams, NewSchema.Diagrams);
                 CompareDiagram.Compare(this, null);
             }
         }
@@ -262,6 +262,30 @@ namespace Jannesen.Tools.DBTools.DBSchema
                             if ((sourceTable.Flags & CompareFlags.Create) != 0)
                                 reference.SetRebuild();
                         }
+                    }
+                }
+            }
+        }
+        private             void                                _dropTypes()
+        {
+            var  usedTypes = new HashSet<string>();
+
+            foreach(var tables in CompareTables.Items) {
+                if (tables.Cur != null) {
+                    foreach(var colums in tables.Cur.Columns) {
+                        if (colums.Type.EndsWith("]")) {
+                            if (!usedTypes.Contains(colums.Type)) {
+                                usedTypes.Add(colums.Type);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach(var t in CompareTypes.Items) {
+                if (t.Flags == CompareFlags.Drop) {
+                    if (!usedTypes.Contains(t.Cur.Name.ToString())) {
+                        t.Flags = CompareFlags.None;
                     }
                 }
             }

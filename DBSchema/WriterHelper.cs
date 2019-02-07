@@ -203,6 +203,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             }
 
             WriteNewLine();
+            WriteSqlGo();
         }
 
         public  static          string                  QuoteName(string s)

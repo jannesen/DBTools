@@ -110,7 +110,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareTypeCollection: CompareItemCollection<CompareType,SchemaType,SqlEntityName>
     {
-        public                                                  CompareTypeCollection(DBSchemaCompare compare, IReadOnlyList<SchemaType> curSchema, IReadOnlyList<SchemaType> newSchema): base(compare, null, curSchema, newSchema)
+        public                                                  CompareTypeCollection(IReadOnlyList<SchemaType> curSchema, IReadOnlyList<SchemaType> newSchema): base(curSchema, newSchema)
         {
         }
     }

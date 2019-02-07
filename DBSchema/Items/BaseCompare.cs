@@ -32,7 +32,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public              CompareTable                        Table                   { get; set; }
         public              TItem                               Cur                     { get; set; }
         public              TItem                               New                     { get; set; }
-        public              CompareFlags                        Flags                   { get; private set; }
+        public              CompareFlags                        Flags                   { get; set; }
 
         public              void                                SetRebuild()
         {
@@ -108,6 +108,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
+        public                                                  CompareItemCollection(IReadOnlyList<TItem> curSchema, IReadOnlyList<TItem> newSchema): this(null, null, curSchema, newSchema)
+        {
+        }
         public                                                  CompareItemCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<TItem> curSchema, IReadOnlyList<TItem> newSchema)
         {
             _items          = new List<TCompare>();
@@ -126,11 +129,13 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             if (newSchema != null) {
                 foreach (var item in newSchema) {
                     if (!_curDictionary.TryGetValue(item.OrgName ?? item.Name, out var cur)) {
-                        foreach (TCompare i in _items) {
-                            if (i.Cur != null && i.New == null &&
-                                i.Cur.CompareEqual(item, compare, table, CompareMode.UpdateWithRefactor)) {
-                                cur = i;
-                                break;
+                        if (table != null) {
+                            foreach (TCompare i in _items) {
+                                if (i.Cur != null && i.New == null &&
+                                    i.Cur.CompareEqual(item, compare, table, CompareMode.UpdateWithRefactor)) {
+                                    cur = i;
+                                    break;
+                                }
                             }
                         }
 
