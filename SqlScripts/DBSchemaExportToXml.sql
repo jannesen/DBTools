@@ -76,7 +76,7 @@ select [name]       = db_name(),
                [@orgname] = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 1 and z.[major_id] = o.[object_id]  and z.[minor_id] = 0 and z.[name] = 'refactor:orgname'),
                (
                     select c.[name],
-                           [orgname]        = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 1 and z.[major_id] = o.[object_id] and z.[major_id] = c.[column_id] and z.[name] = 'refactor:orgname'),
+                           [orgname]        = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 1 and z.[major_id] = o.[object_id] and z.[minor_id] = c.[column_id] and z.[name] = 'refactor:orgname'),
                            [type]           = case when c.[is_computed] = 0
                                                    then case when t.[user_type_id] in (165,167,173,175,231,239) then t.[name] + '(' + case when c.[max_length] > 0 then convert(varchar(16), c.[max_length]) else 'max' end + ')'
                                                              when t.[user_type_id] in (62)                      then t.[name] + '(' + convert(varchar(16), c.[precision]) + ')'
