@@ -52,6 +52,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteRefactorOrgName(OrgName.Fullname, "RULE", Name);
             }
         }
+
+        public  override    string                              ToReportString()
+        {
+            return Definition;
+        }
     }
 
     class SchemaRuleCollection: SchemaItemList<SchemaRule,SqlEntityName>

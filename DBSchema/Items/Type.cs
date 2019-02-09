@@ -8,19 +8,12 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
     class SchemaType: SchemaItemEntityRename<SchemaType>
     {
-        private             string                              _nativeType;
-
-        public              string                              NativeType
-        {
-            get {
-                return _nativeType;
-            }
-        }
+        public              string                              NativeType          { get; private set; }
 
         public                                                  SchemaType(XmlReader xmlReader): base(xmlReader)
         {
             try {
-                _nativeType = xmlReader.ReadContent();
+                NativeType = xmlReader.ReadContent();
             }
             catch(Exception err) {
                 throw new DBSchemaException("Reading of column '" + Name + "' failed.", err);
@@ -29,7 +22,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public  override    bool                                CompareEqual(SchemaType other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             return base.CompareEqual(other, compare, compareTable, mode)        &&
-                   this._nativeType == other._nativeType;
+                   this.NativeType == other.NativeType;
         }
 
         public              void                                WriteDrop(WriterHelper writer)
@@ -57,6 +50,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             if (OrgName != null) {
                 writer.WriteRefactorOrgName(OrgName.Fullname, "TYPE", Name);
             }
+        }
+
+        public  override    string                              ToReportString()
+        {
+            return NativeType;
         }
     }
 

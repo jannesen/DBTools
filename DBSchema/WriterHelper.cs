@@ -61,6 +61,15 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 Write(w.ToString());
             }
         }
+        public                  void                    WriteSection(WriterHelper w)
+        {
+            if (w.hasData) {
+                if (hasData)
+                    WriteNewLine();
+
+                Write(w.ToString());
+            }
+        }
         public                  void                    Write(char c)
         {
             _script.Write(c);

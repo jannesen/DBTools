@@ -153,67 +153,81 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             return Constraints.hasChange() || Indexes.hasChange() || References.hasChange();
         }
-        public  override    void                                ReportUpdate(DBSchemaCompare compare, WriterHelper writer)
+        public  override    void                                ReportUpdate(DBSchemaCompare compare, WriterHelper reportWriter)
         {
-            if (writer.hasData)
-                writer.WriteNewLine();
-
+            bool    report = false;
+            var     writer = new WriterHelper();
+            
             writer.Write("------------------------------------------------------------------------------------------------------------------------");
             writer.WriteNewLine();
             writer.Write(Cur.Name);
-            if (Cur.Name != New.Name) {
+            if (!Cur.Name.Equals(New.Name)) {
                 writer.Write(" => ");
                 writer.Write(New.Name);
+                report = true;
             }
             writer.WriteNewLine();
             writer.Write("------------------------------------------------------------------------------------------------------------------------");
             writer.WriteNewLine();
 
-            foreach(SchemaColumn curColumn in Cur.Columns) {
-                SchemaColumn newColumn = New.Columns.Find(curColumn.Name);
+            var cmp = new CompareSchemaColumn(Cur.Columns, New.Columns);
 
-                if (newColumn != null && !newColumn.CompareEqual(curColumn, compare, this, CompareMode.Report)) {
-                    writer.Write("column ");
-                    writer.WriteWidth(WriterHelper.QuoteName(curColumn.Name), 48);
-                    writer.Write(": change");
-                    var cn = compare.NativeCurType(curColumn.Type);
-                    var nn = compare.NativeNewType(newColumn.Type);
+            foreach(var c in cmp.Items) {
+                var curColumn = c.Cur;
+                var newColumn = c.New;
 
-                    if (cn != nn) {
-                        writer.Write(" { ");
-
-                        writer.Write(curColumn.Type);
-                        if (curColumn.Type != cn) {
-                            writer.Write(" (");
-                            writer.Write(cn);
-                            writer.Write(")");
-                        }
-
-                        writer.Write(" -> ");
-                        writer.Write(newColumn.Type);
-                        if (newColumn.Type != nn) {
-                            writer.Write(" (");
-                            writer.Write(nn);
-                            writer.Write(")");
-                        }
-
-                        writer.Write(" }");
+                if (curColumn != null && newColumn != null) {
+                    if (!curColumn.Name.Equals(newColumn.Name)) {
+                        writer.WriteWidth(WriterHelper.QuoteName(curColumn.Name), 48);
+                        writer.Write("=> ");
+                        writer.Write(WriterHelper.QuoteName(newColumn.Name));
+                        writer.WriteNewLine();
                     }
 
-                    if (curColumn.isNullable != newColumn.isNullable) {
-                        writer.Write(" { ");
-                        writer.Write(curColumn.isNullable ? "IS NULL" : "IS NOT NULL");
-                        writer.Write(" -> ");
-                        writer.Write(newColumn.isNullable ? "IS NULL" : "IS NOT NULL");
-                        writer.Write(" }");
-                    }
+                    if (!curColumn.CompareEqual(newColumn, compare, this, CompareMode.Report)) {
+                        writer.WriteWidth(!curColumn.Name.Equals(newColumn.Name) ? "" : WriterHelper.QuoteName(newColumn.Name), 48);
+                        writer.Write(": ");
+                        var cn = compare.NativeCurType(curColumn.Type);
+                        var nn = compare.NativeNewType(newColumn.Type);
 
-                    writer.WriteNewLine();
+                        if (cn != nn) {
+                            writer.Write(" { ");
+
+                            writer.Write(curColumn.Type);
+                            if (curColumn.Type != cn) {
+                                writer.Write(" (");
+                                writer.Write(cn);
+                                writer.Write(")");
+                            }
+
+                            writer.Write(" -> ");
+                            writer.Write(newColumn.Type);
+                            if (newColumn.Type != nn) {
+                                writer.Write(" (");
+                                writer.Write(nn);
+                                writer.Write(")");
+                            }
+
+                            writer.Write(" }");
+                        }
+
+                        if (curColumn.isNullable != newColumn.isNullable) {
+                            writer.Write(" { ");
+                            writer.Write(curColumn.isNullable ? "IS NULL" : "IS NOT NULL");
+                            writer.Write(" -> ");
+                            writer.Write(newColumn.isNullable ? "IS NULL" : "IS NOT NULL");
+                            writer.Write(" }");
+                        }
+
+                        writer.WriteNewLine();
+                        report = true;
+                    }
                 }
             }
 
-            foreach(SchemaColumn newColumn in New.Columns) {
-                if (Cur.Columns.Find(newColumn.Name) == null) {
+            foreach(var c in cmp.Items) {
+                if (c.Cur == null) {
+                    var newColumn = c.New;
                     writer.Write("column ");
                     writer.WriteWidth(WriterHelper.QuoteName(newColumn.Name), 48);
                     writer.Write(": new ");
@@ -225,21 +239,34 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                         writer.Write(")");
                     }
                     writer.WriteNewLine();
+                    report = true;
                 }
             }
 
-            foreach(SchemaColumn curColumn in Cur.Columns) {
-                if (New.Columns.Find(curColumn.Name) == null) {
+            foreach(var c in cmp.Items) {
+                if (c.New == null) {
+                    var curColumn = c.Cur;
                     writer.Write("column ");
                     writer.WriteWidth(WriterHelper.QuoteName(curColumn.Name), 48);
                     writer.Write(": delete");
                     writer.WriteNewLine();
+                    report = true;
                 }
             }
 
-            Constraints .ReportDepended(writer, compare, this, "check ");
-            Indexes     .ReportDepended(writer, compare, this, "index ");
-            References  .ReportDepended(writer, compare, this, "refer ");
+            if (Constraints .ReportDepended(writer, compare, this, "check ")) {
+                report = true;
+            }
+            if (Indexes     .ReportDepended(writer, compare, this, "index ")) {
+                report = true;
+            }
+            if (References  .ReportDepended(writer, compare, this, "refer ")) {
+                report = true;
+            }
+
+            if (report) {
+                reportWriter.WriteSection(writer);
+            }
         }
         public  override    void                                Init(WriterHelper writer)
         {

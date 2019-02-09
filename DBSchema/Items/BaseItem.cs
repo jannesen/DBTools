@@ -22,6 +22,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
             return CompareEqual(other, null, null, CompareMode.Code);
         }
+        public  virtual     string                              ToReportString()
+        {
+            throw new InvalidOperationException("ToReportString");
+        }
     }
 
     abstract class SchemaItemRename<TItem,TName>: SchemaItem<TItem,TName> where TName:class
@@ -76,7 +80,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             if (Name.Schema != other.Name.Schema)
                 return false;
 
-            if (mode == CompareMode.UpdateWithRefactor)
+            if (mode == CompareMode.UpdateWithRefactor || mode == CompareMode.Report)
                 return true;
 
             return Name.Name == other.Name.Name;

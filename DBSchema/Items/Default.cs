@@ -51,6 +51,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteRefactorOrgName(OrgName.Fullname, "DEFAULT", Name);
             }
         }
+
+        public  override    string                              ToReportString()
+        {
+            return Definition;
+        }
     }
 
     class SchemaDefaultCollection: SchemaItemList<SchemaDefault,SqlEntityName>

@@ -45,8 +45,8 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         public  override    bool                                CompareEqual(SchemaColumn other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
-            return (mode == CompareMode.TableCompare || this.Name == other.Name) &&
-                   (mode == CompareMode.TableCompare || this.Type == other.Type) &&
+            return (mode == CompareMode.TableCompare || mode == CompareMode.Report || this.Name == other.Name) &&
+                   (mode == CompareMode.TableCompare || compare.EqualType(this.Type, other.Type)) &&
                    this.Identity      == other.Identity         &&
                    this.Collation     == other.Collation        &&
                    this.isNullable    == other.isNullable       &&
@@ -78,6 +78,17 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
                 return false;
             }
+        }
+    }
+
+    class CompareColumn: CompareItem<SchemaColumn, string>
+    {
+    }
+
+    class CompareSchemaColumn: CompareItemCollection<CompareColumn, SchemaColumn, string>
+    {
+        public                      CompareSchemaColumn(IReadOnlyList<SchemaColumn> curSchema, IReadOnlyList<SchemaColumn> newSchema): base(curSchema, newSchema)
+        {
         }
     }
 }

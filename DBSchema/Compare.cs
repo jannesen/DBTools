@@ -56,11 +56,11 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
             using (WriterHelper writer = new WriterHelper(fileName))
             {
-                CompareDefaults       .Report(this, null, writer, "defaults");
-                CompareRules          .Report(this, null, writer, "rules");
-                CompareTypes          .Report(this, null, writer, "datatypes");
-                CompareTables         .Report(this, null, writer, "tables");
-                CompareRoles          .Report(this, null, writer, "rules");
+                CompareDefaults       .Report(this, writer, "defaults");
+                CompareRules          .Report(this, writer, "rules");
+                CompareTypes          .Report(this, writer, "datatypes");
+                CompareTables         .Report(this, writer, "tables");
+                CompareRoles          .Report(this, writer, "rules");
                 CompareTypeCodeObject .Report(this, writer, includediff);
                 CompareTables         .ReportPermissions(writer);
                 CompareTypeCodeObject .ReportPermissions(writer);

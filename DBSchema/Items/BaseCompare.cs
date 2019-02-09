@@ -63,13 +63,15 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
         public  virtual     void                                ReportUpdate(DBSchemaCompare compare, WriterHelper writer)
         {
-            writer.WriteQuoteName(Cur.Name);
-            writer.Write(": changed");
-            writer.WriteNewLine();
-
-            if (Cur.Name != New.Name) {
+            if (!Cur.CompareEqual(New, compare, null, CompareMode.Report)) {
                 writer.WriteQuoteName(Cur.Name);
-                writer.Write(": => ");
+                writer.Write(": " + Cur.ToReportString() + " => " + New.ToReportString());
+                writer.WriteNewLine();
+            }
+
+            if (!Cur.Name.Equals(New.Name)) {
+                writer.WriteQuoteName(Cur.Name);
+                writer.Write(" => ");
                 writer.WriteQuoteName(New.Name);
                 writer.WriteNewLine();
             }
@@ -165,15 +167,12 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             return _newDictionary[name];
         }
 
-        public              void                                Report(DBSchemaCompare compare, CompareTable compareTable, WriterHelper writer, string sectionname)
+        public              void                                Report(DBSchemaCompare compare, WriterHelper writer, string sectionname)
         {
             using (WriterHelper     wr = new WriterHelper())
             {
                 foreach(TCompare cmp in Items) {
-                    if (cmp is CompareTable)
-                        compareTable = (CompareTable)(object)cmp;
-
-                    if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, compare, compareTable, CompareMode.Report)) {
+                    if (cmp.Cur != null && cmp.New != null) {
                         cmp.ReportUpdate(compare, wr);
                     }
                 }
@@ -205,13 +204,15 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteReportSection("deleted " + sectionname, wr);
             }
         }
-        public              void                                ReportDepended(WriterHelper writer, DBSchemaCompare compare, CompareTable compareTable, string dependedname)
+        public              bool                                ReportDepended(WriterHelper writer, DBSchemaCompare compare, CompareTable compareTable, string dependedname)
         {
+            bool rtn = false;
             foreach(TCompare cmp in Items) {
-                if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, compare, compareTable, CompareMode.Report)) {
+                if (cmp.Cur != null && cmp.New != null && !cmp.Cur.CompareEqual(cmp.New, compare, compareTable, CompareMode.Report)) {
                     writer.WriteWidth(dependedname + WriterHelper.QuoteName(cmp.Cur.Name), 68);
                     writer.Write(": changed");
                     writer.WriteNewLine();
+                    rtn = true;
                 }
             }
 
@@ -220,6 +221,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     writer.WriteWidth(dependedname + WriterHelper.QuoteName(cmp.New.Name), 68);
                     writer.Write(": new");
                     writer.WriteNewLine();
+                    rtn = true;
                 }
             }
 
@@ -228,8 +230,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     writer.WriteWidth(dependedname + WriterHelper.QuoteName(cmp.Cur.Name), 68);
                     writer.Write(": delete");
                     writer.WriteNewLine();
+                    rtn = true;
                 }
             }
+
+            return rtn;
         }
         public              void                                ReportPermissions(WriterHelper writer)
         {

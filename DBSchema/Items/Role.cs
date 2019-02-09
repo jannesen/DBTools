@@ -83,6 +83,17 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             writer.WriteQuoteName(member);
             writer.WriteNewLine();
         }
+
+        public  override    string                              ToReportString()
+        {
+            string rtn = null;
+
+            foreach(var m in Members) {
+                rtn = (rtn != null) ? rtn + "," + m : m;
+            }
+
+            return rtn ?? "";
+        }
     }
 
     class SchemaRoleCollection: SchemaItemList<SchemaRole,string>
