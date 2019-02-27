@@ -18,8 +18,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 if (xmlReader.HasChildren()) {
                     while (xmlReader.ReadNextElement()) {
                         switch(xmlReader.Name) {
-                        case "member":
-                            {
+                        case "member": {
                                 Members.Add(xmlReader.GetValueString("name"));
                                 xmlReader.NoChildElements();
                             }

@@ -157,7 +157,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
             bool    report = false;
             var     writer = new WriterHelper();
-            
+
             writer.Write("------------------------------------------------------------------------------------------------------------------------");
             writer.WriteNewLine();
             writer.Write(Cur.Name);

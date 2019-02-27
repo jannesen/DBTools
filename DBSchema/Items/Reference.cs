@@ -115,7 +115,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public  override    bool                                CompareEqual(SchemaReference other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
         {
             return base.CompareEqual(other, compare, compareTable, mode)  &&
-                   compare.EqualTable(this.Referenced, other.Referenced)  && 
+                   compare.EqualTable(this.Referenced, other.Referenced)  &&
                    this.isDisabled    == other.isDisabled    &&
                    this.Update_action == other.Update_action &&
                    this.Delete_action == other.Delete_action &&
