@@ -41,18 +41,18 @@
     <Compile Include="Program.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="DBSchema\Items\BaseCompare.cs" />
-    <Compile Include="DBSchema\Items\Diagram.cs" />
     <Compile Include="Library\Diff.cs" />
-    <Compile Include="Library\SqlEntityName.cs" />
     <Compile Include="Library\Library.cs" />
+    <Compile Include="Library\SqlEntityName.cs" />
     <Compile Include="Library\SqlConnectionExtension.cs" />
     <Compile Include="Library\XmlReaderExtension.cs" />
     <Compile Include="SqlScripts\ScriptHelper.cs" />
     <Compile Include="DBSchema\Compare.cs" />
-    <Compile Include="DBSchema\WriterHelper.cs" />
     <Compile Include="DBSchema\Database.cs" />
     <Compile Include="DBSchema\Exception.cs" />
+    <Compile Include="DBSchema\WriterHelper.cs" />
+    <Compile Include="DBSchema\Items\BaseCompare.cs" />
+    <Compile Include="DBSchema\Items\Diagram.cs" />
     <Compile Include="DBSchema\Items\CodeObject.cs" />
     <Compile Include="DBSchema\Items\ReferenceColumn.cs" />
     <Compile Include="DBSchema\Items\Reference.cs" />
@@ -75,7 +75,7 @@
     <EmbeddedResource Include="SqlScripts\DropAllCode.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LICENSE" />
+    <None Include="LICENSE.txt" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
