@@ -110,7 +110,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
             writer.Write(code);
 
-            if (!code.EndsWith("\n"))
+            if (!code.EndsWith("\n", StringComparison.InvariantCulture))
                 writer.WriteNewLine();
 
             writer.WriteSqlGo();
@@ -139,7 +139,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         private             SqlCodeObjectType                   _parseType(string s)
         {
-            s = s.ToUpper();
+            s = s.ToUpperInvariant();
             switch(s) {
             case "V":   case "VIEW":                                return SqlCodeObjectType.View;
             case "FN":  case "SQL_SCALAR_FUNCTION":                 return SqlCodeObjectType.SqlScalarFunction;
@@ -153,8 +153,8 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         private             void                                _removeSourceLocationFromCode()
         {
-            if (Code.StartsWith("--@")) {
-                Code = Code.Substring(Code.IndexOf("\n")+1);
+            if (Code.StartsWith("--@", StringComparison.InvariantCulture)) {
+                Code = Code.Substring(Code.IndexOf("\n", StringComparison.InvariantCulture)+1);
             }
         }
     }
@@ -170,7 +170,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareCodeObject: CompareItem<SchemaCodeObject,SqlEntityName>
     {
-        public              void                                CodeUpdateDrop(WriterHelper writer, SqlCodeObjectType type)
+        public              void                                CodeUpdateDrop(WriterHelper writer)
         {
             if ((New == null && Cur != null) ||
                 (New != null && (Cur == null || !New.isCodeEqual(Cur))))
@@ -178,7 +178,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 (Cur ?? New).WriteDrop(writer);
             }
         }
-        public              void                                CodeUpdateCreate(DBSchemaCompare compare, WriterHelper writer, SqlCodeObjectType type)
+        public              void                                CodeUpdateCreate(DBSchemaCompare compare, WriterHelper writer)
         {
             if (New != null && (Cur == null || !New.CompareEqual(Cur, compare, null, CompareMode.Code))) {
                 New.WriteCreate(compare, writer);
@@ -286,15 +286,15 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 }
             }
         }
-        public              void                                CodeUpdateDrop(WriterHelper writer, SqlCodeObjectType type)
+        public              void                                CodeUpdateDrop(WriterHelper writer)
         {
             foreach(CompareCodeObject cmp in Items)
-                cmp.CodeUpdateDrop(writer, type);
+                cmp.CodeUpdateDrop(writer);
         }
-        public              void                                CodeUpdateCreate(DBSchemaCompare compare, WriterHelper writer, SqlCodeObjectType type)
+        public              void                                CodeUpdateCreate(DBSchemaCompare compare, WriterHelper writer)
         {
             foreach(CompareCodeObject cmp in Items)
-                cmp.CodeUpdateCreate(compare, writer, type);
+                cmp.CodeUpdateCreate(compare, writer);
         }
     }
 
@@ -354,22 +354,16 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteReportSection("updated code", wr);
             }
         }
-        public              void                                ReportPermissions(WriterHelper writer)
-        {
-            using (WriterHelper     wr = new WriterHelper())
-            {
-            }
-        }
         public              void                                CodeUpdate(DBSchemaCompare compare, WriterHelper writer)
         {
             for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
-                this[type].CodeUpdateDrop(writer, type);
+                this[type].CodeUpdateDrop(writer);
 
             for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
-                this[type].CodeUpdateCreate(compare, writer, type);
+                this[type].CodeUpdateCreate(compare, writer);
         }
 
-        private             string                              _typeToName(SqlCodeObjectType type)
+        private static      string                              _typeToName(SqlCodeObjectType type)
         {
             switch(type) {
             case SqlCodeObjectType.View:                    return "view";
@@ -377,7 +371,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             case SqlCodeObjectType.SqlInlineTableFunction:  return "function";
             case SqlCodeObjectType.SqlTableValueFunction:   return "function";
             case SqlCodeObjectType.SqlStoredProcedure:      return "procedure";
-            case SqlCodeObjectType.SqlTrigger:          return "trigger";
+            case SqlCodeObjectType.SqlTrigger:              return "trigger";
             default:                                        return "?????";
             }
         }

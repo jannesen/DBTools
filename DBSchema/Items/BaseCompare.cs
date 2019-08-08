@@ -236,12 +236,6 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             return rtn;
         }
-        public              void                                ReportPermissions(WriterHelper writer)
-        {
-            using (WriterHelper     wr = new WriterHelper())
-            {
-            }
-        }
         public              void                                Init(WriterHelper writer)
         {
             foreach(TCompare cmp in Items)

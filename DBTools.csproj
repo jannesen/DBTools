@@ -29,8 +29,28 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
+  <!-- Import CodeAnalysis if package exists in upper directory -->
+  <PropertyGroup>
+    <PackagesRootCodeAnalysis>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.4\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props'))</PackagesRootCodeAnalysis>
+  </PropertyGroup>
+  <Import Condition="'$(PackagesRootCodeAnalysis)'!=''" Project="$(PackagesRootCodeAnalysis)\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.4\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props" />
+  <Import Condition="'$(PackagesRootCodeAnalysis)'!=''" Project="$(PackagesRootCodeAnalysis)\packages\Microsoft.NetFramework.Analyzers.2.9.4\build\Microsoft.NetFramework.Analyzers.props" />
+  <Import Condition="'$(PackagesRootCodeAnalysis)'!=''" Project="$(PackagesRootCodeAnalysis)\packages\Microsoft.NetCore.Analyzers.2.9.4\build\Microsoft.NetCore.Analyzers.props" />
+  <Import Condition="'$(PackagesRootCodeAnalysis)'!=''" Project="$(PackagesRootCodeAnalysis)\packages\Microsoft.CodeQuality.Analyzers.2.9.4\build\Microsoft.CodeQuality.Analyzers.props" />
+  <Import Condition="'$(PackagesRootCodeAnalysis)'!=''" Project="$(PackagesRootCodeAnalysis)\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.4\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props" />
+  <ItemGroup Condition="'$(PackagesRootCodeAnalysis)' != ''">
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.4\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.CodeQuality.Analyzers.2.9.4\analyzers\dotnet\cs\Humanizer.dll" />
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.CodeQuality.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.CodeQuality.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.NetCore.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.NetCore.Analyzers.dll" />
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.NetCore.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.NetCore.CSharp.Analyzers.dll" />
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.NetFramework.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
+    <Analyzer Include="$(PackagesRootCodeAnalysis)\packages\Microsoft.NetFramework.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <!-- ======================================================== -->  
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />

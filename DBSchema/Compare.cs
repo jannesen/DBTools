@@ -26,18 +26,18 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         public              string                              NativeCurType(string type)
         {
-            return type.EndsWith("]") ? CompareTypes.FindByCurName(new Library.SqlEntityName(type)).Cur.NativeType : type;
+            return type.EndsWith("]", StringComparison.InvariantCulture) ? CompareTypes.FindByCurName(new Library.SqlEntityName(type)).Cur.NativeType : type;
         }
         public              string                              NativeNewType(string type)
         {
-            return type.EndsWith("]") ? CompareTypes.FindByNewName(new Library.SqlEntityName(type)).New.NativeType : type;
+            return type.EndsWith("]", StringComparison.InvariantCulture) ? CompareTypes.FindByNewName(new Library.SqlEntityName(type)).New.NativeType : type;
         }
         public              bool                                EqualType(string curType, string newType)
         {
             if (curType == newType)
                 return true;
 
-            if (curType.EndsWith("]") && newType.EndsWith("]")) {
+            if (curType.EndsWith("]", StringComparison.InvariantCulture) && newType.EndsWith("]", StringComparison.InvariantCulture)) {
                 return CompareTypes.FindByNewName(new Library.SqlEntityName(newType)).New?.OrgName == new Library.SqlEntityName(curType);
             }
 
@@ -62,8 +62,8 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 CompareTables         .Report(this, writer, "tables");
                 CompareRoles          .Report(this, writer, "rules");
                 CompareTypeCodeObject .Report(this, writer, includediff);
-                CompareTables         .ReportPermissions(writer);
-                CompareTypeCodeObject .ReportPermissions(writer);
+                // TODO CompareTables         .ReportPermissions(writer);
+                // TODO CompareTypeCodeObject .ReportPermissions(writer);
             }
         }
         public              void                                SchemaUpdate(string fileName, bool create)
@@ -273,7 +273,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             foreach(var tables in CompareTables.Items) {
                 if (tables.Cur != null) {
                     foreach(var colums in tables.Cur.Columns) {
-                        if (colums.Type.EndsWith("]")) {
+                        if (colums.Type.EndsWith("]", StringComparison.InvariantCulture)) {
                             if (!usedTypes.Contains(colums.Type)) {
                                 usedTypes.Add(colums.Type);
                             }

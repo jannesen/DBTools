@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using Jannesen.Tools.DBTools.Library;
 
@@ -174,7 +175,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             if (FillFactor.HasValue) {
                 writer.Write(" WITH FILLFACTOR=");
-                writer.Write(FillFactor.Value.ToString());
+                writer.Write(FillFactor.Value.ToString(CultureInfo.InvariantCulture));
             }
 
             if (!tableCreate)

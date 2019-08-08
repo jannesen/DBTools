@@ -49,7 +49,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             if (sperm != null) {
                 foreach (string sp in sperm.Split(' ')) {
-                    string s = sp.Trim().ToLower();
+                    string s = sp.Trim().ToLowerInvariant();
 
                     switch(s) {
                     case "select":      rtn |= SqlPermissions.Select;       break;

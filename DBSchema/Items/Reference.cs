@@ -82,12 +82,12 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
                 if (!String.IsNullOrEmpty(Delete_action)) {
                     writer.Write(" ON DELETE ");
-                    writer.Write(Delete_action.ToUpper());
+                    writer.Write(Delete_action.ToUpperInvariant());
                 }
 
                 if (!String.IsNullOrEmpty(Update_action)) {
                     writer.Write(" ON UPDATE ");
-                    writer.Write(Update_action.ToUpper());
+                    writer.Write(Update_action.ToUpperInvariant());
                 }
 
                 writer.WriteNewLine();

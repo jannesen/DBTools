@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using Jannesen.Tools.DBTools.DBSchema;
 using Jannesen.Tools.DBTools.Library;
@@ -63,7 +64,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     writer.Write("), ");
                     writer.WriteString(New.Name.Name);
                     writer.Write(", ");
-                    writer.Write(New.Version.HasValue ? New.Version.Value.ToString() : "NULL");
+                    writer.Write(New.Version.HasValue ? New.Version.Value.ToString(CultureInfo.InvariantCulture) : "NULL");
                     writer.Write(", ");
                     writer.WriteData(New.Definition);
                     writer.WriteNewLine();

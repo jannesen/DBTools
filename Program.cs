@@ -130,7 +130,7 @@ namespace Jannesen.Tools.DBTools
         }
         static      void        CmdExport(string databaseSource, string outputFileName)
         {
-            if (!databaseSource.StartsWith("sql:"))
+            if (!databaseSource.StartsWith("sql:", StringComparison.InvariantCulture))
                 throw new Exception("Syntax error, invalid database source.");
 
             DBSchemaDatabase.ExportToFile(databaseSource.Substring(4), outputFileName);

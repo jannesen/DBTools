@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Runtime.Serialization;
 using System.Xml;
 
 namespace Jannesen.Tools.DBTools.Library
@@ -141,20 +143,24 @@ namespace Jannesen.Tools.DBTools.Library
                 return null;
 
             try {
-                return int.Parse(value);
+                return int.Parse(value, System.Globalization.NumberStyles.Integer, CultureInfo.InvariantCulture);
             }
             catch(Exception) {
                 throw new XmlReaderException("Invalid XML: attribute '" + name + "' in element '" + xmlReader.Name + "' has a invalid boolean value '" + value + "'.");
             }
         }
     }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
-    class XmlReaderException: Exception
+
+    [Serializable]
+    public class XmlReaderException: Exception
     {
         public                              XmlReaderException(string message): base(message)
         {
         }
         public                              XmlReaderException(string message, Exception innerException): base(message, innerException)
+        {
+        }
+        protected                           XmlReaderException(SerializationInfo info,  StreamingContext context): base(info, context)
         {
         }
     }

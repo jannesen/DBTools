@@ -104,10 +104,6 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteSqlGo();
             }
         }
-
-        private             void                                _rename(WriterHelper writer, SqlEntityName newName)
-        {
-        }
     }
 
     class CompareRuleCollection: CompareItemCollection<CompareRule,SchemaRule,SqlEntityName>

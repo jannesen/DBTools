@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Jannesen.Tools.DBTools.Library
@@ -34,10 +35,10 @@ namespace Jannesen.Tools.DBTools.Library
         {
             int     i;
 
-            if ((object)n1 == null)
+            if (n1 == null)
                 return (n1 == null) ? 0 : -1;
 
-            if ((object)n2 == null)
+            if (n2 == null)
                 return 1;
 
             if ((i = _stringCompare(n1.Schema,   n2.Schema)) != 0)
@@ -47,10 +48,10 @@ namespace Jannesen.Tools.DBTools.Library
         }
         public      static      bool            operator == (SqlEntityName n1, SqlEntityName n2)
         {
-            if ((object)n1 == null)
-                return ((object)n2 == null);
+            if (n1 == null)
+                return (n2 == null);
 
-            if ((object)n2 == null)
+            if (n2 == null)
                 return false;
 
             if (object.ReferenceEquals(n1, n2))
@@ -73,8 +74,8 @@ namespace Jannesen.Tools.DBTools.Library
         public      override    int             GetHashCode()
         {
             if (!_hashcode.HasValue) {
-                _hashcode = Name.ToLower().GetHashCode() ^
-                            (Schema   != null ? Schema.ToLower().GetHashCode() : 0);
+                _hashcode = Name.ToLowerInvariant().GetHashCode() ^
+                            (Schema   != null ? Schema.ToLowerInvariant().GetHashCode() : 0);
             }
 
             return _hashcode.Value;
@@ -145,7 +146,7 @@ add:                s.Append(c);
         {
             if (s1 != null) {
                 if (s2 != null)
-                    return string.Compare(s1, s2, true, System.Globalization.CultureInfo.InvariantCulture);
+                    return string.Compare(s1, s2, true, CultureInfo.InvariantCulture);
 
                 return 1;
             }

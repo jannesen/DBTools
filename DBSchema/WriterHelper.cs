@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Jannesen.Tools.DBTools.Library;
 using Jannesen.Tools.DBTools.DBSchema.Item;
@@ -175,7 +176,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public                  void                    WriteDiff(int lineno, char c, string line)
         {
-            string  ln = lineno.ToString();
+            string  ln = lineno.ToString(CultureInfo.InvariantCulture);
 
             for (int n = ln.Length ; n < 5 ; ++n)
                 Write(' ');

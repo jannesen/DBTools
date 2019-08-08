@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Jannesen.Tools.DBTools.Library
 {
-    public class Library
+    internal static class Library
     {
         public      static  string[]        SplitSqlName(string name)
         {

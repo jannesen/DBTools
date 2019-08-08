@@ -37,12 +37,12 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         public              void                                LoadFrom(string sourceName)
         {
-            if (sourceName.StartsWith("sql:")) {
+            if (sourceName.StartsWith("sql:", StringComparison.InvariantCulture)) {
                 LoadFromDatabase(sourceName.Substring(4));
                 return;
             }
 
-            if (sourceName.StartsWith("file:")) {
+            if (sourceName.StartsWith("file:", StringComparison.InvariantCulture)) {
                 LoadFromFile(sourceName.Substring(5));
                 return;
             }
@@ -52,9 +52,8 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public              void                                LoadFromFile(string fileName)
         {
-            using (StreamReader textReader = new StreamReader(fileName))
-            {
-                _parseDatabase(new XmlTextReader(textReader));
+            using (var xmlReader = new XmlTextReader(fileName) { DtdProcessing=DtdProcessing.Prohibit, XmlResolver=null }) {
+                _parseDatabase(xmlReader);
             }
         }
         public              void                                LoadFromDatabase(string databaseName)
@@ -63,8 +62,11 @@ namespace Jannesen.Tools.DBTools.DBSchema
             {
                 sqlConnection.ExecuteSqlScriptResource("DBSchemaExportToXml-pre.sql");
 
-                using (XmlReader xmlReader = sqlConnection.ExecuteXmlReader(Resource.GetScriptString("DBSchemaExportToXml.sql")))
-                    _parseDatabase(xmlReader);
+                using (var sqlCmd = new SqlCommand(Resource.GetScriptString("DBSchemaExportToXml.sql"), sqlConnection) { CommandType = System.Data.CommandType.Text, CommandTimeout = 60000 }) {
+                    using (XmlReader xmlReader = sqlCmd.ExecuteXmlReader()) {
+                        _parseDatabase(xmlReader);
+                    }
+                }
 
                 sqlConnection.ExecuteSqlScriptResource("DBSchemaExportToXml-post.sql");
             }
@@ -75,15 +77,17 @@ namespace Jannesen.Tools.DBTools.DBSchema
             {
                 sqlConnection.ExecuteSqlScriptResource("DBSchemaExportToXml-pre.sql");
 
-                using (XmlReader xmlReader = sqlConnection.ExecuteXmlReader(Resource.GetScriptString("DBSchemaExportToXml.sql")))
-                {
-                    using (XmlWriter writer = XmlWriter.Create(fileName, new XmlWriterSettings() {
-                                                                                CloseOutput = true,
-                                                                                Encoding    = System.Text.Encoding.UTF8,
-                                                                                Indent      = true,
-                                                                                IndentChars = "\t"
-                                                                         }))
-                            writer.WriteNode(xmlReader, true);
+                using (var sqlCmd = new SqlCommand(Resource.GetScriptString("DBSchemaExportToXml.sql"), sqlConnection) { CommandType = System.Data.CommandType.Text, CommandTimeout = 60000 }) {
+                    using (XmlReader xmlReader = sqlCmd.ExecuteXmlReader())
+                    {
+                        using (XmlWriter writer = XmlWriter.Create(fileName, new XmlWriterSettings() {
+                                                                                    CloseOutput = true,
+                                                                                    Encoding    = System.Text.Encoding.UTF8,
+                                                                                    Indent      = true,
+                                                                                    IndentChars = "\t"
+                                                                             }))
+                                writer.WriteNode(xmlReader, true);
+                    }
                 }
 
                 sqlConnection.ExecuteSqlScriptResource("DBSchemaExportToXml-post.sql");
