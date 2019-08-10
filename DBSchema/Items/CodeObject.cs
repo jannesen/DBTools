@@ -330,24 +330,21 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
         public              void                                Report(DBSchemaCompare compare, WriterHelper writer, bool includediff)
         {
-            using (WriterHelper     wr = new WriterHelper())
-            {
+            using (WriterHelper     wr = new WriterHelper()) {
                 for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
                     this[type].ReportNew(wr, _typeToName(type));
 
                 writer.WriteReportSection("new code", wr);
             }
 
-            using (WriterHelper     wr = new WriterHelper())
-            {
+            using (WriterHelper     wr = new WriterHelper()) {
                 for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
                     this[type].ReportDeleted(wr, _typeToName(type));
 
                 writer.WriteReportSection("deleted code", wr);
             }
 
-            using (WriterHelper     wr = new WriterHelper())
-            {
+            using (WriterHelper     wr = new WriterHelper()) {
                 for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
                     this[type].ReportChanges(compare, wr, _typeToName(type), includediff);
 

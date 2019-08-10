@@ -54,8 +54,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             _initSchema();
             _initCode();
 
-            using (WriterHelper writer = new WriterHelper(fileName))
-            {
+            using (WriterHelper writer = new WriterHelper(fileName)) {
                 CompareDefaults       .Report(this, writer, "defaults");
                 CompareRules          .Report(this, writer, "rules");
                 CompareTypes          .Report(this, writer, "datatypes");
@@ -71,8 +70,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             _initSchema();
             _initDiagram();
 
-            using (WriterHelper writer = new WriterHelper(fileName))
-            {
+            using (WriterHelper writer = new WriterHelper(fileName)) {
                 writer.WriteLine("SET NOCOUNT            ON");
                 writer.WriteLine("SET ANSI_NULLS         ON");
                 writer.WriteLine("SET ANSI_PADDING       ON");
@@ -85,8 +83,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                     writer.Write(SqlScript.Resource.GetScriptString("DropAllCode.sql"));
                 }
             // Init
-                using (WriterHelper wr = new WriterHelper())
-                {
+                using (WriterHelper wr = new WriterHelper()) {
                     foreach (var compareTable in CompareTables.Items)
                         compareTable.Constraints.Init(wr);
 
@@ -124,8 +121,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 }
 
             // Cleanup
-                using (WriterHelper wr = new WriterHelper())
-                {
+                using (WriterHelper wr = new WriterHelper()) {
                     CompareTables  .Cleanup(wr);
                     CompareTypes   .Cleanup(wr);
                     CompareRules   .Cleanup(wr);
@@ -146,15 +142,13 @@ namespace Jannesen.Tools.DBTools.DBSchema
                     compareTable.ProcessReferences(this, writer);
 
             // Process roles
-                using (WriterHelper wr = new WriterHelper())
-                {
+                using (WriterHelper wr = new WriterHelper()) {
                     CompareRoles.Process(this, wr);
                     writer.WriteSqlSection("update roles.", wr);
                 }
 
             // Process table permissions
-                using (WriterHelper wr = new WriterHelper())
-                {
+                using (WriterHelper wr = new WriterHelper()) {
                     foreach (CompareTable compareTable in CompareTables.Items)
                         compareTable.ProcessPermissions(this, wr);
 
@@ -162,8 +156,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 }
 
             // Update diagrams
-                using (WriterHelper wr = new WriterHelper())
-                {
+                using (WriterHelper wr = new WriterHelper()) {
                     if (CompareDiagram.hasChange()) {
                         wr.WriteLine("IF NOT EXISTS (SELECT * FROM sys.objects WHERE [object_id] = OBJECT_ID('dbo.[sysdiagrams]'))");
                         wr.WriteLine("BEGIN");
@@ -189,8 +182,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 }
 
                 // Update diagrams
-                using (WriterHelper wr = new WriterHelper())
-                {
+                using (WriterHelper wr = new WriterHelper()) {
                     foreach (var i in CompareDefaults.Items)
                         i.New?.WriteRefactor(wr);
 
@@ -214,8 +206,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             _initSchema();
             _initCode();
 
-            using (WriterHelper writer = new WriterHelper(fileName))
-            {
+            using (WriterHelper writer = new WriterHelper(fileName)) {
                 CompareTypeCodeObject.CodeUpdate(this, writer);
             }
         }

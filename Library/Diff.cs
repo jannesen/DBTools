@@ -72,7 +72,7 @@ namespace Jannesen.Tools.DBTools.Library
   /// 2006.03.10 using the standard Debug class for self-test now.
   ///            compile with: csc /target:exe /out:diffTest.exe /d:DEBUG /d:TRACE /d:SELFTEST Diff.cs
   /// </summary>
-  /// 
+  ///
 
     internal static class Diff
     {

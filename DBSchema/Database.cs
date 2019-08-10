@@ -58,8 +58,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public              void                                LoadFromDatabase(string databaseName)
         {
-            using (SqlConnection sqlConnection = SqlConnectionExtension.NewConnection(databaseName))
-            {
+            using (SqlConnection sqlConnection = SqlConnectionExtension.NewConnection(databaseName)) {
                 sqlConnection.ExecuteSqlScriptResource("DBSchemaExportToXml-pre.sql");
 
                 using (var sqlCmd = new SqlCommand(Resource.GetScriptString("DBSchemaExportToXml.sql"), sqlConnection) { CommandType = System.Data.CommandType.Text, CommandTimeout = 60000 }) {
@@ -73,13 +72,11 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public  static      void                                ExportToFile(string serverDatabaseName, string fileName)
         {
-            using (SqlConnection sqlConnection = SqlConnectionExtension.NewConnection(serverDatabaseName))
-            {
+            using (SqlConnection sqlConnection = SqlConnectionExtension.NewConnection(serverDatabaseName)) {
                 sqlConnection.ExecuteSqlScriptResource("DBSchemaExportToXml-pre.sql");
 
                 using (var sqlCmd = new SqlCommand(Resource.GetScriptString("DBSchemaExportToXml.sql"), sqlConnection) { CommandType = System.Data.CommandType.Text, CommandTimeout = 60000 }) {
-                    using (XmlReader xmlReader = sqlCmd.ExecuteXmlReader())
-                    {
+                    using (XmlReader xmlReader = sqlCmd.ExecuteXmlReader()) {
                         using (XmlWriter writer = XmlWriter.Create(fileName, new XmlWriterSettings() {
                                                                                     CloseOutput = true,
                                                                                     Encoding    = System.Text.Encoding.UTF8,

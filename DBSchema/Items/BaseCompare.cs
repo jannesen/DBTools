@@ -169,8 +169,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         public              void                                Report(DBSchemaCompare compare, WriterHelper writer, string sectionname)
         {
-            using (WriterHelper     wr = new WriterHelper())
-            {
+            using (WriterHelper     wr = new WriterHelper()) {
                 foreach(TCompare cmp in Items) {
                     if (cmp.Cur != null && cmp.New != null) {
                         cmp.ReportUpdate(compare, wr);
@@ -180,8 +179,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteReportSection("changed " + sectionname, wr);
             }
 
-            using (WriterHelper     wr = new WriterHelper())
-            {
+            using (WriterHelper     wr = new WriterHelper()) {
                 foreach(TCompare cmp in Items) {
                     if (cmp.Cur == null && cmp.New != null) {
                         wr.Write(WriterHelper.QuoteName(cmp.New.Name));
@@ -192,8 +190,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteReportSection("new " + sectionname, wr);
             }
 
-            using (WriterHelper     wr = new WriterHelper())
-            {
+            using (WriterHelper     wr = new WriterHelper()) {
                 foreach(TCompare cmp in Items) {
                     if (cmp.Cur != null && cmp.New == null) {
                         wr.Write(WriterHelper.QuoteName(cmp.Cur.Name));
