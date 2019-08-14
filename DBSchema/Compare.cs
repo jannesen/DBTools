@@ -26,18 +26,18 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         public              string                              NativeCurType(string type)
         {
-            return type.EndsWith("]", StringComparison.InvariantCulture) ? CompareTypes.FindByCurName(new Library.SqlEntityName(type)).Cur.NativeType : type;
+            return type.EndsWith("]", StringComparison.Ordinal) ? CompareTypes.FindByCurName(new Library.SqlEntityName(type)).Cur.NativeType : type;
         }
         public              string                              NativeNewType(string type)
         {
-            return type.EndsWith("]", StringComparison.InvariantCulture) ? CompareTypes.FindByNewName(new Library.SqlEntityName(type)).New.NativeType : type;
+            return type.EndsWith("]", StringComparison.Ordinal) ? CompareTypes.FindByNewName(new Library.SqlEntityName(type)).New.NativeType : type;
         }
         public              bool                                EqualType(string curType, string newType)
         {
             if (curType == newType)
                 return true;
 
-            if (curType.EndsWith("]", StringComparison.InvariantCulture) && newType.EndsWith("]", StringComparison.InvariantCulture)) {
+            if (curType.EndsWith("]", StringComparison.Ordinal) && newType.EndsWith("]", StringComparison.Ordinal)) {
                 return CompareTypes.FindByNewName(new Library.SqlEntityName(newType)).New?.OrgName == new Library.SqlEntityName(curType);
             }
 
@@ -264,7 +264,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             foreach(var tables in CompareTables.Items) {
                 if (tables.Cur != null) {
                     foreach(var colums in tables.Cur.Columns) {
-                        if (colums.Type.EndsWith("]", StringComparison.InvariantCulture)) {
+                        if (colums.Type.EndsWith("]", StringComparison.Ordinal)) {
                             if (!usedTypes.Contains(colums.Type)) {
                                 usedTypes.Add(colums.Type);
                             }

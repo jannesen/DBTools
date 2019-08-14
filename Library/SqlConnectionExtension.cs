@@ -19,18 +19,18 @@ namespace Jannesen.Tools.DBTools.Library
             var     s = datasource;
             int     i;
 
-            if ((i = s.IndexOf("@", StringComparison.InvariantCulture)) > 0) {
+            if ((i = s.IndexOf("@", StringComparison.Ordinal)) > 0) {
                 var userPasswd = s.Substring(0, i);
                 s = s.Substring(i + 1);
 
-                if ((i = userPasswd.IndexOf(":", StringComparison.InvariantCulture)) <= 0)
+                if ((i = userPasswd.IndexOf(":", StringComparison.Ordinal)) <= 0)
                     throw new FormatException("Invalid username:passwd in datasource '" + datasource + "'");
 
                 username = userPasswd.Substring(0, i);
                 passwd   = userPasswd.Substring(i + 1);
             }
 
-            if ((i = s.LastIndexOf("\\", StringComparison.InvariantCulture)) <= 0)
+            if ((i = s.LastIndexOf("\\", StringComparison.Ordinal)) <= 0)
                 throw new FormatException("Invalid datasource '" + datasource + "'");
 
             serverInstanceName = s.Substring(0, i);
@@ -85,7 +85,7 @@ namespace Jannesen.Tools.DBTools.Library
                     ++lineNumber;
 
                     if (line == null ||
-                        (line.Length >= 2 && (line[0] == 'G' || line[0] == 'g') && string.Compare(line.Trim(), "GO", StringComparison.InvariantCultureIgnoreCase) == 0))
+                        (line.Length >= 2 && (line[0] == 'G' || line[0] == 'g') && string.Compare(line.Trim(), "GO", StringComparison.OrdinalIgnoreCase) == 0))
                     {
                         if (cmdText.Length > 0) {
                             while (cmdText.Length > 0 && cmdText[cmdText.Length - 1] == '\n')

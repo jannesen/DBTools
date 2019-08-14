@@ -110,7 +110,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
             writer.Write(code);
 
-            if (!code.EndsWith("\n", StringComparison.InvariantCulture))
+            if (!code.EndsWith("\n", StringComparison.Ordinal))
                 writer.WriteNewLine();
 
             writer.WriteSqlGo();
@@ -153,8 +153,8 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
         private             void                                _removeSourceLocationFromCode()
         {
-            if (Code.StartsWith("--@", StringComparison.InvariantCulture)) {
-                Code = Code.Substring(Code.IndexOf("\n", StringComparison.InvariantCulture)+1);
+            if (Code.StartsWith("--@", StringComparison.Ordinal)) {
+                Code = Code.Substring(Code.IndexOf("\n", StringComparison.Ordinal)+1);
             }
         }
     }

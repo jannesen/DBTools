@@ -37,12 +37,12 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         public              void                                LoadFrom(string sourceName)
         {
-            if (sourceName.StartsWith("sql:", StringComparison.InvariantCulture)) {
+            if (sourceName.StartsWith("sql:", StringComparison.Ordinal)) {
                 LoadFromDatabase(sourceName.Substring(4));
                 return;
             }
 
-            if (sourceName.StartsWith("file:", StringComparison.InvariantCulture)) {
+            if (sourceName.StartsWith("file:", StringComparison.Ordinal)) {
                 LoadFromFile(sourceName.Substring(5));
                 return;
             }

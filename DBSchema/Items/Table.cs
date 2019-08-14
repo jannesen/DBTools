@@ -123,9 +123,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     rtnFlags |= CompareFlags.Update;
                 }
 
-                if ((                             curColumn.Type   .EndsWith("]", StringComparison.InvariantCulture) && (compare.CompareTypes   .FindByCurName(new SqlEntityName(curColumn.Type   )).Flags & CompareFlags.Create) != 0) ||
-                    (curColumn.Default != null && curColumn.Default.EndsWith("]", StringComparison.InvariantCulture) && (compare.CompareDefaults.FindByCurName(new SqlEntityName(curColumn.Default)).Flags & CompareFlags.Create) != 0) ||
-                    (curColumn.Rule    != null && curColumn.Rule   .EndsWith("]", StringComparison.InvariantCulture) && (compare.CompareRules   .FindByCurName(new SqlEntityName(curColumn.Rule   )).Flags & CompareFlags.Create) != 0) )
+                if ((                             curColumn.Type   .EndsWith("]", StringComparison.Ordinal) && (compare.CompareTypes   .FindByCurName(new SqlEntityName(curColumn.Type   )).Flags & CompareFlags.Create) != 0) ||
+                    (curColumn.Default != null && curColumn.Default.EndsWith("]", StringComparison.Ordinal) && (compare.CompareDefaults.FindByCurName(new SqlEntityName(curColumn.Default)).Flags & CompareFlags.Create) != 0) ||
+                    (curColumn.Rule    != null && curColumn.Rule   .EndsWith("]", StringComparison.Ordinal) && (compare.CompareRules   .FindByCurName(new SqlEntityName(curColumn.Rule   )).Flags & CompareFlags.Create) != 0) )
                     return CompareFlags.Rebuild;
             }
 
@@ -177,7 +177,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     var newColumn = c.New;
 
                     if (curColumn != null && newColumn != null) {
-                        if (!curColumn.Name.Equals(newColumn.Name, StringComparison.InvariantCulture)) {
+                        if (!curColumn.Name.Equals(newColumn.Name, StringComparison.Ordinal)) {
                             writer.WriteWidth(WriterHelper.QuoteName(curColumn.Name), 48);
                             writer.Write("=> ");
                             writer.Write(WriterHelper.QuoteName(newColumn.Name));
@@ -185,7 +185,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                         }
 
                         if (!curColumn.CompareEqual(newColumn, compare, this, CompareMode.Report)) {
-                            writer.WriteWidth(!curColumn.Name.Equals(newColumn.Name, StringComparison.InvariantCulture) ? "" : WriterHelper.QuoteName(newColumn.Name), 48);
+                            writer.WriteWidth(!curColumn.Name.Equals(newColumn.Name, StringComparison.Ordinal) ? "" : WriterHelper.QuoteName(newColumn.Name), 48);
                             writer.Write(": ");
                             var cn = compare.NativeCurType(curColumn.Type);
                             var nn = compare.NativeNewType(newColumn.Type);

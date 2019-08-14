@@ -43,7 +43,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             writer.Write(" CHECK ");
 
-            if (Definition.StartsWith("(", StringComparison.InvariantCulture) && Definition.EndsWith(")", StringComparison.InvariantCulture)) {
+            if (Definition.StartsWith("(", StringComparison.Ordinal) && Definition.EndsWith(")", StringComparison.Ordinal)) {
                 writer.Write(Definition);
             }
             else {
