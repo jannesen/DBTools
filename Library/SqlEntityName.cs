@@ -48,10 +48,10 @@ namespace Jannesen.Tools.DBTools.Library
         }
         public      static      bool            operator == (SqlEntityName n1, SqlEntityName n2)
         {
-            if (n1 == null)
-                return (n2 == null);
+            if (n1 is null)
+                return (n2 is null);
 
-            if (n2 == null)
+            if (n2 is null)
                 return false;
 
             if (object.ReferenceEquals(n1, n2))
