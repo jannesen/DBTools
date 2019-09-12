@@ -20,7 +20,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaDefault other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaDefault other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             return base.CompareEqual(other, compare, compareTable, mode) &&
                    this.Definition == other.Definition;
@@ -64,7 +64,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareDefault: CompareItem<SchemaDefault,SqlEntityName>
     {
-        public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
+        public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
             if (!Cur.CompareEqual(New, compare, compareTable, CompareMode.UpdateWithRefactor))
                 return CompareFlags.Update;

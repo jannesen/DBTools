@@ -33,7 +33,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaPermission other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaPermission other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             if (this.Name  != other.Name     ||
                 this.Grant != other.Grant    ||

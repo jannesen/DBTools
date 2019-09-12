@@ -16,5 +16,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style",         "IDE0044:Add readonly modifier")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style",         "IDE1006:Naming Styles")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage",         "CA1801:Review unused parameters")]
-
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style",         "IDE0060:Remove unused parameter", Scope = "member", Target = "~M:Jannesen.Tools.DBTools.DBSchema.Item.SchemaReferenceColumn.CompareEqual(Jannesen.Tools.DBTools.DBSchema.Item.SchemaReferenceColumn,Jannesen.Tools.DBTools.DBSchema.DBSchemaCompare,Jannesen.Tools.DBTools.DBSchema.Item.CompareTable,Jannesen.Tools.DBTools.DBSchema.Item.CompareTable)~System.Boolean")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style",         "IDE0060:Remove unused parameter")]

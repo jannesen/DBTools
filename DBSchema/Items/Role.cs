@@ -36,7 +36,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaRole other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaRole other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             if (this.Name        != other.Name)
                 return false;
@@ -101,7 +101,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareRole: CompareItem<SchemaRole,string>
     {
-        public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
+        public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
             if (!Cur.CompareEqual(New, compare, compareTable, CompareMode.UpdateWithRefactor))
                 return CompareFlags.Update;

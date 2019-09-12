@@ -18,7 +18,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             Definition = Convert.FromBase64String(xmlReader.ReadContent());
         }
 
-        public  override    bool                                CompareEqual(SchemaDiagram other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaDiagram other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             return this.Name    == other.Name     &&
                    this.Version == other.Version &&

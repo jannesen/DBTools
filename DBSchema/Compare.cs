@@ -181,22 +181,24 @@ namespace Jannesen.Tools.DBTools.DBSchema
                     writer.WriteSqlSection("update diagrams.", wr);
                 }
 
-                // Update diagrams
-                using (WriterHelper wr = new WriterHelper()) {
-                    foreach (var i in CompareDefaults.Items)
-                        i.New?.WriteRefactor(wr);
+                // Write refactor
+                if (!create) { 
+                    using (WriterHelper wr = new WriterHelper()) {
+                        foreach (var i in CompareDefaults.Items)
+                            i.New?.WriteRefactor(wr);
 
-                    foreach (var i in CompareRules.Items)
-                        i.New?.WriteRefactor(wr);
+                        foreach (var i in CompareRules.Items)
+                            i.New?.WriteRefactor(wr);
 
-                    foreach (var i in CompareTypes.Items)
-                        i.New?.WriteRefactor(wr);
+                        foreach (var i in CompareTypes.Items)
+                            i.New?.WriteRefactor(wr);
 
-                    foreach (var i in CompareTables.Items)
-                        i.New?.WriteRefactor(wr);
+                        foreach (var i in CompareTables.Items)
+                            i.New?.WriteRefactor(wr);
 
-                    if (wr.hasData) {
-                        writer.WriteSqlSection("restore refacor data.", wr);
+                        if (wr.hasData) {
+                            writer.WriteSqlSection("restore refacor data.", wr);
+                        }
                     }
                 }
             }

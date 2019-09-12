@@ -43,7 +43,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaColumn other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaColumn other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             return (mode == CompareMode.TableCompare || mode == CompareMode.Report || this.Name == other.Name) &&
                    (mode == CompareMode.TableCompare || compare.EqualType(this.Type, other.Type)) &&
@@ -77,6 +77,43 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 }
 
                 return false;
+            }
+        }
+
+        public              void                                WriteColumns(WriterHelper writer)
+        {
+            for (int c = 0 ; c < this.Count ; ++c) {
+                SchemaColumn column = this[c];
+
+                if (c > 0)
+                    writer.Write(",");
+
+                writer.WriteNewLine();
+                writer.Write("    ");
+                writer.WriteWidth(WriterHelper.QuoteName(column.Name), 48);
+                writer.WriteWidth(column.Type, 32);
+
+                if (column.Collation != null) {
+                    writer.Write(" COLLATE ");
+                    writer.Write(column.Collation);
+                }
+
+                writer.Write(column.isNullable ? " NULL" : " NOT NULL");
+
+                if (column.Default != null) {
+                    writer.Write(" DEFAULT ");
+                    writer.Write(column.Default);
+                }
+
+                if (column.Identity != null) {
+                    writer.Write(" IDENTITY(");
+                    writer.Write(column.Identity);
+                    writer.Write(")");
+                }
+
+                if (column.isRowguid) {
+                    writer.Write(" ROWGUIDCOL");
+                }
             }
         }
     }

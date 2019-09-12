@@ -28,7 +28,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     while (xmlReader.ReadNextElement()) {
                         switch (xmlReader.Name) {
                         case "column":              Columns    .Add(new SchemaColumn(xmlReader));      break;
-                        case "constraint":          Checks     .Add(new SchemaCheck(xmlReader));   break;
+                        case "constraint":          Checks     .Add(new SchemaCheck(xmlReader));       break;
                         case "index":               Indexes    .Add(new SchemaIndex(xmlReader));       break;
                         case "reference":           References .Add(new SchemaReference(xmlReader));   break;
                         case "permission":          Permissions.Add(new SchemaPermission(xmlReader));  break;
@@ -44,7 +44,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaTable other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaTable other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             return base.CompareEqual(other, compare, compareTable, mode)                         &&
                    this.Columns.CompareEqual(other.Columns, compare, compareTable, mode)         &&
@@ -78,7 +78,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     {
     }
 
-    class CompareTable: CompareItem<SchemaTable,SqlEntityName>
+    class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICompareTable
     {
         public              CompareCheckCollection              Constraints      { get; private set; }
         public              CompareIndexCollection              Indexes         { get; private set; }
@@ -91,7 +91,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             References  = new CompareReferenceCollection(compare, this, Cur?.References, New?.References);
         }
 
-        public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
+        public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
             CompareFlags    rtnFlags = CompareFlags.None;
 
@@ -312,7 +312,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteNewLine();
 
                 writer.Write("(");
-                _writeColumns(writer);
+                New.Columns.WriteColumns(writer);
 
                 {
                     SchemaIndex     primaryKey = New.Indexes.PrimaryKey;
@@ -496,42 +496,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             return false;
         }
-        private             void                                _writeColumns(WriterHelper writer)
-        {
-            for (int c = 0 ; c < New.Columns.Count ; ++c) {
-                SchemaColumn column = New.Columns[c];
 
-                if (c > 0)
-                    writer.Write(",");
-
-                writer.WriteNewLine();
-                writer.Write("    ");
-                writer.WriteWidth(WriterHelper.QuoteName(column.Name), 48);
-                writer.WriteWidth(column.Type, 32);
-
-                if (column.Collation != null) {
-                    writer.Write(" COLLATE ");
-                    writer.Write(column.Collation);
-                }
-
-                writer.Write(column.isNullable ? " NULL" : " NOT NULL");
-
-                if (column.Default != null) {
-                    writer.Write(" DEFAULT ");
-                    writer.Write(column.Default);
-                }
-
-                if (column.Identity != null) {
-                    writer.Write(" IDENTITY(");
-                    writer.Write(column.Identity);
-                    writer.Write(")");
-                }
-
-                if (column.isRowguid) {
-                    writer.Write(" ROWGUIDCOL");
-                }
-            }
-        }
         private             void                                _rename(WriterHelper writer, SqlEntityName newName)
         {
             writer.WriteSqlRename(Cur.Name.Fullname, newName.Name, "OBJECT");

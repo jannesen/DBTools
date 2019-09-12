@@ -43,7 +43,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public  virtual     void                                InitDepended(DBSchemaCompare compare)
         {
         }
-        public              void                                Compare(DBSchemaCompare compare, CompareTable compareTable)
+        public              void                                Compare(DBSchemaCompare compare, ICompareTable compareTable)
         {
             InitDepended(compare);
 
@@ -53,7 +53,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             if (CompareDepended(compare, Flags) && (Flags & (CompareFlags.Update | CompareFlags.Create)) == 0)
                 Flags |= CompareFlags.Update;
         }
-        public  virtual     CompareFlags                        CompareNewCur(DBSchemaCompare compare, CompareTable compareTable)
+        public  virtual     CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
             return New.CompareEqual(Cur, compare, compareTable, CompareMode.Update) ? CompareFlags.None : CompareFlags.Rebuild;
         }
@@ -92,6 +92,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
             throw new NotImplementedException(this.GetType().Name + " cleanup not implemented.");
         }
+    }
+
+    enum SortReason
+    {
+        Init        = 1
     }
 
     abstract class CompareItemCollection<TCompare, TItem, TName>
@@ -201,7 +206,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteReportSection("deleted " + sectionname, wr);
             }
         }
-        public              bool                                ReportDepended(WriterHelper writer, DBSchemaCompare compare, CompareTable compareTable, string dependedname)
+        public              bool                                ReportDepended(WriterHelper writer, DBSchemaCompare compare, ICompareTable compareTable, string dependedname)
         {
             bool rtn = false;
             foreach(TCompare cmp in Items) {
@@ -243,12 +248,12 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             foreach(var item in _items)
                 item.Refactor(writer);
         }
-        public              void                                Process(DBSchemaCompare dbCompare, WriterHelper writer)
+        public  virtual     void                                Process(DBSchemaCompare dbCompare, WriterHelper writer)
         {
             foreach(TCompare cmp in Items)
                 cmp.Process(dbCompare, writer);
         }
-        public              void                                Cleanup(WriterHelper writer)
+        public  virtual     void                                Cleanup(WriterHelper writer)
         {
             foreach(TCompare cmp in Items)
                 cmp.Cleanup(writer);
@@ -259,7 +264,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             foreach(TCompare cmp in Items)
                 cmp.SetRebuild();
         }
-        public              void                                Compare(DBSchemaCompare compare, CompareTable compareTable)
+        public              void                                Compare(DBSchemaCompare compare, ICompareTable compareTable)
         {
             foreach(TCompare cmp in Items)
                 cmp.Compare(compare, compareTable);

@@ -55,7 +55,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaCodeObject other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaCodeObject other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             return this.Name                  == other.Name     &&
                    this.TableName             == other.TableName             &&

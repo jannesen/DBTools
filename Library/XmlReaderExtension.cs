@@ -15,10 +15,8 @@ namespace Jannesen.Tools.DBTools.Library
         public  static      void            ReadRootNode(this XmlReader xmlReader, string rootName)
         {
             do {
-                if (!xmlReader.Read())
-                    throw new XmlReaderException("Invalid XML: missing root element.");
-            }
-            while (xmlReader.NodeType != XmlNodeType.Element);
+                xmlReader.ReadNext();
+            } while (xmlReader.NodeType != XmlNodeType.Element);
 
             if (xmlReader.Name != rootName)
                 throw new XmlReaderException("Invalid XML: Invalid root element expect '" + rootName + "'.");
@@ -26,10 +24,7 @@ namespace Jannesen.Tools.DBTools.Library
         public  static      bool            ReadNextElement(this XmlReader xmlReader)
         {
             for(;;) {
-                if (!xmlReader.Read())
-                    throw new XmlReaderException("Invalid XML: reading EOF.");
-
-                switch(xmlReader.NodeType) {
+                switch(xmlReader.ReadNext()) {
                 case XmlNodeType.Element:
                     return true;
 
@@ -46,10 +41,7 @@ namespace Jannesen.Tools.DBTools.Library
             string      rtn = null;
 
             for(;;) {
-                if (!xmlReader.Read())
-                    throw new XmlReaderException("Invalid XML: reading EOF.");
-
-                switch(xmlReader.NodeType) {
+                switch(xmlReader.ReadNext()) {
                 case XmlNodeType.Comment:
                 case XmlNodeType.Whitespace:
                     break;
@@ -69,6 +61,12 @@ namespace Jannesen.Tools.DBTools.Library
                 }
             }
         }
+        public  static      void            SkipCommentWhitespace(this XmlReader xmlReader)
+        {
+            while (xmlReader.NodeType == XmlNodeType.Comment || xmlReader.NodeType == XmlNodeType.Whitespace) {
+                xmlReader.ReadNext();
+            }
+        }
         public  static      void            NoChildElements(this XmlReader xmlReader)
         {
             if (!xmlReader.IsEmptyElement) {
@@ -79,6 +77,14 @@ namespace Jannesen.Tools.DBTools.Library
         public  static      void            UnexpectedElement(this XmlReader xmlReader)
         {
             throw new XmlReaderException("Invalid XML: unexpected element '" + xmlReader.Name + "'.");
+        }
+        public  static      XmlNodeType     ReadNext(this XmlReader xmlReader)
+        {
+            if (!xmlReader.Read()) {
+                throw new XmlReaderException("Invalid XML: reading EOF.");
+            }
+
+            return xmlReader.NodeType;
         }
 
         public  static      bool            HasValue(this XmlReader xmlReader, string name)

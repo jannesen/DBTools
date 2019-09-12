@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBSchema\Items\Interfaces.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GlobalSuppressions.cs" />

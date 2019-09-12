@@ -21,11 +21,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public  override    bool                                CompareEqual(SchemaReferenceColumn other, DBSchemaCompare compare, CompareTable compareTable, CompareMode mode)
+        public  override    bool                                CompareEqual(SchemaReferenceColumn other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             throw new InvalidOperationException("SchemaReferenceColumn.CompareEqual not possible.");
         }
-        public              bool                                CompareEqual(SchemaReferenceColumn other, DBSchemaCompare compare, CompareTable compareTable, CompareTable referenceTable)
+        public              bool                                CompareEqual(SchemaReferenceColumn other, DBSchemaCompare compare, ICompareTable compareTable, ICompareTable referenceTable)
         {
             return compareTable.EqualColumn(this.Name,       other.Name) &&
                    referenceTable.EqualColumn(this.Referenced, other.Referenced);
@@ -34,7 +34,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class SchemaReferenceColumnCollection: SchemaItemList<SchemaReferenceColumn,string>
     {
-        public              bool                                CompareEqual(SchemaReferenceColumnCollection other, DBSchemaCompare compare, CompareTable compareTable, CompareTable referenceTable)
+        public              bool                                CompareEqual(SchemaReferenceColumnCollection other, DBSchemaCompare compare, ICompareTable compareTable, ICompareTable referenceTable)
         {
             if (this.Count != other.Count)
                 return false;
