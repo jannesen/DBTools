@@ -9,6 +9,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct          ("Jannesen Tools")]
 [assembly: AssemblyTrademark        ("")]
 [assembly: AssemblyCulture          ("")]
-[assembly: AssemblyVersion          ("1.09.00.000")] /*@VERSIONINFO*/
-[assembly: AssemblyFileVersion      ("1.09.00.000")] /*@VERSIONINFO*/
+[assembly: AssemblyVersion          ("1.09.00.001")] /*@VERSIONINFO*/
+[assembly: AssemblyFileVersion      ("1.09.00.001")] /*@VERSIONINFO*/
 [assembly: ComVisible               (false)]
