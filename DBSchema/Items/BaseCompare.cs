@@ -47,7 +47,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
             InitDepended(compare);
 
-            Flags = (New != null) ? ((Cur != null) ? CompareNewCur(compare, compareTable) : CompareFlags.Create)
+            Flags = (New != null) ? ((Cur != null) ? CompareNewCur(compare, compareTable) : (CompareNeededCreate(compare) ? CompareFlags.Create : CompareFlags.None))
                                   : ((Cur != null) ? CompareFlags.Drop                    : CompareFlags.None);
 
             if (CompareDepended(compare, Flags) && (Flags & (CompareFlags.Update | CompareFlags.Create)) == 0)
@@ -56,6 +56,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public  virtual     CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
             return New.CompareEqual(Cur, compare, compareTable, CompareMode.Update) ? CompareFlags.None : CompareFlags.Rebuild;
+        }
+        public  virtual     bool                                CompareNeededCreate(DBSchemaCompare compare)
+        {
+            return true;
         }
         public  virtual     bool                                CompareDepended(DBSchemaCompare dbCompare, CompareFlags status)
         {

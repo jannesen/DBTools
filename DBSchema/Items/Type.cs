@@ -126,6 +126,20 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             return CompareFlags.None;
         }
+        public  override    bool                                CompareNeededCreate(DBSchemaCompare compare)
+        {
+            foreach (var table in compare.CompareTables.Items) {
+                if (table.New != null) {
+                    foreach (var x in table.New.Columns) {
+                        if (x.Type == this.New.Name.Fullname) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
         public  override    void                                Init(WriterHelper writer)
         {
             if ((Flags & CompareFlags.Drop) != 0) {
