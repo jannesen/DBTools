@@ -290,6 +290,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     var newColumn = New.Columns[i];
 
                     if (curColumn.Name != newColumn.Name) {
+                        writer.WriteSqlPrint("refactor column " + Cur.Name.Fullname + "." +WriterHelper.QuoteName(curColumn.Name) + " -> " + newColumn.Name);
                         writer.WriteSqlRename(Cur.Name.Fullname + "." +WriterHelper.QuoteName(curColumn.Name), newColumn.Name, "COLUMN");
                         curColumn.Name = newColumn.Name;
                         writer.WriteSqlGo();
