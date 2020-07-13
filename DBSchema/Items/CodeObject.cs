@@ -137,7 +137,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        private             SqlCodeObjectType                   _parseType(string s)
+        private static      SqlCodeObjectType                   _parseType(string s)
         {
             s = s.ToUpperInvariant();
             switch(s) {

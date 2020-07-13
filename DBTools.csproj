@@ -1,13 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Jannesen.Tools.DBTools</RootNamespace>
+    <AssemblyName>DBTools</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net46</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>	
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Company>Jannesen B.V.</Company>
+    <Version>1.09.00.003</Version>
+    <RepositoryUrl>https://github.com/jannesen/DBTools</RepositoryUrl>
+    <Authors>Peter Jannesen</Authors>    
+  </PropertyGroup>
+
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D065DE53-C381-4924-85E9-8A072D449E06}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Jannesen.Tools.DBTools</RootNamespace>
-    <AssemblyName>DBTools</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -17,6 +28,7 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -24,61 +36,37 @@
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <!-- Import CodeAnalysis if package exists in upper directory -->
-  <Import Condition="Exists($([MSBuild]::GetPathOfFileAbove('code-analysis-package.vsprops')))" Project="$([MSBuild]::GetPathOfFileAbove('code-analysis-package.vsprops'))" />
+
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="DBSchema\Items\Interfaces.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Library\Diff.cs" />
-    <Compile Include="Library\Library.cs" />
-    <Compile Include="Library\SqlEntityName.cs" />
-    <Compile Include="Library\SqlConnectionExtension.cs" />
-    <Compile Include="Library\XmlReaderExtension.cs" />
-    <Compile Include="SqlScripts\ScriptHelper.cs" />
-    <Compile Include="DBSchema\Compare.cs" />
-    <Compile Include="DBSchema\Database.cs" />
-    <Compile Include="DBSchema\Exception.cs" />
-    <Compile Include="DBSchema\WriterHelper.cs" />
-    <Compile Include="DBSchema\Items\BaseCompare.cs" />
-    <Compile Include="DBSchema\Items\Diagram.cs" />
-    <Compile Include="DBSchema\Items\CodeObject.cs" />
-    <Compile Include="DBSchema\Items\ReferenceColumn.cs" />
-    <Compile Include="DBSchema\Items\Reference.cs" />
-    <Compile Include="DBSchema\Items\Permission.cs" />
-    <Compile Include="DBSchema\Items\IndexColumn.cs" />
-    <Compile Include="DBSchema\Items\Index.cs" />
-    <Compile Include="DBSchema\Items\Column.cs" />
-    <Compile Include="DBSchema\Items\BaseItem.cs" />
-    <Compile Include="DBSchema\Items\Check.cs" />
-    <Compile Include="DBSchema\Items\Type.cs" />
-    <Compile Include="DBSchema\Items\Table.cs" />
-    <Compile Include="DBSchema\Items\Rule.cs" />
-    <Compile Include="DBSchema\Items\Role.cs" />
-    <Compile Include="DBSchema\Items\Default.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml.sql" />
     <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-pre.sql" />
     <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-post.sql" />
     <EmbeddedResource Include="SqlScripts\DropAllCode.sql" />
   </ItemGroup>
+
   <ItemGroup>
     <None Include="LICENSE.txt" />
     <None Include="README.md" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>  
 </Project>

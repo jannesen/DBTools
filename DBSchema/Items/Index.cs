@@ -193,7 +193,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        private             SchemaIndexFunction                 _strToIndexFunction(string s)
+        private static      SchemaIndexFunction                 _strToIndexFunction(string s)
         {
             switch(s) {
             case "primary-key":     return  SchemaIndexFunction.PrimaryKey;
@@ -203,7 +203,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             default:                throw new Exception("Unknown function '" + s + "'.");
             }
         }
-        private             SchemaIndexType                     _strToIndexType(string s)
+        private static      SchemaIndexType                     _strToIndexType(string s)
         {
             switch(s) {
             case "clustered":       return  SchemaIndexType.Clustered;
