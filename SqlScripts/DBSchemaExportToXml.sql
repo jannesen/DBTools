@@ -57,7 +57,8 @@ select [name]       = db_name(),
                               end,
                (
                 select case when s.[user_type_id] IN (165,167,173,175,231,239) then s.[name] + '(' + case when t.[max_length] > 0 then convert(varchar(16), t.[max_length]) else 'max' end + ')'
-                            when s.[user_type_id] IN (42,43,62)                then s.[name] + '(' + convert(varchar(16), t.[precision]) + ')'
+                            when s.[user_type_id] IN (62)                      then s.[name] + '(' + convert(varchar(16), t.[precision]) + ')'
+                            when s.[user_type_id] IN (42,43)                   then s.[name] + '(' + convert(varchar(16), t.[scale]) + ')'
                             when s.[user_type_id] IN (106,108)                 then s.[name] + '(' + convert(varchar(16), t.[precision]) + ',' + convert(varchar(16), t.[scale]) + ')'
                                                                                else s.[name]
                        end
@@ -69,11 +70,12 @@ select [name]       = db_name(),
 		         select c.[name],
                         [type]           = case when c.[is_computed] = 0
                                                 then case when t.[user_type_id] in (165,167,173,175,231,239) then t.[name] + '(' + case when c.[max_length] > 0 then convert(varchar(16), c.[max_length]) else 'max' end + ')'
-                                                          when t.[user_type_id] in (42,43,62)                then t.[name] + '(' + convert(varchar(16), c.[precision]) + ')'
+                                                          when t.[user_type_id] in (62)                      then t.[name] + '(' + convert(varchar(16), c.[precision]) + ')'
+                                                          when t.[user_type_id] in (42,43)                   then t.[name] + '(' + convert(varchar(16), c.[scale]) + ')'
                                                           when t.[user_type_id] in (106,108)                 then t.[name] + '(' + convert(varchar(16), c.[precision]) + ',' + convert(varchar(16), c.[scale]) + ')'
                                                           when t.[user_type_id] <= 256                       then t.[name]
-                                                                                                            else schema_name(t.[schema_id]) + '.' + quotename(t.[name])
-                                                    end
+                                                                                                             else schema_name(t.[schema_id]) + '.' + quotename(t.[name])
+                                                     end
                                             end,
                         [identity]       = case when c.[is_identity]       <> 0
                                                 then convert(varchar, ident_seed(schema_name(tt.[object_schema_id])+'.'+quotename(tt.[object_name]))) + ',' +
@@ -185,7 +187,8 @@ select [name]       = db_name(),
                            [orgname]        = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 1 and z.[major_id] = o.[object_id] and z.[minor_id] = c.[column_id] and z.[name] = 'refactor:orgname'),
                            [type]           = case when c.[is_computed] = 0
                                                    then case when t.[user_type_id] in (165,167,173,175,231,239) then t.[name] + '(' + case when c.[max_length] > 0 then convert(varchar(16), c.[max_length]) else 'max' end + ')'
-                                                             when t.[user_type_id] in (42,43,62)                then t.[name] + '(' + convert(varchar(16), c.[precision]) + ')'
+                                                             when t.[user_type_id] in (62)                      then t.[name] + '(' + convert(varchar(16), c.[precision]) + ')'
+                                                             when t.[user_type_id] in (42,43)                   then t.[name] + '(' + convert(varchar(16), c.[scale]) + ')'
                                                              when t.[user_type_id] in (106,108)                 then t.[name] + '(' + convert(varchar(16), c.[precision]) + ',' + convert(varchar(16), c.[scale]) + ')'
                                                              when t.[user_type_id] <= 256                       then t.[name]
                                                                                                                 else schema_name(t.[schema_id]) + '.' + quotename(t.[name])
