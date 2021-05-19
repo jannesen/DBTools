@@ -288,7 +288,8 @@ select [name]       = db_name(),
                            [filter]         = case when i.[has_filter] <> 0 then i.[filter_definition] end,
                            (
                              select c.[name],
-                                    [order]     = case when k.[is_descending_key] <> 0 then 'desc' end
+                                    [order]     = case when k.[is_descending_key]  <> 0 then 'desc' end,
+                                    [included]  = case when k.[is_included_column] <> 0 then '1' end
                                from sys.index_columns k
                                     inner join sys.columns c on c.[object_id] = k.[object_id]
                                                             and c.[column_id] = k.[column_id]

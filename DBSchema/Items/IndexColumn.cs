@@ -8,11 +8,13 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     class SchemaIndexColumn: SchemaItemName<SchemaIndexColumn>
     {
         public              string                              Order                   { get; private set; }
+        public              bool                                Included                { get; private set; }
 
         public                                                  SchemaIndexColumn(XmlReader xmlReader): base(xmlReader)
         {
             try {
-                Order = xmlReader.GetValueStringNullable("order");
+                Order    = xmlReader.GetValueStringNullable("order");
+                Included = xmlReader.GetValueBool("included", false);
 
                 xmlReader.NoChildElements();
             }
@@ -24,7 +26,8 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public  override    bool                                CompareEqual(SchemaIndexColumn other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             return compareTable.EqualColumn(this.Name, other.Name) &&
-                   this.Order == other.Order;
+                   this.Order    == other.Order && 
+                   this.Included == other.Included;
         }
     }
 

@@ -152,21 +152,45 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             writer.Write("(");
 
-            for (int i = 0 ; i < Columns.Count ; ++i) {
-                SchemaIndexColumn   column = Columns[i];
+            bool next = false;
+            bool hasInclude = false;
 
-                if (i > 0)
-                    writer.Write(", ");
+            foreach (var column in Columns) {
+                if (!column.Included) { 
+                    if (next)
+                        writer.Write(", ");
+                    else
+                        next = true;
 
-                writer.WriteQuoteName(column.Name);
+                    writer.WriteQuoteName(column.Name);
 
-                if (column.Order != null) {
-                    writer.Write(" ");
-                    writer.Write(column.Order);
+                    if (column.Order != null) {
+                        writer.Write(" ");
+                        writer.Write(column.Order);
+                    }
+                }
+                else {
+                    hasInclude = true;
                 }
             }
 
             writer.Write(")");
+
+            if (hasInclude) {
+                next = false;
+                writer.Write(" INCLUDE (");
+                foreach (var column in Columns) {
+                    if (column.Included) { 
+                        if (next)
+                            writer.Write(", ");
+                        else
+                            next = true;
+
+                        writer.WriteQuoteName(column.Name);
+                    }
+                }
+                writer.Write(")");
+            }
 
             if (Filter != null) {
                 writer.Write(" WHERE ");
