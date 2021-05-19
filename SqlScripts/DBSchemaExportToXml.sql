@@ -185,14 +185,12 @@ select [name]       = db_name(),
                (
                     select c.[name],
                            [orgname]        = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 1 and z.[major_id] = o.[object_id] and z.[minor_id] = c.[column_id] and z.[name] = 'refactor:orgname'),
-                           [type]           = case when c.[is_computed] = 0
-                                                   then case when t.[user_type_id] in (165,167,173,175,231,239) then t.[name] + '(' + case when c.[max_length] > 0 then convert(varchar(16), c.[max_length]) else 'max' end + ')'
-                                                             when t.[user_type_id] in (62)                      then t.[name] + '(' + convert(varchar(16), c.[precision]) + ')'
-                                                             when t.[user_type_id] in (42,43)                   then t.[name] + '(' + convert(varchar(16), c.[scale]) + ')'
-                                                             when t.[user_type_id] in (106,108)                 then t.[name] + '(' + convert(varchar(16), c.[precision]) + ',' + convert(varchar(16), c.[scale]) + ')'
-                                                             when t.[user_type_id] <= 256                       then t.[name]
-                                                                                                                else schema_name(t.[schema_id]) + '.' + quotename(t.[name])
-                                                        end
+                           [type]           = case when t.[user_type_id] in (165,167,173,175,231,239) then t.[name] + '(' + case when c.[max_length] > 0 then convert(varchar(16), c.[max_length]) else 'max' end + ')'
+                                                   when t.[user_type_id] in (62)                      then t.[name] + '(' + convert(varchar(16), c.[precision]) + ')'
+                                                   when t.[user_type_id] in (42,43)                   then t.[name] + '(' + convert(varchar(16), c.[scale]) + ')'
+                                                   when t.[user_type_id] in (106,108)                 then t.[name] + '(' + convert(varchar(16), c.[precision]) + ',' + convert(varchar(16), c.[scale]) + ')'
+                                                   when t.[user_type_id] <= 256                       then t.[name]
+                                                                                                      else schema_name(t.[schema_id]) + '.' + quotename(t.[name])
                                               end,
                            [identity]       = case when c.[is_identity]       <> 0
                                                    then convert(varchar, ident_seed(schema_name(o.[schema_id])+'.'+quotename(o.[name]))) + ',' +
@@ -217,6 +215,14 @@ select [name]       = db_name(),
                            [is-computed]    = case when c.[is_computed]       <> 0
                                                    then '1'
                                               end,
+                           [is-persisted]   = case when c.[is_computed]       <> 0
+                                                   then (
+                                                            select [is_persisted]
+                                                              from sys.computed_columns x
+                                                             where x.[object_id] = c.[object_id]
+                                                               and x.[column_id] = c.[column_id]
+                                                        )
+                                              end,
                            [default]        = case when c.[default_object_id] <> 0
                                                     and c.[default_object_id] <> t.[default_object_id]
                                                    then (
@@ -239,6 +245,14 @@ select [name]       = db_name(),
                                                                    end
                                                               from sys.objects r
                                                              where r.[object_id]    = c.[default_object_id]
+                                                        )
+                                              end,
+                           [compute]        = case when c.[is_computed]       <> 0
+                                                   then (
+                                                            select [definition]
+                                                              from sys.computed_columns x
+                                                             where x.[object_id] = c.[object_id]
+                                                               and x.[column_id] = c.[column_id]
                                                         )
                                               end
                       from sys.columns c

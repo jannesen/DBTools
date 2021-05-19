@@ -380,6 +380,8 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public              void                                ProcessCopyData(WriterHelper writer)
         {
             if ((Flags & (CompareFlags.Drop | CompareFlags.Create)) == (CompareFlags.Drop | CompareFlags.Create)) {
+                bool n;
+
                 writer.WriteSqlPrint("copy data into table: " + New.Name);
 
                 if (New.Columns.hasIdentity) {
@@ -394,34 +396,41 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     writer.WriteNewLine();
 
                 writer.Write("      (");
+                    n = false;
                     for(int c=0 ; c < New.Columns.Count ; ++c) {
-                        if (c > 0)
-                            writer.Write(", ");
+                        if (!New.Columns[c].isComputed) { 
+                            if (n)
+                                writer.Write(", ");
+                            else
+                                n = true;
 
-                        writer.WriteQuoteName(New.Columns[c].Name);
+                            writer.WriteQuoteName(New.Columns[c].Name);
+                        }
                     }
                     writer.Write(")");
                     writer.WriteNewLine();
 
                 for(int c=0 ; c < New.Columns.Count ; ++c) {
                     SchemaColumn    newColumn = New.Columns[c];
-                    SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.OrgName ?? newColumn.Name);
+                    if (!New.Columns[c].isComputed) { 
+                        SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.OrgName ?? newColumn.Name);
 
-                    writer.Write((c == 0) ? "SELECT " : "       ");
-                    writer.WriteWidth(WriterHelper.QuoteName(newColumn.Name), 40);
+                        writer.Write((c == 0) ? "SELECT " : "       ");
+                        writer.WriteWidth(WriterHelper.QuoteName(newColumn.Name), 40);
 
-                    if (oldColumn != null) {
-                        writer.Write(" = old.");
-                        writer.WriteQuoteName(oldColumn.Name);
+                        if (oldColumn != null) {
+                            writer.Write(" = old.");
+                            writer.WriteQuoteName(oldColumn.Name);
+                        }
+                        else {
+                            writer.Write(newColumn.isNullable ? " = NULL" : " = /*!!TODO!!*/");
+                        }
+
+                        if (c < New.Columns.Count - 1)
+                            writer.Write(",");
+
+                        writer.WriteNewLine();
                     }
-                    else {
-                        writer.Write(newColumn.isNullable ? " = NULL" : " = /*!!TODO!!*/");
-                    }
-
-                    if (c < New.Columns.Count - 1)
-                        writer.Write(",");
-
-                    writer.WriteNewLine();
                 }
 
                 writer.Write("  FROM ");

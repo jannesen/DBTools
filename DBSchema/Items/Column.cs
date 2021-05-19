@@ -15,8 +15,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public              bool                                isFilestream        { get; private set; }
         public              bool                                isXmlDocument       { get; private set; }
         public              bool                                isComputed          { get; private set; }
+        public              bool                                isPersisted         { get; private set; }
         public              string                              Default             { get; private set; }
         public              string                              Rule                { get; private set; }
+        public              string                              Compute             { get; private set; }
 
         public                                                  SchemaColumn(XmlReader xmlReader): base(xmlReader)
         {
@@ -28,13 +30,14 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 isRowguid     = xmlReader.GetValueBool           ("is-rowguid",      false);
                 isFilestream  = xmlReader.GetValueBool           ("is-filestream",   false);
                 isXmlDocument = xmlReader.GetValueBool           ("is-xml-document", false);
-                isComputed    = xmlReader.GetValueBool           ("is-compute",      false);
+                isComputed    = xmlReader.GetValueBool           ("is-computed",     false);
+                isPersisted   = xmlReader.GetValueBool           ("is-persisted",    false);
                 Default       = xmlReader.GetValueStringNullable ("default");
                 Rule          = xmlReader.GetValueStringNullable ("rule");
+                Compute       = xmlReader.GetValueStringNullable ("compute");
 
                 if (isFilestream)       throw new DBSchemaException("filestream column not supported.");
                 if (isXmlDocument)      throw new DBSchemaException("xmldocument column not supported.");
-                if (isComputed)         throw new DBSchemaException("Computed column not supported.");
 
                 xmlReader.NoChildElements();
             }
@@ -54,8 +57,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                    this.isFilestream  == other.isFilestream     &&
                    this.isXmlDocument == other.isXmlDocument    &&
                    this.isComputed    == other.isComputed       &&
+                   this.isPersisted   == other.isPersisted      &&
                    this.Default       == other.Default          &&
-                   this.Rule          == other.Rule;
+                   this.Rule          == other.Rule             &&
+                   this.Compute       == other.Compute;
         }
 
         public              void                                WriteRefactor(WriterHelper writer, SqlEntityName tableName)
@@ -91,28 +96,42 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.WriteNewLine();
                 writer.Write("    ");
                 writer.WriteWidth(WriterHelper.QuoteName(column.Name), 48);
-                writer.WriteWidth(column.Type, 32);
 
-                if (column.Collation != null) {
-                    writer.Write(" COLLATE ");
-                    writer.Write(column.Collation);
+                if (!column.isComputed) {
+                    writer.WriteWidth(column.Type, 32);
+
+                    if (column.Collation != null) {
+                        writer.Write(" COLLATE ");
+                        writer.Write(column.Collation);
+                    }
+
+                    writer.Write(column.isNullable ? " NULL" : " NOT NULL");
+
+                    if (column.Default != null) {
+                        writer.Write(" DEFAULT ");
+                        writer.Write(column.Default);
+                    }
+
+                    if (column.Identity != null) {
+                        writer.Write(" IDENTITY(");
+                        writer.Write(column.Identity);
+                        writer.Write(")");
+                    }
+
+                    if (column.isRowguid) {
+                        writer.Write(" ROWGUIDCOL");
+                    }
                 }
+                else {
+                    writer.Write("AS ");
+                    writer.Write(column.Compute);
 
-                writer.Write(column.isNullable ? " NULL" : " NOT NULL");
-
-                if (column.Default != null) {
-                    writer.Write(" DEFAULT ");
-                    writer.Write(column.Default);
-                }
-
-                if (column.Identity != null) {
-                    writer.Write(" IDENTITY(");
-                    writer.Write(column.Identity);
-                    writer.Write(")");
-                }
-
-                if (column.isRowguid) {
-                    writer.Write(" ROWGUIDCOL");
+                    if (column.isPersisted) {
+                        writer.Write(" PERSISTED");
+                    }
+                    if (column.isNullable) {
+                        writer.Write(" NOT NULL");
+                    }
                 }
             }
         }
