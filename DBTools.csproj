@@ -3,7 +3,7 @@
     <RootNamespace>Jannesen.Tools.DBTools</RootNamespace>
     <AssemblyName>DBTools</AssemblyName>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>	
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
