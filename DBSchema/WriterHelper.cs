@@ -9,9 +9,9 @@ namespace Jannesen.Tools.DBTools.DBSchema
 {
     class WriterHelper: IDisposable
     {
-        private     static      char[]                  _hexTable = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+        private static readonly char[]                  _hexTable = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
-        private                 TextWriter              _script;
+        private readonly        TextWriter              _script;
         private                 bool                    _hasData;
 
         public                  bool                    hasData
@@ -110,10 +110,12 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public                  void                    WriteQuoteName(object n)
         {
-            if (n is SqlEntityName)
-                Write((SqlEntityName)n);
-            else
+            if (n is SqlEntityName entityName) {
+                Write(entityName);
+            }
+            else {
                 WriteQuoteName(n.ToString());
+            }
         }
         public                  void                    WriteQuoteName(string s)
         {
@@ -222,8 +224,8 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public  static          string                  QuoteName(object n)
         {
-            if (n is SqlEntityName)
-                return ((SqlEntityName)n).Fullname;
+            if (n is SqlEntityName entityName)
+                return entityName.Fullname;
 
             return QuoteName(n.ToString());
         }

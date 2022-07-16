@@ -4,11 +4,14 @@
     <AssemblyName>DBTools</AssemblyName>
     <OutputType>Exe</OutputType>
     <TargetFramework>net48</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>	
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Company>Jannesen B.V.</Company>
-    <Version>1.09.02.000</Version>
+    <Version>1.10.00.001</Version>
     <RepositoryUrl>https://github.com/jannesen/DBTools</RepositoryUrl>
     <Authors>Peter Jannesen</Authors>    
   </PropertyGroup>
@@ -22,6 +25,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
@@ -42,15 +46,4 @@
     <EmbeddedResource Include="SqlScripts\DropAllCode.sql" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="LICENSE.txt" />
-    <None Include="README.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>  
 </Project>

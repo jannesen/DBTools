@@ -36,7 +36,7 @@ namespace Jannesen.Tools.DBTools.Library
             int     i;
 
             if (n1 == null)
-                return (n1 == null) ? 0 : -1;
+                return (n2 == null) ? 0 : -1;
 
             if (n2 == null)
                 return 1;
@@ -146,7 +146,7 @@ add:                s.Append(c);
         {
             if (s1 != null) {
                 if (s2 != null)
-                    return string.Compare(s1, s2, true, CultureInfo.InvariantCulture);
+                    return string.Compare(s1, s2, StringComparison.OrdinalIgnoreCase);
 
                 return 1;
             }

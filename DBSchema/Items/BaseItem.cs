@@ -32,7 +32,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     {
         public  override    TName                               OrgName             { get { return _orgName; } }
 
-        private             TName                               _orgName;
+        private readonly    TName                               _orgName;
 
         public                                                  SchemaItemRename(TName name, TName orgName): base(name)
         {

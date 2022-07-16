@@ -108,9 +108,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                                                             where TItem:SchemaItem<TItem, TName>
                                                             where TName:class,IComparable
     {
-        private             List<TCompare>                      _items;
-        private             Dictionary<TName, TCompare>         _curDictionary;
-        private             Dictionary<TName, TCompare>         _newDictionary;
+        private readonly    List<TCompare>                      _items;
+        private readonly    Dictionary<TName, TCompare>         _curDictionary;
+        private readonly    Dictionary<TName, TCompare>         _newDictionary;
 
         public              IReadOnlyList<TCompare>             Items
         {
