@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using Jannesen.Tools.DBTools.DBSchema;
@@ -110,7 +112,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     return CompareFlags.Rebuild;
 
                 if (curColumn.Name != newColumn.Name) {
-                    if (curColumn.Name != newColumn.OrgName)
+                    if (curColumn.Name != newColumn.GetOrgName(compare))
                         return CompareFlags.Rebuild;
 
                     rtnFlags |= CompareFlags.Refactor;
@@ -170,7 +172,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.Write("------------------------------------------------------------------------------------------------------------------------");
                 writer.WriteNewLine();
 
-                var cmp = new CompareSchemaColumn(Cur.Columns, New.Columns);
+                var cmp = new CompareSchemaColumn(compare, Cur.Columns, New.Columns);
 
                 foreach(var c in cmp.Items) {
                     var curColumn = c.Cur;
@@ -377,7 +379,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     writer.WriteSqlGo();
             }
         }
-        public              void                                ProcessCopyData(WriterHelper writer)
+        public              void                                ProcessCopyData(DBSchemaCompare compare, WriterHelper writer)
         {
             if ((Flags & (CompareFlags.Drop | CompareFlags.Create)) == (CompareFlags.Drop | CompareFlags.Create)) {
                 bool n;
@@ -413,7 +415,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 for(int c=0 ; c < New.Columns.Count ; ++c) {
                     SchemaColumn    newColumn = New.Columns[c];
                     if (!New.Columns[c].isComputed) { 
-                        SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.OrgName ?? newColumn.Name);
+                        SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.GetOrgName(compare));
 
                         writer.Write((c == 0) ? "SELECT " : "       ");
                         writer.WriteWidth(WriterHelper.QuoteName(newColumn.Name), 40);
@@ -497,11 +499,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public              bool                                EqualColumn(string curName, string newName)
+        public              bool                                EqualColumn(DBSchemaCompare compare, string curName, string newName)
         {
             if (Cur != null && New != null) {
                 var c = New.Columns.Find(newName);
-                return curName == (c.OrgName ?? c.Name);
+                return curName == c.GetOrgName(compare);
             }
 
             return false;
@@ -516,7 +518,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareTableCollection: CompareItemCollection<CompareTable,SchemaTable,SqlEntityName>
     {
-        public                                                  CompareTableCollection(IReadOnlyList<SchemaTable> curSchema, IReadOnlyList<SchemaTable> newSchema): base(curSchema, newSchema)
+        public                                                  CompareTableCollection(DBSchemaCompare compare, IReadOnlyList<SchemaTable> curSchema, IReadOnlyList<SchemaTable> newSchema): base(compare, curSchema, newSchema)
         {
         }
 

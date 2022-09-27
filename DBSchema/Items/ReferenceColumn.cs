@@ -27,8 +27,8 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
         public              bool                                CompareEqual(SchemaReferenceColumn other, DBSchemaCompare compare, ICompareTable compareTable, ICompareTable referenceTable)
         {
-            return compareTable.EqualColumn(this.Name,       other.Name) &&
-                   referenceTable.EqualColumn(this.Referenced, other.Referenced);
+            return compareTable.EqualColumn(compare,this.Name,       other.Name) &&
+                   referenceTable.EqualColumn(compare, this.Referenced, other.Referenced);
         }
     }
 

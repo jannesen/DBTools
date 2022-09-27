@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using Jannesen.Tools.DBTools.Library;
 
@@ -143,7 +144,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareSchemaColumn: CompareItemCollection<CompareColumn, SchemaColumn, string>
     {
-        public                      CompareSchemaColumn(IReadOnlyList<SchemaColumn> curSchema, IReadOnlyList<SchemaColumn> newSchema): base(curSchema, newSchema)
+        public                      CompareSchemaColumn(DBSchemaCompare compare, IReadOnlyList<SchemaColumn> curSchema, IReadOnlyList<SchemaColumn> newSchema): base(compare, curSchema, newSchema)
         {
         }
     }

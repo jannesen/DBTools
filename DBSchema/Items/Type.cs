@@ -171,11 +171,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public              bool                                EqualColumn(string curName, string newName)
+        public              bool                                EqualColumn(DBSchemaCompare compare, string curName, string newName)
         {
             if (Cur != null && New != null) {
                 var c = New.Columns.Find(newName);
-                return curName == (c.OrgName ?? c.Name);
+                return curName == c.GetOrgName(compare);
             }
 
             return false;
@@ -184,7 +184,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareTypeCollection: CompareItemCollection<CompareType,SchemaType,SqlEntityName>
     {
-        public                                                  CompareTypeCollection(IReadOnlyList<SchemaType> curSchema, IReadOnlyList<SchemaType> newSchema): base(curSchema, newSchema)
+        public                                                  CompareTypeCollection(DBSchemaCompare compare, IReadOnlyList<SchemaType> curSchema, IReadOnlyList<SchemaType> newSchema): base(compare, curSchema, newSchema)
         {
         }
 

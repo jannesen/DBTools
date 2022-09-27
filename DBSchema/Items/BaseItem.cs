@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using Jannesen.Tools.DBTools.DBSchema;
@@ -25,6 +26,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public  virtual     string                              ToReportString()
         {
             throw new InvalidOperationException("ToReportString");
+        }
+
+        public              TName                               GetOrgName(DBSchemaCompare compare)
+        {
+            return (OrgName != null && compare.Options.Refactor) ? OrgName : Name;
         }
     }
 

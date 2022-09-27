@@ -192,7 +192,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareCodeObjectCollection: CompareItemCollection<CompareCodeObject,SchemaCodeObject,SqlEntityName>
     {
-        public                                                  CompareCodeObjectCollection(IReadOnlyList<SchemaCodeObject> curSchema, IReadOnlyList<SchemaCodeObject> newSchema): base(curSchema, newSchema)
+        public                                                  CompareCodeObjectCollection(DBSchemaCompare compare, IReadOnlyList<SchemaCodeObject> curSchema, IReadOnlyList<SchemaCodeObject> newSchema): base(compare, curSchema, newSchema)
         {
         }
 
@@ -313,7 +313,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
         }
 
-        public              void                                Fill(SchemaCodeObjectCollection curSchema, SchemaCodeObjectCollection newSchema)
+        public              void                                Fill(DBSchemaCompare compare, SchemaCodeObjectCollection curSchema, SchemaCodeObjectCollection newSchema)
         {
             var curSplitSchema = _split(curSchema);
             var newSplitSchema = _split(newSchema);
@@ -321,7 +321,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             CompareCollections = new CompareCodeObjectCollection[(int)SqlCodeObjectType._MaxValue];
 
             for (int i=0 ; i < (int)SqlCodeObjectType._MaxValue ; ++i)
-                CompareCollections[i] = new CompareCodeObjectCollection(curSplitSchema[i], newSplitSchema[i]);
+                CompareCollections[i] = new CompareCodeObjectCollection(compare, curSplitSchema[i], newSplitSchema[i]);
         }
         public              void                                Compare(DBSchemaCompare compare)
         {

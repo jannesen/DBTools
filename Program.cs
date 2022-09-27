@@ -10,17 +10,33 @@ namespace Jannesen.Tools.DBTools
 {
     class Program
     {
-        static      void        Main(string[] args)
+        static      void        Main(string[] aargs)
         {
             try {
-                if (args.Length < 1) {
+                var args = new List<string>(aargs);
+                var options = new Options();
+
+                while (args.Count > 1 && args[0].StartsWith("-", StringComparison.Ordinal)) {
+                    switch(args[0]) {
+                    case "--refactor":
+                        options.Refactor = true;
+                        break;
+
+                    default:
+                        throw new Exception("Syntax error, unknown option '" + args[0] + "'.");                            
+                    }
+
+                    args.RemoveAt(0);
+                }
+
+                if (args.Count < 1) {
                     CmdHelp();
                     return;
                 }
 
                 int p = 0;
 
-                while (p < args.Length) {
+                while (p < args.Count) {
                     switch(args[p]) {
                     case "help":
                         CmdHelp();
@@ -28,7 +44,7 @@ namespace Jannesen.Tools.DBTools
                         break;
 
                     case "export":
-                        if (args.Length - p < 3)
+                        if (args.Count - p < 3)
                             throw new Exception("Syntax error, missing argument.");
 
                         CmdExport(args[p + 1], args[p + 2]);
@@ -36,47 +52,47 @@ namespace Jannesen.Tools.DBTools
                         break;
 
                     case "compare-report":
-                        if (args.Length - p < 4)
+                        if (args.Count - p < 4)
                             throw new Exception("Syntax error, missing argument.");
 
-                        CmdCompareReport(args[p + 1], args[p + 2], args[p + 3], false);
+                        CmdCompareReport(options, args[p + 1], args[p + 2], args[p + 3], false);
                         p += 4;
                         break;
 
                     case "compare-diff":
-                        if (args.Length - p < 4)
+                        if (args.Count - p < 4)
                             throw new Exception("Syntax error, missing argument.");
 
-                        CmdCompareReport(args[p + 1], args[p + 2], args[p + 3], true);
+                        CmdCompareReport(options, args[p + 1], args[p + 2], args[p + 3], true);
                         p += 4;
                         break;
 
                     case "schema-create":
-                        if (args.Length - p < 3)
+                        if (args.Count - p < 3)
                             throw new Exception("Syntax error, missing argument.");
 
-                        CmdSchemaCreate(args[p + 1], args[p + 2]);
+                        CmdSchemaCreate(options, args[p + 1], args[p + 2]);
                         p += 3;
                         break;
 
                     case "schema-update":
-                        if (args.Length - p < 4)
+                        if (args.Count - p < 4)
                             throw new Exception("Syntax error, missing argument.");
 
-                        CmdSchemaUpdate(args[p + 1], args[p + 2], args[p + 3]);
+                        CmdSchemaUpdate(options, args[p + 1], args[p + 2], args[p + 3]);
                         p += 4;
                         break;
 
                     case "code-update":
-                        if (args.Length - p < 4)
+                        if (args.Count - p < 4)
                             throw new Exception("Syntax error, missing argument.");
 
-                        CmdCodeUpdate(args[p + 1], args[p + 2], args[p + 3]);
+                        CmdCodeUpdate(options, args[p + 1], args[p + 2], args[p + 3]);
                         p += 4;
                         break;
 
                     case "code-grep":
-                        if (args.Length - p < 3)
+                        if (args.Count - p < 3)
                             throw new Exception("Syntax error, missing argument.");
 
                         CmdCodeGrep(args[p + 1], args[p + 2]);
@@ -135,32 +151,32 @@ namespace Jannesen.Tools.DBTools
 
             DBSchemaDatabase.ExportToFile(databaseSource.Substring(4), outputFileName);
         }
-        static      void        CmdCompareReport(string curSchemaName, string newSchemaName, string outputFileName, bool includediff)
+        static      void        CmdCompareReport(Options options, string curSchemaName, string newSchemaName, string outputFileName, bool includediff)
         {
-                DBSchemaCompare         compare = new DBSchemaCompare();
+                DBSchemaCompare         compare = new DBSchemaCompare(options);
 
                 compare.CurSchema.LoadFrom(curSchemaName);
                 compare.NewSchema.LoadFrom(newSchemaName);
                 compare.Report(outputFileName, includediff);
         }
-        static      void        CmdSchemaCreate(string schemaName, string outputFileName)
+        static      void        CmdSchemaCreate(Options options, string schemaName, string outputFileName)
         {
-                DBSchemaCompare         compare = new DBSchemaCompare();
+                DBSchemaCompare         compare = new DBSchemaCompare(options);
 
                 compare.NewSchema.LoadFrom(schemaName);
                 compare.SchemaUpdate(outputFileName, true);
         }
-        static      void        CmdSchemaUpdate(string curSchemaName, string newSchemaName, string outputFileName)
+        static      void        CmdSchemaUpdate(Options options, string curSchemaName, string newSchemaName, string outputFileName)
         {
-                DBSchemaCompare         compare = new DBSchemaCompare();
+                DBSchemaCompare         compare = new DBSchemaCompare(options);
 
                 compare.CurSchema.LoadFrom(curSchemaName);
                 compare.NewSchema.LoadFrom(newSchemaName);
                 compare.SchemaUpdate(outputFileName, false);
         }
-        static      void        CmdCodeUpdate(string curSchemaName, string newSchemaName, string outputFileName)
+        static      void        CmdCodeUpdate(Options options, string curSchemaName, string newSchemaName, string outputFileName)
         {
-                DBSchemaCompare         compare = new DBSchemaCompare();
+                DBSchemaCompare         compare = new DBSchemaCompare(options);
 
                 compare.CurSchema.LoadFrom(curSchemaName);
                 compare.NewSchema.LoadFrom(newSchemaName);

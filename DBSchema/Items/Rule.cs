@@ -108,7 +108,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareRuleCollection: CompareItemCollection<CompareRule,SchemaRule,SqlEntityName>
     {
-        public                                                  CompareRuleCollection(IReadOnlyList<SchemaRule> curSchema, IReadOnlyList<SchemaRule> newSchema): base(curSchema, newSchema)
+        public                                                  CompareRuleCollection(DBSchemaCompare compare, IReadOnlyList<SchemaRule> curSchema, IReadOnlyList<SchemaRule> newSchema): base(compare, curSchema, newSchema)
         {
         }
     }

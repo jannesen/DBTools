@@ -68,6 +68,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     writer.Write(", ");
                     writer.WriteData(New.Definition);
                     writer.WriteNewLine();
+            }
+
+            if ((Flags & CompareFlags.Drop) != 0 || (Flags & CompareFlags.Create) != 0) {
                 writer.WriteSqlGo();
             }
         }
@@ -75,7 +78,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
     class CompareDiagramCollection: CompareItemCollection<CompareDiagram,SchemaDiagram,SqlEntityName>
     {
-        public                                                  CompareDiagramCollection(IReadOnlyList<SchemaDiagram> curSchema, IReadOnlyList<SchemaDiagram> newSchema): base(curSchema, newSchema)
+        public                                                  CompareDiagramCollection(DBSchemaCompare compare, IReadOnlyList<SchemaDiagram> curSchema, IReadOnlyList<SchemaDiagram> newSchema): base(compare, curSchema, newSchema)
         {
         }
     }

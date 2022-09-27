@@ -8,6 +8,6 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
     interface ICompareTable
     {
-        bool        EqualColumn(string thisName, string otherName);
+        bool        EqualColumn(DBSchemaCompare compare, string thisName, string otherName);
     }
 }

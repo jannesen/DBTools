@@ -9,7 +9,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
     {
         public              string                              Definition                      { get; private set; }
 
-        public                                                  SchemaCheck(XmlReader xmlReader): base (xmlReader)
+        public                                                  SchemaCheck( XmlReader xmlReader): base (xmlReader)
         {
             try {
                 Definition = xmlReader.ReadContent();

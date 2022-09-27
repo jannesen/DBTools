@@ -119,7 +119,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        public                                                  CompareItemCollection(IReadOnlyList<TItem> curSchema, IReadOnlyList<TItem> newSchema): this(null, null, curSchema, newSchema)
+        public                                                  CompareItemCollection(DBSchemaCompare compare, IReadOnlyList<TItem> curSchema, IReadOnlyList<TItem> newSchema): this(compare, null, curSchema, newSchema)
         {
         }
         public                                                  CompareItemCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<TItem> curSchema, IReadOnlyList<TItem> newSchema)
@@ -139,7 +139,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             if (newSchema != null) {
                 foreach (var item in newSchema) {
-                    if (!_curDictionary.TryGetValue(item.OrgName ?? item.Name, out var cur)) {
+                    if (!_curDictionary.TryGetValue(item.GetOrgName(compare), out var cur)) {
                         if (table != null) {
                             foreach (TCompare i in _items) {
                                 if (i.Cur != null && i.New == null &&
