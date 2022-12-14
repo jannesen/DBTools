@@ -8,7 +8,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    enum SqlCodeObjectType
+    internal enum SqlCodeObjectType
     {
         View                        = 0,
         SqlScalarFunction,
@@ -19,7 +19,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         _MaxValue,
     }
 
-    class SchemaCodeObject: SchemaItemEntity<SchemaCodeObject>
+    internal sealed class SchemaCodeObject: SchemaItemEntity<SchemaCodeObject>
     {
         public              SqlCodeObjectType                   Type                        { get; private set; }
         public              string                              TableName                   { get; private set; }
@@ -159,7 +159,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaCodeObjectCollection: SchemaItemList<SchemaCodeObject,SqlEntityName>
+    internal sealed class SchemaCodeObjectCollection: SchemaItemList<SchemaCodeObject,SqlEntityName>
     {
         public              void                                CodeGrep(Regex regex)
         {
@@ -168,7 +168,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareCodeObject: CompareItem<SchemaCodeObject,SqlEntityName>
+    internal sealed class CompareCodeObject: CompareItem<SchemaCodeObject,SqlEntityName>
     {
         public              void                                CodeUpdateDrop(WriterHelper writer)
         {
@@ -190,7 +190,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareCodeObjectCollection: CompareItemCollection<CompareCodeObject,SchemaCodeObject,SqlEntityName>
+    internal sealed class CompareCodeObjectCollection: CompareItemCollection<CompareCodeObject,SchemaCodeObject,SqlEntityName>
     {
         public                                                  CompareCodeObjectCollection(DBSchemaCompare compare, IReadOnlyList<SchemaCodeObject> curSchema, IReadOnlyList<SchemaCodeObject> newSchema): base(compare, curSchema, newSchema)
         {
@@ -298,7 +298,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareTypeCodeObjectCollection
+    internal sealed class CompareTypeCodeObjectCollection
     {
         public              CompareCodeObjectCollection[]       CompareCollections          { get; private set; }
 

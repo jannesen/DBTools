@@ -5,7 +5,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    class SchemaReferenceColumn: SchemaItemName<SchemaReferenceColumn>
+    internal sealed class SchemaReferenceColumn: SchemaItemName<SchemaReferenceColumn>
     {
         public              string                              Referenced                              { get; private set; }
 
@@ -32,7 +32,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaReferenceColumnCollection: SchemaItemList<SchemaReferenceColumn,string>
+    internal sealed class SchemaReferenceColumnCollection: SchemaItemList<SchemaReferenceColumn,string>
     {
         public              bool                                CompareEqual(SchemaReferenceColumnCollection other, DBSchemaCompare compare, ICompareTable compareTable, ICompareTable referenceTable)
         {

@@ -9,7 +9,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    class SchemaTable: SchemaItemEntityRename<SchemaTable>
+    internal sealed class SchemaTable: SchemaItemEntityRename<SchemaTable>
     {
         public              SchemaColumnCollection              Columns         { get; private set; }
         public              SchemaCheckCollection               Checks          { get; private set; }
@@ -76,11 +76,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaTableCollection: SchemaItemList<SchemaTable,SqlEntityName>
+    internal sealed class SchemaTableCollection: SchemaItemList<SchemaTable,SqlEntityName>
     {
     }
 
-    class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICompareTable
+    internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICompareTable
     {
         public              CompareCheckCollection              Constraints      { get; private set; }
         public              CompareIndexCollection              Indexes         { get; private set; }
@@ -516,7 +516,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareTableCollection: CompareItemCollection<CompareTable,SchemaTable,SqlEntityName>
+    internal sealed class CompareTableCollection: CompareItemCollection<CompareTable,SchemaTable,SqlEntityName>
     {
         public                                                  CompareTableCollection(DBSchemaCompare compare, IReadOnlyList<SchemaTable> curSchema, IReadOnlyList<SchemaTable> newSchema): base(compare, curSchema, newSchema)
         {

@@ -6,7 +6,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    class SchemaRule: SchemaItemEntityRename<SchemaRule>
+    internal sealed class SchemaRule: SchemaItemEntityRename<SchemaRule>
     {
         public              string                              Definition                          { get; private set; }
 
@@ -59,11 +59,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaRuleCollection: SchemaItemList<SchemaRule,SqlEntityName>
+    internal sealed class SchemaRuleCollection: SchemaItemList<SchemaRule,SqlEntityName>
     {
     }
 
-    class CompareRule: CompareItem<SchemaRule,SqlEntityName>
+    internal sealed class CompareRule: CompareItem<SchemaRule,SqlEntityName>
     {
         public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
@@ -106,7 +106,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareRuleCollection: CompareItemCollection<CompareRule,SchemaRule,SqlEntityName>
+    internal sealed class CompareRuleCollection: CompareItemCollection<CompareRule,SchemaRule,SqlEntityName>
     {
         public                                                  CompareRuleCollection(DBSchemaCompare compare, IReadOnlyList<SchemaRule> curSchema, IReadOnlyList<SchemaRule> newSchema): base(compare, curSchema, newSchema)
         {

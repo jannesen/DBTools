@@ -6,7 +6,7 @@ using Jannesen.Tools.DBTools.DBSchema.Item;
 
 namespace Jannesen.Tools.DBTools.DBSchema
 {
-    class DBSchemaCompare
+    internal sealed class DBSchemaCompare
     {
         public              Options                             Options                             { get; private set; }       
         public              DBSchemaDatabase                    CurSchema                           { get; set; }

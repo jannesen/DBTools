@@ -7,7 +7,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    class SchemaDiagram: SchemaItemEntity<SchemaDiagram>
+    internal sealed class SchemaDiagram: SchemaItemEntity<SchemaDiagram>
     {
         public          int?                                    Version                     { get; private set; }
         public          byte[]                                  Definition                  { get; private set; }
@@ -39,11 +39,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaDiagramCollection: SchemaItemList<SchemaDiagram, SqlEntityName>
+    internal sealed class SchemaDiagramCollection: SchemaItemList<SchemaDiagram, SqlEntityName>
     {
     }
 
-    class CompareDiagram: CompareItem<SchemaDiagram, SqlEntityName>
+    internal sealed class CompareDiagram: CompareItem<SchemaDiagram, SqlEntityName>
     {
         public  override    void                                Process(DBSchemaCompare dbCompare, WriterHelper writer)
         {
@@ -76,7 +76,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareDiagramCollection: CompareItemCollection<CompareDiagram,SchemaDiagram,SqlEntityName>
+    internal sealed class CompareDiagramCollection: CompareItemCollection<CompareDiagram,SchemaDiagram,SqlEntityName>
     {
         public                                                  CompareDiagramCollection(DBSchemaCompare compare, IReadOnlyList<SchemaDiagram> curSchema, IReadOnlyList<SchemaDiagram> newSchema): base(compare, curSchema, newSchema)
         {

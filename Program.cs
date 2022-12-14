@@ -8,7 +8,7 @@ using Jannesen.Tools.DBTools.DBSchema;
 // DBTools code-update    N:\TVCN\TVCN-SERVER\TAS\2.38.01\Schema\TAS2.38.01-schema.xml "sql:TVCN-SERVER-DEV\TAS2" "C:\Temp\T.sql"
 namespace Jannesen.Tools.DBTools
 {
-    class Program
+    public sealed class Program
     {
         static      void        Main(string[] aargs)
         {

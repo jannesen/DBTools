@@ -6,7 +6,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    class SchemaColumn: SchemaItemNameRename<SchemaColumn>
+    internal sealed class SchemaColumn: SchemaItemNameRename<SchemaColumn>
     {
         public              string                              Type                { get; private set; }
         public              string                              Identity            { get; private set; }
@@ -72,7 +72,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaColumnCollection: SchemaItemList<SchemaColumn,string>
+    internal sealed class SchemaColumnCollection: SchemaItemList<SchemaColumn,string>
     {
         public              bool                                hasIdentity
         {
@@ -138,11 +138,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareColumn: CompareItem<SchemaColumn, string>
+    internal sealed class CompareColumn: CompareItem<SchemaColumn, string>
     {
     }
 
-    class CompareSchemaColumn: CompareItemCollection<CompareColumn, SchemaColumn, string>
+    internal sealed class CompareSchemaColumn: CompareItemCollection<CompareColumn, SchemaColumn, string>
     {
         public                      CompareSchemaColumn(DBSchemaCompare compare, IReadOnlyList<SchemaColumn> curSchema, IReadOnlyList<SchemaColumn> newSchema): base(compare, curSchema, newSchema)
         {

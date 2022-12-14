@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Jannesen.Tools.DBTools
 {
-    internal class Options
+    internal sealed class Options
     {
         public          bool        Refactor;
     }

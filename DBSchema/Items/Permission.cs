@@ -6,7 +6,7 @@ using Jannesen.Tools.DBTools.Library;
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
     [Flags]
-    enum SqlPermissions
+    internal enum SqlPermissions
     {
         None        = 0x0000,
         Select      = 0x0001,
@@ -15,7 +15,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         Update      = 0x0020,
         Delete      = 0x0040,
     }
-    class SchemaPermission: SchemaItemName<SchemaPermission>
+    internal sealed class SchemaPermission: SchemaItemName<SchemaPermission>
     {
         public          SqlPermissions                          Grant               { get; private set; }
         public          SqlPermissions                          Deny                { get; private set; }
@@ -78,15 +78,15 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaPermissionCollection: SchemaItemList<SchemaPermission,string>
+    internal sealed class SchemaPermissionCollection: SchemaItemList<SchemaPermission,string>
     {
     }
 
-    class ComparePermission: CompareItem<SchemaPermission,string>
+    internal sealed class ComparePermission: CompareItem<SchemaPermission,string>
     {
     }
 
-    class ComparePermissionCollection: CompareItemCollection<ComparePermission,SchemaPermission,string>
+    internal sealed class ComparePermissionCollection: CompareItemCollection<ComparePermission,SchemaPermission,string>
     {
         public                                                  ComparePermissionCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<SchemaPermission> curSchema, IReadOnlyList<SchemaPermission> newSchema): base(compare, table, curSchema, newSchema)
         {

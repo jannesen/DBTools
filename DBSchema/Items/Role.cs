@@ -6,7 +6,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    class SchemaRole: SchemaItemNameRename<SchemaRole>
+    internal sealed class SchemaRole: SchemaItemNameRename<SchemaRole>
     {
         public              List<string>                        Members                         { get; private set; }
 
@@ -95,11 +95,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaRoleCollection: SchemaItemList<SchemaRole,string>
+    internal sealed class SchemaRoleCollection: SchemaItemList<SchemaRole,string>
     {
     }
 
-    class CompareRole: CompareItem<SchemaRole,string>
+    internal sealed class CompareRole: CompareItem<SchemaRole,string>
     {
         public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
@@ -139,7 +139,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareRoleCollection: CompareItemCollection<CompareRole,SchemaRole,string>
+    internal sealed class CompareRoleCollection: CompareItemCollection<CompareRole,SchemaRole,string>
     {
         public                                                  CompareRoleCollection(DBSchemaCompare compare, IReadOnlyList<SchemaRole> curSchema, IReadOnlyList<SchemaRole> newSchema): base(compare, curSchema, newSchema)
         {

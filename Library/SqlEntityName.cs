@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Jannesen.Tools.DBTools.Library
 {
-    class SqlEntityName: IComparable
+    internal sealed class SqlEntityName: IComparable
     {
         public          string                  Fullname            { get; private set; }
         public          string                  Schema              { get; private set; }

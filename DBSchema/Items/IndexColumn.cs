@@ -5,7 +5,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    class SchemaIndexColumn: SchemaItemName<SchemaIndexColumn>
+    internal sealed class SchemaIndexColumn: SchemaItemName<SchemaIndexColumn>
     {
         public              string                              Order                   { get; private set; }
         public              bool                                Included                { get; private set; }
@@ -31,7 +31,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaIndexColumnCollection: SchemaItemList<SchemaIndexColumn,string>
+    internal sealed class SchemaIndexColumnCollection: SchemaItemList<SchemaIndexColumn,string>
     {
     }
 }

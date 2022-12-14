@@ -6,20 +6,20 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    enum SchemaIndexFunction
+    internal enum SchemaIndexFunction
     {
         PrimaryKey,
         Index,
         Constraint,
         Stat
     }
-    enum SchemaIndexType
+    internal enum SchemaIndexType
     {
         Clustered,
         Nonclustered,
     }
 
-    class SchemaIndex: SchemaItemNameRename<SchemaIndex>
+    internal sealed class SchemaIndex: SchemaItemNameRename<SchemaIndex>
     {
         public              SchemaIndexFunction                 Function                            { get; private set; }
         public              SchemaIndexType                     Type                                { get; private set; }
@@ -237,7 +237,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaIndexCollection: SchemaItemList<SchemaIndex,string>
+    internal sealed class SchemaIndexCollection: SchemaItemList<SchemaIndex,string>
     {
         public          SchemaIndex                             PrimaryKey
         {
@@ -263,7 +263,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareIndex: CompareItem<SchemaIndex,string>
+    internal sealed class CompareIndex: CompareItem<SchemaIndex,string>
     {
         public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
@@ -319,7 +319,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareIndexCollection: CompareItemCollection<CompareIndex,SchemaIndex,string>
+    internal sealed class CompareIndexCollection: CompareItemCollection<CompareIndex,SchemaIndex,string>
     {
         public                                                  CompareIndexCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<SchemaIndex> curSchema, IReadOnlyList<SchemaIndex> newSchema): base(compare, table, curSchema, newSchema)
         {

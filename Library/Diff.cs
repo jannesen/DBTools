@@ -105,7 +105,7 @@ namespace Jannesen.Tools.DBTools.Library
 
         /// <summary>Data on one input file being compared.
     /// </summary>
-        internal class DiffData
+        internal sealed class DiffData
         {
             /// <summary>Number of elements (lines).</summary>
             internal int Length;

@@ -5,7 +5,7 @@ using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
 {
-    class SchemaReference: SchemaItemEntityRename<SchemaReference>
+    internal sealed class SchemaReference: SchemaItemEntityRename<SchemaReference>
     {
         public              SqlEntityName                       Referenced                          { get; private set; }
         public              bool                                isDisabled                          { get; private set; }
@@ -123,12 +123,12 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class SchemaReferenceCollection: SchemaItemList<SchemaReference,SqlEntityName>
+    internal sealed class SchemaReferenceCollection: SchemaItemList<SchemaReference,SqlEntityName>
     {
     }
 
 
-    class CompareReference: CompareItem<SchemaReference,SqlEntityName>
+    internal sealed class CompareReference: CompareItem<SchemaReference,SqlEntityName>
     {
         public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
         {
@@ -165,7 +165,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
     }
 
-    class CompareReferenceCollection: CompareItemCollection<CompareReference,SchemaReference,SqlEntityName>
+    internal sealed class CompareReferenceCollection: CompareItemCollection<CompareReference,SchemaReference,SqlEntityName>
     {
         public                                                  CompareReferenceCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<SchemaReference> curSchema, IReadOnlyList<SchemaReference> newSchema): base(compare, table, curSchema, newSchema)
         {

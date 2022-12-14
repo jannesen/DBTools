@@ -7,7 +7,7 @@ using Jannesen.Tools.DBTools.DBSchema.Item;
 
 namespace Jannesen.Tools.DBTools.DBSchema
 {
-    class WriterHelper: IDisposable
+    internal sealed class WriterHelper: IDisposable
     {
         private static readonly char[]                  _hexTable = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 

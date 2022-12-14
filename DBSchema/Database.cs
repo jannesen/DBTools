@@ -12,7 +12,7 @@ using Jannesen.Tools.DBTools.DBSchema.Item;
 
 namespace Jannesen.Tools.DBTools.DBSchema
 {
-    class DBSchemaDatabase
+    internal sealed class DBSchemaDatabase
     {
         public              string                              Name            { get; private set; }
         public              string                              Collate         { get; private set; }
