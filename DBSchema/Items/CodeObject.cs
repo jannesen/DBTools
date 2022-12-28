@@ -48,7 +48,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     }
                 }
 
-                _removeSourceLocationFromCode();
+                _stripAndNormalizeCode();
             }
             catch(Exception err) {
                 throw new DBSchemaException("Reading of code-object '" + Name + "' failed.", err);
@@ -151,10 +151,31 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
         }
 
-        private             void                                _removeSourceLocationFromCode()
+        private             void                                _stripAndNormalizeCode()
         {
             if (Code.StartsWith("--@", StringComparison.Ordinal)) {
                 Code = Code.Substring(Code.IndexOf("\n", StringComparison.Ordinal)+1);
+            }
+
+            while (Code.EndsWith("\r\n\r\n", StringComparison.Ordinal)) {
+                Code = Code.Substring(0, Code.Length - 2);
+            }
+
+            while (Code.EndsWith("\n\n", StringComparison.Ordinal)) {
+                Code = Code.Substring(0, Code.Length - 1);
+            }
+
+            if (!Code.EndsWith("\r\n", StringComparison.Ordinal) && !Code.EndsWith("\n", StringComparison.Ordinal)) {
+                if (Code.IndexOf("\r\n", StringComparison.Ordinal)>=0) {
+                    Code += "\r\n";
+                }
+                else
+                if (Code.IndexOf("\n", StringComparison.Ordinal)>=0) {
+                    Code += "\n";
+                }
+                else {
+                    Code += "\r\n";
+                }
             }
         }
     }
