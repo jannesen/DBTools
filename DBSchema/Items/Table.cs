@@ -412,7 +412,11 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     writer.Write(")");
                     writer.WriteNewLine();
 
-                for(int c=0 ; c < New.Columns.Count ; ++c) {
+                int count = New.Columns.Count;
+                while (count > 0 && New.Columns[count - 1].isComputed)
+                    --count;
+
+                for(int c=0 ; c < count ; ++c) {
                     SchemaColumn    newColumn = New.Columns[c];
                     if (!New.Columns[c].isComputed) { 
                         SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.GetOrgName(compare));
@@ -428,7 +432,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                             writer.Write(newColumn.isNullable ? " = NULL" : " = /*!!TODO!!*/");
                         }
 
-                        if (c < New.Columns.Count - 1)
+                        if (c < count - 1)
                             writer.Write(",");
 
                         writer.WriteNewLine();
