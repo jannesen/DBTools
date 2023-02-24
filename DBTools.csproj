@@ -33,6 +33,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="SqlScripts\DBSchemaExportToXml-code-object.sql" />
+    <None Remove="SqlScripts\DBSchemaExportToXml-default.sql" />
+    <None Remove="SqlScripts\DBSchemaExportToXml-role.sql" />
+    <None Remove="SqlScripts\DBSchemaExportToXml-rule.sql" />
+    <None Remove="SqlScripts\DBSchemaExportToXml-table.sql" />
+    <None Remove="SqlScripts\DBSchemaExportToXml-type-with-code.sql" />
+    <None Remove="SqlScripts\DBSchemaExportToXml-type.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -40,7 +50,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml.sql" />
+    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-code-object.sql" />
+    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-table.sql" />
+    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-type-with-code.sql" />
+    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-type.sql" />
+    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-rule.sql" />
+    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-default.sql" />
+    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-role.sql" />
+    <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-diagram.sql" />
     <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-pre.sql" />
     <EmbeddedResource Include="SqlScripts\DBSchemaExportToXml-post.sql" />
     <EmbeddedResource Include="SqlScripts\DropAllCode.sql" />

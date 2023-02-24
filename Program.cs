@@ -22,6 +22,10 @@ namespace Jannesen.Tools.DBTools
                         options.Refactor = true;
                         break;
 
+                    case "--include-code":
+                        options.IncludeCode = true;
+                        break;
+
                     default:
                         throw new Exception("Syntax error, unknown option '" + args[0] + "'.");                            
                     }
@@ -47,7 +51,7 @@ namespace Jannesen.Tools.DBTools
                         if (args.Count - p < 3)
                             throw new Exception("Syntax error, missing argument.");
 
-                        CmdExport(args[p + 1], args[p + 2]);
+                        CmdExport(options, args[p + 1], args[p + 2]);
                         p += 3;
                         break;
 
@@ -95,7 +99,7 @@ namespace Jannesen.Tools.DBTools
                         if (args.Count - p < 3)
                             throw new Exception("Syntax error, missing argument.");
 
-                        CmdCodeGrep(args[p + 1], args[p + 2]);
+                        CmdCodeGrep(options, args[p + 1], args[p + 2]);
                         p += 3;
                         break;
 
@@ -144,12 +148,12 @@ namespace Jannesen.Tools.DBTools
             Console.WriteLine("        sql:<server-name>\\<database-name>");
             Console.WriteLine("        file:<filename-name>");
         }
-        static      void        CmdExport(string databaseSource, string outputFileName)
+        static      void        CmdExport(Options options, string databaseSource, string outputFileName)
         {
             if (!databaseSource.StartsWith("sql:", StringComparison.Ordinal))
                 throw new Exception("Syntax error, invalid database source.");
 
-            DBSchemaDatabase.ExportToFile(databaseSource.Substring(4), outputFileName);
+            DBSchemaDatabase.ExportToFile(options, databaseSource.Substring(4), outputFileName);
         }
         static      void        CmdCompareReport(Options options, string curSchemaName, string newSchemaName, string outputFileName, bool includediff)
         {
@@ -182,9 +186,9 @@ namespace Jannesen.Tools.DBTools
                 compare.NewSchema.LoadFrom(newSchemaName);
                 compare.CodeUpdate(outputFileName);
         }
-        static      void        CmdCodeGrep(string schemaName, string regex)
+        static      void        CmdCodeGrep(Options options, string schemaName, string regex)
         {
-                DBSchemaDatabase    schema = new DBSchemaDatabase();
+                DBSchemaDatabase    schema = new DBSchemaDatabase(options);
 
                 schema.LoadFrom(schemaName);
                 schema.CodeGrep(regex);

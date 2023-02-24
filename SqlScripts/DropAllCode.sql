@@ -11,7 +11,8 @@ DECLARE ccmd CURSOR LOCAL STATIC
                       FROM master.sys.[dm_tran_locks]
                      WHERE [resource_type]        = 'DATABASE'
                        AND [resource_database_id] = db_id()
-               ) l INNER JOIN master.sys.[dm_exec_sessions] s ON s.[session_id] = l.[request_session_id]
+               ) l
+               INNER JOIN master.sys.[dm_exec_sessions] s ON s.[session_id] = l.[request_session_id]
          WHERE s.[session_id]         <> @@spid
            AND s.[is_user_process]    =  1
 
@@ -71,7 +72,11 @@ DECLARE ccmd CURSOR LOCAL STATIC
                            [cmd]    = 'DROP TYPE ' + quotename(schema_name(t.[schema_id])) + N'.' + quotename(t.[name])
                       FROM sys.types t
                      WHERE t.[is_user_defined] = 1
-                       AND NOT EXISTS (SELECT * FROM sys.columns c WHERE c.[user_type_id] = t.[user_type_id])
+                       AND NOT EXISTS (SELECT *
+                                         FROM sys.columns c
+                                              INNER JOIN sys.objects o on o.[object_id] = c.[object_id]
+                                        WHERE c.[user_type_id] = t.[user_type_id]
+                                          AND o.[type] = 'U')
                ) x
          WHERE [cmd] is not null
       ORDER BY [order], [cmd];

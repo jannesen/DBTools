@@ -22,8 +22,8 @@ namespace Jannesen.Tools.DBTools.DBSchema
         public                                                  DBSchemaCompare(Options options)
         {
             Options   = options;  
-            CurSchema = new DBSchemaDatabase();
-            NewSchema = new DBSchemaDatabase();
+            CurSchema = new DBSchemaDatabase(options);
+            NewSchema = new DBSchemaDatabase(options);
         }
 
         public              string                              NativeCurType(string type)
