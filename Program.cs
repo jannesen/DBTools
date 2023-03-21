@@ -157,41 +157,45 @@ namespace Jannesen.Tools.DBTools
         }
         static      void        CmdCompareReport(Options options, string curSchemaName, string newSchemaName, string outputFileName, bool includediff)
         {
-                DBSchemaCompare         compare = new DBSchemaCompare(options);
+            options.IncludeCode = true;
 
-                compare.CurSchema.LoadFrom(curSchemaName);
-                compare.NewSchema.LoadFrom(newSchemaName);
-                compare.Report(outputFileName, includediff);
+            DBSchemaCompare         compare = new DBSchemaCompare(options);
+
+            compare.CurSchema.LoadFrom(curSchemaName);
+            compare.NewSchema.LoadFrom(newSchemaName);
+            compare.Report(outputFileName, includediff);
         }
         static      void        CmdSchemaCreate(Options options, string schemaName, string outputFileName)
         {
-                DBSchemaCompare         compare = new DBSchemaCompare(options);
+            DBSchemaCompare         compare = new DBSchemaCompare(options);
 
-                compare.NewSchema.LoadFrom(schemaName);
-                compare.SchemaUpdate(outputFileName, true);
+            compare.NewSchema.LoadFrom(schemaName);
+            compare.SchemaUpdate(outputFileName, true);
         }
         static      void        CmdSchemaUpdate(Options options, string curSchemaName, string newSchemaName, string outputFileName)
         {
-                DBSchemaCompare         compare = new DBSchemaCompare(options);
+            DBSchemaCompare         compare = new DBSchemaCompare(options);
 
-                compare.CurSchema.LoadFrom(curSchemaName);
-                compare.NewSchema.LoadFrom(newSchemaName);
-                compare.SchemaUpdate(outputFileName, false);
+            compare.CurSchema.LoadFrom(curSchemaName);
+            compare.NewSchema.LoadFrom(newSchemaName);
+            compare.SchemaUpdate(outputFileName, false);
         }
         static      void        CmdCodeUpdate(Options options, string curSchemaName, string newSchemaName, string outputFileName)
         {
-                DBSchemaCompare         compare = new DBSchemaCompare(options);
+            options.IncludeCode = true;
+            DBSchemaCompare         compare = new DBSchemaCompare(options);
 
-                compare.CurSchema.LoadFrom(curSchemaName);
-                compare.NewSchema.LoadFrom(newSchemaName);
-                compare.CodeUpdate(outputFileName);
+            compare.CurSchema.LoadFrom(curSchemaName);
+            compare.NewSchema.LoadFrom(newSchemaName);
+            compare.CodeUpdate(outputFileName);
         }
         static      void        CmdCodeGrep(Options options, string schemaName, string regex)
         {
-                DBSchemaDatabase    schema = new DBSchemaDatabase(options);
+            options.IncludeCode = true;
+            DBSchemaDatabase    schema = new DBSchemaDatabase(options);
 
-                schema.LoadFrom(schemaName);
-                schema.CodeGrep(regex);
+            schema.LoadFrom(schemaName);
+            schema.CodeGrep(regex);
         }
     }
 }
