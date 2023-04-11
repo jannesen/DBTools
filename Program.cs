@@ -157,8 +157,6 @@ namespace Jannesen.Tools.DBTools
         }
         static      void        CmdCompareReport(Options options, string curSchemaName, string newSchemaName, string outputFileName, bool includediff)
         {
-            options.IncludeCode = true;
-
             DBSchemaCompare         compare = new DBSchemaCompare(options);
 
             compare.CurSchema.LoadFrom(curSchemaName);
