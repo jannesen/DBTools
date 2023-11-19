@@ -112,9 +112,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             foreach (var table in Tables) {
                 foreach (var column in table.Columns) {
                     var type = column.Type;
-                    if (!usedTypes.Contains(type)) {
-                        usedTypes.Add(type);
-                    }
+                    usedTypes.Add(type);
                 }
             }
 
