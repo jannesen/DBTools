@@ -36,14 +36,27 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public              bool                                EqualType(string curType, string newType)
         {
-            if (curType == newType)
+            if (curType == newType) {
                 return true;
+            }
 
             if (curType.EndsWith("]", StringComparison.Ordinal) && newType.EndsWith("]", StringComparison.Ordinal)) {
                 return CompareTypes.FindByNewName(new Library.SqlEntityName(newType)).New?.GetOrgName(this) == new Library.SqlEntityName(curType);
             }
 
             return false;
+        }
+        public              bool                                EqualNativeType(string curType, string newType)
+        {
+            if (curType.EndsWith("]", StringComparison.Ordinal)) {
+                curType = CurSchema.Types.Find(new Library.SqlEntityName(curType)).NativeType;
+            }
+
+            if (newType.EndsWith("]", StringComparison.Ordinal)) {
+                newType = NewSchema.Types.Find(new Library.SqlEntityName(newType)).NativeType;
+            }
+
+            return curType == newType;
         }
         public              bool                                EqualTable(Library.SqlEntityName curName, Library.SqlEntityName newName)
         {

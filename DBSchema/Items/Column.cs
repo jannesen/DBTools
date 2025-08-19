@@ -51,6 +51,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         {
             return (mode == CompareMode.TableCompare || mode == CompareMode.Report || this.Name == other.Name) &&
                    (mode == CompareMode.TableCompare || compare.EqualType(this.Type, other.Type)) &&
+                   compare.EqualNativeType(this.Type, other.Type) && 
                    this.Identity      == other.Identity         &&
                    this.Collation     == other.Collation        &&
                    this.isNullable    == other.isNullable       &&

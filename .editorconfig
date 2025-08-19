@@ -32,6 +32,9 @@ dotnet_diagnostic.CA1308.severity = none
 # CA1309: Use ordinal string comparison
 dotnet_diagnostic.CA1309.severity = none
 
+# CA1515: Because an application's API isn't typically referenced from outside the assembly
+dotnet_diagnostic.CA1515.severity = none
+
 # CA1812: CompareCheck is an internal class that is apparently never instantiated. False alarm
 dotnet_diagnostic.CA1812.severity = none
 
