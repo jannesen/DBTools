@@ -104,6 +104,8 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             if (Cur.Columns.Count != New.Columns.Count)
                 return CompareFlags.Rebuild;
 
+            bool hasComputedColumn = false;
+
             for (int i = 0 ; i < Cur.Columns.Count ; ++i) {
                 var curColumn = Cur.Columns[i];
                 var newColumn = New.Columns[i];
@@ -129,6 +131,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     (curColumn.Default != null && curColumn.Default.EndsWith("]", StringComparison.Ordinal) && (compare.CompareDefaults.FindByCurName(new SqlEntityName(curColumn.Default)).Flags & CompareFlags.Create) != 0) ||
                     (curColumn.Rule    != null && curColumn.Rule   .EndsWith("]", StringComparison.Ordinal) && (compare.CompareRules   .FindByCurName(new SqlEntityName(curColumn.Rule   )).Flags & CompareFlags.Create) != 0) )
                     return CompareFlags.Rebuild;
+
+                if (newColumn.isComputed) {
+                    hasComputedColumn = true;
+                }
             }
 
             var curClusteredIndex = Cur.Indexes.Clustered;
@@ -138,6 +144,10 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 (curClusteredIndex == null && newClusteredIndex != null) ||
                 (curClusteredIndex != null && newClusteredIndex != null && !curClusteredIndex.CompareEqual(newClusteredIndex, compare, this, CompareMode.UpdateWithRefactor)))
                 return CompareFlags.Rebuild;
+
+            if (rtnFlags != CompareFlags.None && hasComputedColumn) {
+                return CompareFlags.Rebuild;
+            }
 
             return rtnFlags;
         }
