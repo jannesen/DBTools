@@ -84,54 +84,62 @@ namespace Jannesen.Tools.DBTools.DBSchema
             _initSchema();
             _initDiagram();
 
-            using (WriterHelper writer = new WriterHelper(fileName)) {
-                writer.WriteLine("SET NOCOUNT            ON");
-                writer.WriteLine("SET ANSI_NULLS         ON");
-                writer.WriteLine("SET ANSI_PADDING       ON");
-                writer.WriteLine("SET ANSI_WARNINGS      ON");
-                writer.WriteLine("SET QUOTED_IDENTIFIER  ON");
-                writer.WriteLine("SET NUMERIC_ROUNDABORT OFF");
-                writer.WriteSqlGo();
+            using (var writer = new SqlFileWriter(fileName)) {
 
-                if (CompareTables.HasDropTable()) {
-                    writer.Write(SqlScript.Resource.GetScriptString("DropAllCode.sql"));
-                }
             // Init
                 using (WriterHelper wr = new WriterHelper()) {
-                    foreach (var compareTable in CompareTables.Items)
-                        compareTable.Constraints.Init(wr);
+                    if (CompareTables.HasDropTable()) {
+                        wr.Write(SqlScript.Resource.GetScriptString("DropAllCode.sql"));
+                    }
 
-                    foreach (var compareTable in CompareTables.Items)
-                        compareTable.References .Init(wr);
+                    using (WriterHelper initwr = new WriterHelper()) {
+                        foreach (var compareTable in CompareTables.Items) {
+                            compareTable.Constraints.Init(initwr);
+                        }
 
-                    foreach (var compareTable in CompareTables.Items)
-                        compareTable.Indexes    .Init(wr);
+                        foreach (var compareTable in CompareTables.Items) {
+                            compareTable.References .Init(initwr);
+                        }
 
-                    CompareDefaults.Init(wr);
-                    CompareRules   .Init(wr);
-                    CompareTypes   .Init(wr);
-                    CompareTables  .Init(wr);
-                    writer.WriteSqlSection("init update.", wr);
+                        foreach (var compareTable in CompareTables.Items) {
+                            compareTable.Indexes    .Init(initwr);
+                        }
+
+                        CompareDefaults.Init(initwr);
+                        CompareRules   .Init(initwr);
+                        CompareTypes   .Init(initwr);
+                        CompareTables  .Init(initwr);
+                        wr.WriteSqlSection("init update.", initwr);
+                    }
+
+                    writer.WriteSection("01-init.sql", wr);
                 }
 
             // Refactor
-                if (!create) {
-                    CompareTypes.Refactor(writer);
-                    CompareDefaults.Refactor(writer);
-                    CompareRules.Refactor(writer);
-                    CompareTables.Refactor(writer);
-                }
+                using (WriterHelper wr = new WriterHelper()) {
+                    if (!create) {
+                        CompareTypes.Refactor(wr);
+                        CompareDefaults.Refactor(wr);
+                        CompareRules.Refactor(wr);
+                        CompareTables.Refactor(wr);
+                    }
 
-            // Process
-                CompareDefaults.Process(this, writer);
-                CompareRules.Process(this, writer);
-                CompareTypes.Process(this, writer);
-                CompareTables.Process(this, writer);
+                    CompareDefaults.Process(this, wr);
+                    CompareRules.Process(this, wr);
+                    CompareTypes.Process(this, wr);
+                    CompareTables.Process(this, wr);
+                    writer.WriteSection("02-schemaobjects.sql", wr);
+                }
 
             // Copy data
                 if (!create) {
-                    foreach (CompareTable compareTable in CompareTables.Items)
-                        compareTable.ProcessCopyData(this, writer);
+                    using (WriterHelper wr = new WriterHelper()) {
+                        foreach (CompareTable compareTable in CompareTables.Items) {
+                            compareTable.ProcessCopyData(this, wr);
+                        }
+
+                        writer.WriteSection("03-copydata.sql", wr);
+                    }
                 }
 
             // Cleanup
@@ -140,33 +148,45 @@ namespace Jannesen.Tools.DBTools.DBSchema
                     CompareTypes   .Cleanup(wr);
                     CompareRules   .Cleanup(wr);
                     CompareDefaults.Cleanup(wr);
-                    writer.WriteSqlSection("cleanup old objects.", wr);
+                    writer.WriteSection("04-cleanup.sql", "cleanup old objects.", wr);
                 }
 
-            // Process checks
-                foreach (CompareTable compareTable in CompareTables.Items)
-                    compareTable.ProcessChecks(this, writer);
-
-            // Process indexes
-                foreach (CompareTable compareTable in CompareTables.Items)
-                    compareTable.ProcessIndexes(this, writer);
-
-            // Process references
-                foreach (CompareTable compareTable in CompareTables.Items)
-                    compareTable.ProcessReferences(this, writer);
-
-            // Process roles
                 using (WriterHelper wr = new WriterHelper()) {
-                    CompareRoles.Process(this, wr);
-                    writer.WriteSqlSection("update roles.", wr);
+                    // Process checks
+                    foreach (CompareTable compareTable in CompareTables.Items) {
+                        compareTable.ProcessChecks(this, wr);
+                    }
+
+                    // Process indexes
+                    foreach (CompareTable compareTable in CompareTables.Items) {
+                        compareTable.ProcessIndexes(this, wr);
+                    }
+
+                    // Process references
+                    foreach (CompareTable compareTable in CompareTables.Items) {
+                        compareTable.ProcessReferences(this, wr);
+                    }
+
+                    writer.WriteSection("05-indexesconstraints.sql", wr);
                 }
 
-            // Process table permissions
-                using (WriterHelper wr = new WriterHelper()) {
-                    foreach (CompareTable compareTable in CompareTables.Items)
-                        compareTable.ProcessPermissions(this, wr);
 
-                    writer.WriteSqlSection("update table permissions.", wr);
+                using (WriterHelper wr = new WriterHelper()) {
+                // Process roles
+                    using (WriterHelper roleswr = new WriterHelper()) {
+                        CompareRoles.Process(this, roleswr);
+                        wr.WriteSqlSection("update roles.", roleswr);
+                    }
+
+                // Process table permissions
+                    using (WriterHelper permissionswr = new WriterHelper()) {
+                        foreach (CompareTable compareTable in CompareTables.Items) {
+                            compareTable.ProcessPermissions(this, permissionswr);
+                        }
+                        wr.WriteSqlSection("update table permissions.", permissionswr);
+                    }
+
+                    writer.WriteSection("06-security.sql", wr);
                 }
 
             // Update diagrams
@@ -192,7 +212,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                     foreach (CompareDiagram compareDiagram in CompareDiagram.Items)
                         compareDiagram.Process(this, wr);
 
-                    writer.WriteSqlSection("update diagrams.", wr);
+                    writer.WriteSection("10-diagrams.sql", "update diagrams.", wr);
                 }
 
                 // Write refactor
@@ -211,7 +231,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                             i.New?.WriteRefactor(wr);
 
                         if (wr.hasData) {
-                            writer.WriteSqlSection("restore refacor data.", wr);
+                            writer.WriteSection("11-refactordata.sql", "restore refacor data.", wr);
                         }
                     }
                 }
