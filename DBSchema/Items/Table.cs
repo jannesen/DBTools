@@ -410,7 +410,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 writer.Write("      (");
                     n = false;
                     for(int c=0 ; c < New.Columns.Count ; ++c) {
-                        if (!New.Columns[c].isComputed) { 
+                        if (!New.Columns[c].isComputed) {
                             if (n)
                                 writer.Write(", ");
                             else
@@ -428,7 +428,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
                 for(int c=0 ; c < count ; ++c) {
                     SchemaColumn    newColumn = New.Columns[c];
-                    if (!New.Columns[c].isComputed) { 
+                    if (!New.Columns[c].isComputed) {
                         SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.GetOrgName(compare));
 
                         writer.Write((c == 0) ? "SELECT " : "       ");

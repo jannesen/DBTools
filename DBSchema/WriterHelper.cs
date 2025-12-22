@@ -9,7 +9,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
 {
     internal sealed class WriterHelper: IDisposable
     {
-        public  const           string                  NewLine      = "\r\n";
+        public  const           string                  NewLine      = "\n";
 
         private static readonly char[]                  _hexTable = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
@@ -91,7 +91,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         public                  void                    WriteLine(string s)
         {
             Write(s);
-            Write("\r\n");
+            Write(NewLine);
         }
         public                  void                    WriteWidth(string s, int w)
         {
@@ -109,7 +109,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public                  void                    WriteNewLine()
         {
-            Write("\r\n");
+            Write(NewLine);
         }
         public                  void                    WriteQuoteName(object n)
         {

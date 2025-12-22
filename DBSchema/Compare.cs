@@ -8,7 +8,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
 {
     internal sealed class DBSchemaCompare
     {
-        public              Options                             Options                             { get; private set; }       
+        public              Options                             Options                             { get; private set; }
         public              DBSchemaDatabase                    CurSchema                           { get; set; }
         public              DBSchemaDatabase                    NewSchema                           { get; set; }
         public              CompareRoleCollection               CompareRoles                        { get; private set; }
@@ -21,7 +21,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         public                                                  DBSchemaCompare(Options options)
         {
-            Options   = options;  
+            Options   = options;
             CurSchema = new DBSchemaDatabase(options);
             NewSchema = new DBSchemaDatabase(options);
         }
@@ -216,7 +216,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 }
 
                 // Write refactor
-                if (!create && Options.Refactor) { 
+                if (!create && Options.Refactor) {
                     using (WriterHelper wr = new WriterHelper()) {
                         foreach (var i in CompareDefaults.Items)
                             i.New?.WriteRefactor(wr);

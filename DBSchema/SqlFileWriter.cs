@@ -56,7 +56,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         private static          StreamWriter            _createFile(string filename)
         {
-            var wr = new StreamWriter(filename, false, System.Text.Encoding.UTF8); 
+            var wr = new StreamWriter(filename, false, System.Text.Encoding.UTF8);
             try {
                 wr.Write("SET NOCOUNT            ON"  + WriterHelper.NewLine);
                 wr.Write("SET ANSI_NULLS         ON"  + WriterHelper.NewLine);

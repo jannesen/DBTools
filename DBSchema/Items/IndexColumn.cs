@@ -26,7 +26,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         public  override    bool                                CompareEqual(SchemaIndexColumn other, DBSchemaCompare compare, ICompareTable compareTable, CompareMode mode)
         {
             return compareTable.EqualColumn(compare, this.Name, other.Name) &&
-                   this.Order    == other.Order && 
+                   this.Order    == other.Order &&
                    this.Included == other.Included;
         }
     }

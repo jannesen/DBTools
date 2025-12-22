@@ -27,7 +27,7 @@ namespace Jannesen.Tools.DBTools
                         break;
 
                     default:
-                        throw new Exception("Syntax error, unknown option '" + args[0] + "'.");                            
+                        throw new Exception("Syntax error, unknown option '" + args[0] + "'.");
                     }
 
                     args.RemoveAt(0);

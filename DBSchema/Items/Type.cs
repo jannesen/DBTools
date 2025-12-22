@@ -196,7 +196,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 }
             }
 
-            foreach(var cmp in Items) { 
+            foreach(var cmp in Items) {
                 if (cmp.New?.Columns != null) {
                     cmp.Process(dbCompare, writer);
                 }
@@ -204,13 +204,13 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
         public  override    void                                Cleanup(WriterHelper writer)
         {
-            foreach(var cmp in Items) { 
+            foreach(var cmp in Items) {
                 if (cmp.Cur?.Columns != null) {
                     cmp.Cleanup(writer);
                 }
             }
 
-            foreach(var cmp in Items) { 
+            foreach(var cmp in Items) {
                 if (cmp.Cur?.Columns == null) {
                     cmp.Cleanup(writer);
                 }

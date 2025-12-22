@@ -156,7 +156,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             bool hasInclude = false;
 
             foreach (var column in Columns) {
-                if (!column.Included) { 
+                if (!column.Included) {
                     if (next)
                         writer.Write(", ");
                     else
@@ -180,7 +180,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 next = false;
                 writer.Write(" INCLUDE (");
                 foreach (var column in Columns) {
-                    if (column.Included) { 
+                    if (column.Included) {
                         if (next)
                             writer.Write(", ");
                         else
