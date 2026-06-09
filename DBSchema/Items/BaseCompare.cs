@@ -119,7 +119,7 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
     }
     public                                                  CompareItemCollection(DBSchemaCompare compare, CompareTable table, IReadOnlyList<TItem> curSchema, IReadOnlyList<TItem> newSchema)
     {
-        _items          = new List<TCompare>();
+        _items         = new List<TCompare>();
         _curDictionary = new Dictionary<TName, TCompare>();
         _newDictionary = new Dictionary<TName, TCompare>();
 
@@ -136,7 +136,7 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
             foreach (var item in newSchema) {
                 if (!_curDictionary.TryGetValue(item.GetOrgName(compare), out var cur)) {
                     if (table != null) {
-                        foreach (TCompare i in _items) {
+                        foreach (var i in _items) {
                             if (i.Cur != null && i.New == null &&
                                 i.Cur.CompareEqual(item, compare, table, CompareMode.UpdateWithRefactor)) {
                                 cur = i;
@@ -173,8 +173,8 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
 
     public              void                                Report(DBSchemaCompare compare, WriterHelper writer, string sectionname)
     {
-        using (WriterHelper     wr = new WriterHelper()) {
-            foreach(TCompare cmp in Items) {
+        using (var wr = new WriterHelper()) {
+            foreach(var cmp in Items) {
                 if (cmp.Cur != null && cmp.New != null) {
                     cmp.ReportUpdate(compare, wr);
                 }
@@ -183,8 +183,8 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
             writer.WriteReportSection("changed " + sectionname, wr);
         }
 
-        using (WriterHelper     wr = new WriterHelper()) {
-            foreach(TCompare cmp in Items) {
+        using (var wr = new WriterHelper()) {
+            foreach(var cmp in Items) {
                 if (cmp.Cur == null && cmp.New != null) {
                     wr.Write(WriterHelper.QuoteName(cmp.New.Name));
                     wr.WriteNewLine();
@@ -194,8 +194,8 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
             writer.WriteReportSection("new " + sectionname, wr);
         }
 
-        using (WriterHelper     wr = new WriterHelper()) {
-            foreach(TCompare cmp in Items) {
+        using (var wr = new WriterHelper()) {
+            foreach(var cmp in Items) {
                 if (cmp.Cur != null && cmp.New == null) {
                     wr.Write(WriterHelper.QuoteName(cmp.Cur.Name));
                     wr.WriteNewLine();
@@ -207,8 +207,8 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
     }
     public              bool                                ReportDepended(WriterHelper writer, DBSchemaCompare compare, ICompareTable compareTable, string dependedname)
     {
-        bool rtn = false;
-        foreach(TCompare cmp in Items) {
+        var rtn = false;
+        foreach(var cmp in Items) {
             if (cmp.Cur != null && cmp.New != null && !cmp.Cur.CompareEqual(cmp.New, compare, compareTable, CompareMode.Report)) {
                 writer.WriteWidth(dependedname + WriterHelper.QuoteName(cmp.Cur.Name), 68);
                 writer.Write(": changed");
@@ -217,7 +217,7 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
             }
         }
 
-        foreach(TCompare cmp in Items) {
+        foreach(var cmp in Items) {
             if (cmp.Cur == null && cmp.New != null) {
                 writer.WriteWidth(dependedname + WriterHelper.QuoteName(cmp.New.Name), 68);
                 writer.Write(": new");
@@ -226,7 +226,7 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
             }
         }
 
-        foreach(TCompare cmp in Items) {
+        foreach(var cmp in Items) {
             if (cmp.Cur != null && cmp.New == null) {
                 writer.WriteWidth(dependedname + WriterHelper.QuoteName(cmp.Cur.Name), 68);
                 writer.Write(": delete");
@@ -239,7 +239,7 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
     }
     public              void                                Init(WriterHelper writer)
     {
-        foreach(TCompare cmp in Items)
+        foreach(var cmp in Items)
             cmp.Init(writer);
     }
     public              void                                Refactor(WriterHelper writer)
@@ -249,28 +249,28 @@ internal abstract class CompareItemCollection<TCompare, TItem, TName> where TCom
     }
     public  virtual     void                                Process(DBSchemaCompare dbCompare, WriterHelper writer)
     {
-        foreach(TCompare cmp in Items)
+        foreach(var cmp in Items)
             cmp.Process(dbCompare, writer);
     }
     public  virtual     void                                Cleanup(WriterHelper writer)
     {
-        foreach(TCompare cmp in Items)
+        foreach(var cmp in Items)
             cmp.Cleanup(writer);
     }
 
     public              void                                SetRebuild()
     {
-        foreach(TCompare cmp in Items)
+        foreach(var cmp in Items)
             cmp.SetRebuild();
     }
     public              void                                Compare(DBSchemaCompare compare, ICompareTable compareTable)
     {
-        foreach(TCompare cmp in Items)
+        foreach(var cmp in Items)
             cmp.Compare(compare, compareTable);
     }
     public              bool                                hasChange()
     {
-        foreach(TCompare cmp in _items) {
+        foreach(var cmp in _items) {
             if ((cmp.Flags & (CompareFlags.Create | CompareFlags.Refactor | CompareFlags.Update)) != 0)
                 return true;
         }

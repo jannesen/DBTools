@@ -77,7 +77,7 @@ internal sealed class SchemaColumnCollection: SchemaItemList<SchemaColumn,string
     public              bool                                hasIdentity
     {
         get {
-            for (int c = 0 ; c < Count ; ++c) {
+            for (var c = 0 ; c < Count ; ++c) {
                 if (this[c].Identity != null)
                     return true;
             }
@@ -88,8 +88,8 @@ internal sealed class SchemaColumnCollection: SchemaItemList<SchemaColumn,string
 
     public              void                                WriteColumns(WriterHelper writer)
     {
-        for (int c = 0 ; c < this.Count ; ++c) {
-            SchemaColumn column = this[c];
+        for (var c = 0 ; c < this.Count ; ++c) {
+            var column = this[c];
 
             if (c > 0)
                 writer.Write(",");

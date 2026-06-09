@@ -26,10 +26,8 @@ internal sealed class SqlFileWriter: IDisposable
 
     public                  void                    Dispose()
     {
-        if (_writer != null) {
-            _writer.Dispose();
-            _writer = null;
-        }
+        _writer?.Dispose();
+        _writer = null;
     }
 
     public                  void                    WriteSection(string name, WriterHelper w)
@@ -40,11 +38,11 @@ internal sealed class SqlFileWriter: IDisposable
     {
         if (w.hasData) {
             if (_writer != null) {
-                _writeSection(_writer, name, description, w);
+                _writeSection(_writer, description, w);
             }
             else {
                 using (var writer = _createFile(_filename + name)) {
-                    _writeSection(writer, name, description, w);
+                    _writeSection(writer, description, w);
                 }
             }
         }
@@ -69,7 +67,7 @@ internal sealed class SqlFileWriter: IDisposable
         }
 
     }
-    private static          void                    _writeSection(StreamWriter writer, string name, string description, WriterHelper w)
+    private static          void                    _writeSection(StreamWriter writer, string description, WriterHelper w)
     {
         if (w.hasData) {
             writer.Write(WriterHelper.NewLine);

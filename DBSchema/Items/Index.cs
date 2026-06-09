@@ -153,8 +153,8 @@ internal sealed class SchemaIndex: SchemaItemNameRename<SchemaIndex>
 
         writer.Write("(");
 
-        bool next = false;
-        bool hasInclude = false;
+        var next       = false;
+        var hasInclude = false;
 
         foreach (var column in Columns) {
             if (!column.Included) {
@@ -243,7 +243,7 @@ internal sealed class SchemaIndexCollection: SchemaItemList<SchemaIndex,string>
     public          SchemaIndex                             PrimaryKey
     {
         get {
-            for (int i = 0 ; i < Count ; ++i) {
+            for (var i = 0 ; i < Count ; ++i) {
                 if (this[i].Function == SchemaIndexFunction.PrimaryKey)
                     return this[i];
             }
@@ -254,7 +254,7 @@ internal sealed class SchemaIndexCollection: SchemaItemList<SchemaIndex,string>
     public          SchemaIndex                             Clustered
     {
         get {
-            for (int i = 0 ; i < Count ; ++i) {
+            for (var i = 0 ; i < Count ; ++i) {
                 if (this[i].Type == SchemaIndexType.Clustered)
                     return this[i];
             }

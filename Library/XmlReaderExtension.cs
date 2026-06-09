@@ -91,12 +91,8 @@ internal static class XmlReaderExtension
     }
     public  static      string          GetValueString(this XmlReader xmlReader, string name)
     {
-        string      value = xmlReader.GetAttribute(name);
-
-        if (value == null)
-            throw new XmlReaderException("Invalid XML: missing attribute '" + name + "' in element '" + xmlReader.Name + "'.");
-
-        return value;
+        return xmlReader.GetAttribute(name)
+                    ?? throw new XmlReaderException("Invalid XML: missing attribute '" + name + "' in element '" + xmlReader.Name + "'.");
     }
     public  static      string          GetValueStringNullable(this XmlReader xmlReader, string name)
     {
@@ -104,7 +100,7 @@ internal static class XmlReaderExtension
     }
     public  static      bool            GetValueBool(this XmlReader xmlReader, string name)
     {
-        string      value = xmlReader.GetValueString(name);
+        var value = xmlReader.GetValueString(name);
 
         switch(value) {
         case "0":
@@ -121,7 +117,7 @@ internal static class XmlReaderExtension
     }
     public  static      bool            GetValueBool(this XmlReader xmlReader, string name, bool defaultValue)
     {
-        string      value = xmlReader.GetAttribute(name);
+        var value = xmlReader.GetAttribute(name);
 
         if (value == null)
             return defaultValue;
@@ -141,7 +137,7 @@ internal static class XmlReaderExtension
     }
     public  static      int?            GetValueIntNullable(this XmlReader xmlReader, string name)
     {
-        string      value = xmlReader.GetAttribute(name);
+        var value = xmlReader.GetAttribute(name);
 
         if (value == null)
             return null;

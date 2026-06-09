@@ -98,7 +98,7 @@ internal abstract class SchemaItemList<TItem,TName> : List<TItem> where TItem:Sc
         if (this.Count != other.Count)
             return false;
 
-        for (int i = 0 ; i < this.Count ; ++i) {
+        for (var i = 0 ; i < this.Count ; ++i) {
             if (!this[i].CompareEqual(other[i], compare, compareTable, mode))
                 return false;
         }
@@ -107,7 +107,7 @@ internal abstract class SchemaItemList<TItem,TName> : List<TItem> where TItem:Sc
     }
     public              TItem                               Find(TName name)
     {
-        for (int i=0 ; i < Count ; ++i) {
+        for (var i=0 ; i < Count ; ++i) {
             if (this[i].Name.Equals(name))
                 return this[i];
         }

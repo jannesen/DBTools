@@ -8,12 +8,12 @@ internal static class Library
 {
     public      static  string[]        SplitSqlName(string name)
     {
-        List<string>    rtn   = new List<string>();
-        StringBuilder   s     = new StringBuilder();
-        bool            quote = false;
+        var rtn   = new List<string>();
+        var s     = new StringBuilder();
+        var quote = false;
 
-        for (int p = 0 ; p < name.Length ; ++p) {
-            char c = name[p];
+        for (var p = 0 ; p < name.Length ; ++p) {
+            var c = name[p];
 
             switch(c) {
             case '[':

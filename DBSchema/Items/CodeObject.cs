@@ -95,7 +95,7 @@ internal sealed class SchemaCodeObject: SchemaItemEntity<SchemaCodeObject>
     }
     public              void                                WriteCreate(DBSchemaCompare compare, WriterHelper writer)
     {
-        string code = Code.Replace("\r\n", "\n", StringComparison.Ordinal).Replace("\n", "\r\n", StringComparison.Ordinal);
+        var code = Code.Replace("\r\n", "\n", StringComparison.Ordinal).Replace("\n", "\r\n", StringComparison.Ordinal);
 
         writer.WriteSqlPrint("create: " + Name);
 
@@ -182,7 +182,7 @@ internal sealed class SchemaCodeObjectCollection: SchemaItemList<SchemaCodeObjec
 {
     public              void                                CodeGrep(Regex regex)
     {
-        foreach(SchemaCodeObject schemaCodeObject in this)
+        foreach(var schemaCodeObject in this)
             schemaCodeObject.CodeGrep(regex);
     }
 }
@@ -217,9 +217,9 @@ internal sealed class CompareCodeObjectCollection: CompareItemCollection<Compare
 
     public              void                                ReportChanges(DBSchemaCompare compare, WriterHelper writer, string typeName, bool includediff)
     {
-        int     extralines = 3;
+        var extralines = 3;
 
-        foreach(CompareCodeObject cmp in Items) {
+        foreach(var cmp in Items) {
             if (cmp.Cur != null && cmp.New != null && !cmp.New.CompareEqual(cmp.Cur, compare, null, CompareMode.Report)) {
                 if (includediff) {
                     writer.Write("------------------------------------------------------------------------------------------------------------------------");
@@ -248,15 +248,15 @@ internal sealed class CompareCodeObjectCollection: CompareItemCollection<Compare
                         writer.WriteNewLine();
                     }
 
-                    string[]    curLines = cmp.Cur.Code.Replace("\r", "", StringComparison.Ordinal).Split('\n');
-                    string[]    newLines = cmp.New.Code.Replace("\r", "", StringComparison.Ordinal).Split('\n');
+                    var curLines = cmp.Cur.Code.Replace("\r", "", StringComparison.Ordinal).Split('\n');
+                    var newLines = cmp.New.Code.Replace("\r", "", StringComparison.Ordinal).Split('\n');
 
-                    Diff.Item[] diffs    = Diff.DiffText(curLines, newLines);
+                    var diffs    = Diff.DiffText(curLines, newLines);
 
-                    for (int n = 0 ; n < diffs.Length ; ++n) {
-                        Diff.Item   diff  = diffs[n];
-                        int         npre  = diff.StartB                                                                 - (n > 0 ? diffs[n-1].EndB : 0);
-                        int         npost = (n < diffs.Length - 1 ? diffs[n + 1].StartB - extralines : newLines.Length) - diff.EndB;
+                    for (var n = 0 ; n < diffs.Length ; ++n) {
+                        var diff  = diffs[n];
+                        var npre  = diff.StartB                                                                 - (n > 0 ? diffs[n-1].EndB : 0);
+                        var npost = (n < diffs.Length - 1 ? diffs[n + 1].StartB - extralines : newLines.Length) - diff.EndB;
 
                         if (npre  < 0) npre  = 0;
                         if (npost < 0) npost = 0;
@@ -287,7 +287,7 @@ internal sealed class CompareCodeObjectCollection: CompareItemCollection<Compare
     }
     public              void                                ReportNew(WriterHelper writer, string typeName)
     {
-        foreach(CompareCodeObject cmp in Items) {
+        foreach(var cmp in Items) {
             if (cmp.Cur == null && cmp.New != null) {
                 writer.WriteWidth(typeName, 10);
                 writer.Write(cmp.New.Name);
@@ -297,7 +297,7 @@ internal sealed class CompareCodeObjectCollection: CompareItemCollection<Compare
     }
     public              void                                ReportDeleted(WriterHelper writer, string typeName)
     {
-        foreach(CompareCodeObject cmp in Items) {
+        foreach(var cmp in Items) {
             if (cmp.Cur != null && cmp.New == null) {
                 writer.WriteWidth(typeName, 10);
                 writer.Write(cmp.Cur.Name);
@@ -307,12 +307,12 @@ internal sealed class CompareCodeObjectCollection: CompareItemCollection<Compare
     }
     public              void                                CodeUpdateDrop(WriterHelper writer)
     {
-        foreach(CompareCodeObject cmp in Items)
+        foreach(var cmp in Items)
             cmp.CodeUpdateDrop(writer);
     }
     public              void                                CodeUpdateCreate(DBSchemaCompare compare, WriterHelper writer)
     {
-        foreach(CompareCodeObject cmp in Items)
+        foreach(var cmp in Items)
             cmp.CodeUpdateCreate(compare, writer);
     }
 }
@@ -339,31 +339,31 @@ internal sealed class CompareTypeCodeObjectCollection
 
         CompareCollections = new CompareCodeObjectCollection[(int)SqlCodeObjectType._MaxValue];
 
-        for (int i=0 ; i < (int)SqlCodeObjectType._MaxValue ; ++i)
+        for (var i=0 ; i < (int)SqlCodeObjectType._MaxValue ; ++i)
             CompareCollections[i] = new CompareCodeObjectCollection(compare, curSplitSchema[i], newSplitSchema[i]);
     }
     public              void                                Compare(DBSchemaCompare compare)
     {
-        foreach(CompareCodeObjectCollection c in CompareCollections)
+        foreach(var c in CompareCollections)
             c.Compare(compare, null);
     }
     public              void                                Report(DBSchemaCompare compare, WriterHelper writer, bool includediff)
     {
-        using (WriterHelper     wr = new WriterHelper()) {
+        using (var wr = new WriterHelper()) {
             for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
                 this[type].ReportNew(wr, _typeToName(type));
 
             writer.WriteReportSection("new code", wr);
         }
 
-        using (WriterHelper     wr = new WriterHelper()) {
+        using (var wr = new WriterHelper()) {
             for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
                 this[type].ReportDeleted(wr, _typeToName(type));
 
             writer.WriteReportSection("deleted code", wr);
         }
 
-        using (WriterHelper     wr = new WriterHelper()) {
+        using (var wr = new WriterHelper()) {
             for (SqlCodeObjectType type = 0 ; type < SqlCodeObjectType._MaxValue ; ++type)
                 this[type].ReportChanges(compare, wr, _typeToName(type), includediff);
 
@@ -395,10 +395,10 @@ internal sealed class CompareTypeCodeObjectCollection
     {
         var rtn = new List<SchemaCodeObject>[(int)SqlCodeObjectType._MaxValue];
 
-        for (int i=0 ; i < (int)SqlCodeObjectType._MaxValue ; ++i)
+        for (var i=0 ; i < (int)SqlCodeObjectType._MaxValue ; ++i)
             rtn[i] = new List<SchemaCodeObject>();
 
-        foreach(SchemaCodeObject item in schema)
+        foreach(var item in schema)
             rtn[(int)item.Type].Add(item);
 
         return rtn;

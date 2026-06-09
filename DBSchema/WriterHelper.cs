@@ -9,7 +9,7 @@ internal sealed class WriterHelper: IDisposable
 {
     public  const           string                  NewLine      = "\n";
 
-    private static readonly char[]                  _hexTable = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+    private static readonly char[]                  _hexTable = [ '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' ];
 
     private readonly        TextWriter              _script;
     private                 bool                    _hasData;
@@ -142,8 +142,8 @@ internal sealed class WriterHelper: IDisposable
     {
         Write("0x");
 
-        for(int i = 0 ; i < d.Length ; ++i) {
-            byte b = d[i];
+        for(var i = 0 ; i < d.Length ; ++i) {
+            var b = d[i];
 
             _script.Write(_hexTable[(b >> 4) & 0xf]);
             _script.Write(_hexTable[(b     ) & 0xf]);
@@ -179,9 +179,9 @@ internal sealed class WriterHelper: IDisposable
     }
     public                  void                    WriteDiff(int lineno, char c, string line)
     {
-        string  ln = lineno.ToString(CultureInfo.InvariantCulture);
+        var ln = lineno.ToString(CultureInfo.InvariantCulture);
 
-        for (int n = ln.Length ; n < 5 ; ++n)
+        for (var n = ln.Length ; n < 5 ; ++n)
             Write(' ');
 
         Write(ln);

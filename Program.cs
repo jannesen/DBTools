@@ -38,7 +38,7 @@ internal sealed class Program
                 return;
             }
 
-            int p = 0;
+            var p = 0;
 
             while (p < args.Count) {
                 switch(args[p]) {
@@ -157,7 +157,7 @@ internal sealed class Program
     }
     static      void        CmdCompareReport(Options options, string curSchemaName, string newSchemaName, string outputFileName, bool includediff)
     {
-        DBSchemaCompare         compare = new DBSchemaCompare(options);
+        var compare = new DBSchemaCompare(options);
 
         compare.CurSchema.LoadFrom(curSchemaName);
         compare.NewSchema.LoadFrom(newSchemaName);
@@ -165,14 +165,14 @@ internal sealed class Program
     }
     static      void        CmdSchemaCreate(Options options, string schemaName, string outputFileName)
     {
-        DBSchemaCompare         compare = new DBSchemaCompare(options);
+        var compare = new DBSchemaCompare(options);
 
         compare.NewSchema.LoadFrom(schemaName);
         compare.SchemaUpdate(outputFileName, true);
     }
     static      void        CmdSchemaUpdate(Options options, string curSchemaName, string newSchemaName, string outputFileName)
     {
-        DBSchemaCompare         compare = new DBSchemaCompare(options);
+        var compare = new DBSchemaCompare(options);
 
         compare.CurSchema.LoadFrom(curSchemaName);
         compare.NewSchema.LoadFrom(newSchemaName);
@@ -181,7 +181,7 @@ internal sealed class Program
     static      void        CmdCodeUpdate(Options options, string curSchemaName, string newSchemaName, string outputFileName)
     {
         options.IncludeCode = true;
-        DBSchemaCompare         compare = new DBSchemaCompare(options);
+        var compare = new DBSchemaCompare(options);
 
         compare.CurSchema.LoadFrom(curSchemaName);
         compare.NewSchema.LoadFrom(newSchemaName);
@@ -190,7 +190,7 @@ internal sealed class Program
     static      void        CmdCodeGrep(Options options, string schemaName, string regex)
     {
         options.IncludeCode = true;
-        DBSchemaDatabase    schema = new DBSchemaDatabase(options);
+        var schema = new DBSchemaDatabase(options);
 
         schema.LoadFrom(schemaName);
         schema.CodeGrep(regex);

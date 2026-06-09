@@ -2,8 +2,11 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 
+#pragma warning disable IDE0007
+#pragma warning disable IDE0251 
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
 #pragma warning disable IDE0017 // Simplify object initialization
+#pragma warning disable SYSLIB1045
 
 namespace Jannesen.Tools.DBTools.Library;
 

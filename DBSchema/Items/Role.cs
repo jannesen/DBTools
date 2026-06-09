@@ -40,12 +40,12 @@ internal sealed class SchemaRole: SchemaItemNameRename<SchemaRole>
         if (this.Name        != other.Name)
             return false;
 
-        foreach(string member in this.Members) {
+        foreach(var member in this.Members) {
             if (!other.Members.Contains(member))
                 return false;
         }
 
-        foreach(string member in other.Members) {
+        foreach(var member in other.Members) {
             if (!this.Members.Contains(member))
                 return false;
         }
@@ -117,14 +117,14 @@ internal sealed class CompareRole: CompareItem<SchemaRole,string>
                 New.WriteCreate(writer);
 
             if ((Flags & CompareFlags.Update) != 0) {
-                foreach(string member in Cur.Members) {
+                foreach(var member in Cur.Members) {
                     if (!New.Members.Contains(member))
                         New.WriteDropMember(writer, member);
                 }
             }
 
             if ((Flags & (CompareFlags.Create | CompareFlags.Update)) != 0) {
-                foreach(string member in New.Members) {
+                foreach(var member in New.Members) {
                     if ((Flags & CompareFlags.Create) != 0 || !Cur.Members.Contains(member))
                         New.WriteAddMember(writer, member);
                 }

@@ -21,7 +21,7 @@ internal sealed class SqlEntityName: IComparable
     {
         Fullname = fullname;
 
-        List<string>    parts = _splitSqlName(fullname);
+        var parts = _splitSqlName(fullname);
 
         if (parts.Count != 2)
             throw new ArgumentException("Invalid sql fullname '" + fullname + "'.");
@@ -65,8 +65,8 @@ internal sealed class SqlEntityName: IComparable
     }
     public                  int             CompareTo(object o)
     {
-        if (o is SqlEntityName)
-            return Compare(this, (SqlEntityName)o);
+        if (o is SqlEntityName osen)
+            return Compare(this, osen);
 
         return 1;
     }
@@ -81,8 +81,8 @@ internal sealed class SqlEntityName: IComparable
     }
     public      override    bool            Equals(object obj)
     {
-        if (obj is SqlEntityName)
-            return this == (SqlEntityName)obj;
+        if (obj is SqlEntityName osen)
+            return this == osen;
 
         return false;
     }
@@ -93,12 +93,12 @@ internal sealed class SqlEntityName: IComparable
 
     public      static      List<string>    _splitSqlName(string fullname)
     {
-        List<string>    rtn   = new List<string>();
-        StringBuilder   s     = new StringBuilder();
-        bool            quote = false;
+        var rtn   = new List<string>();
+        var s     = new StringBuilder();
+        var quote = false;
 
-        for (int p = 0 ; p < fullname.Length ; ++p) {
-            char c = fullname[p];
+        for (var p = 0 ; p < fullname.Length ; ++p) {
+            var c = fullname[p];
 
             switch(c) {
             case '[':

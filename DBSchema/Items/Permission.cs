@@ -46,11 +46,11 @@ internal sealed class SchemaPermission: SchemaItemName<SchemaPermission>
 
     public  static      SqlPermissions                      ParsePermissions(string sperm)
     {
-        SqlPermissions      rtn = SqlPermissions.None;
+        var rtn = SqlPermissions.None;
 
         if (sperm != null) {
-            foreach (string sp in sperm.Split(' ')) {
-                string s = sp.Trim().ToLowerInvariant();
+            foreach (var sp in sperm.Split(' ')) {
+                var s = sp.Trim().ToLowerInvariant();
 
                 switch(s) {
                 case "select":      rtn |= SqlPermissions.Select;       break;
@@ -67,7 +67,7 @@ internal sealed class SchemaPermission: SchemaItemName<SchemaPermission>
     }
     public  static      string                              ToSqlPermissions(SqlPermissions p)
     {
-        string  rtn = "";
+        var rtn = "";
 
         if ((p & SqlPermissions.Select)  == SqlPermissions.Select)      rtn = (rtn.Length > 0) ? rtn + ",SELECT"  : "SELECT";
         if ((p & SqlPermissions.Execute) == SqlPermissions.Execute)     rtn = (rtn.Length > 0) ? rtn + ",EXECUTE" : "EXECUTE";
@@ -95,16 +95,16 @@ internal sealed class ComparePermissionCollection: CompareItemCollection<Compare
 
     public              void                                WriteGrantRevoke(WriterHelper writer, CompareFlags status, SqlEntityName name, int width)
     {
-        bool        f = false;
+        var f = false;
 
-        foreach(ComparePermission cmpPermission in this.Items) {
-            SqlPermissions      curGrant = (cmpPermission.Cur != null && status != CompareFlags.Rebuild ? cmpPermission.Cur.Grant : SqlPermissions.None);
-            SqlPermissions      newGrant = (cmpPermission.New != null                                   ? cmpPermission.New.Grant : SqlPermissions.None);
-            SqlPermissions      curDeny  = (cmpPermission.Cur != null && status != CompareFlags.Rebuild ? cmpPermission.Cur.Deny  : SqlPermissions.None);
-            SqlPermissions      newDeny  = (cmpPermission.New != null                                   ? cmpPermission.New.Deny  : SqlPermissions.None);
-            SqlPermissions      revoke   = (curGrant & (~newGrant)) | (curDeny & (~newDeny));
-            SqlPermissions      grant    = newGrant & (~(curGrant | revoke));
-            SqlPermissions      deny     = newDeny  & (~(curDeny  | revoke));
+        foreach(var cmpPermission in this.Items) {
+            var curGrant = (cmpPermission.Cur != null && status != CompareFlags.Rebuild ? cmpPermission.Cur.Grant : SqlPermissions.None);
+            var newGrant = (cmpPermission.New != null                                   ? cmpPermission.New.Grant : SqlPermissions.None);
+            var curDeny  = (cmpPermission.Cur != null && status != CompareFlags.Rebuild ? cmpPermission.Cur.Deny  : SqlPermissions.None);
+            var newDeny  = (cmpPermission.New != null                                   ? cmpPermission.New.Deny  : SqlPermissions.None);
+            var revoke   = (curGrant & (~newGrant)) | (curDeny & (~newDeny));
+            var grant    = newGrant & (~(curGrant | revoke));
+            var deny     = newDeny  & (~(curDeny  | revoke));
 
             if (revoke != SqlPermissions.None) {
                 writer.Write("REVOKE ");

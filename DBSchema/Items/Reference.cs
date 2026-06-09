@@ -60,7 +60,7 @@ internal sealed class SchemaReference: SchemaItemEntityRename<SchemaReference>
             writer.WriteQuoteName(Name.Name);
             writer.Write(" FOREIGN KEY (");
             f = false;
-            foreach(SchemaReferenceColumn c in Columns) {
+            foreach(var c in Columns) {
                 if (f)
                     writer.Write(", ");
 
@@ -71,7 +71,7 @@ internal sealed class SchemaReference: SchemaItemEntityRename<SchemaReference>
             writer.Write(Referenced);
             writer.Write("(");
             f = false;
-            foreach(SchemaReferenceColumn c in Columns) {
+            foreach(var c in Columns) {
                 if (f)
                     writer.Write(", ");
 

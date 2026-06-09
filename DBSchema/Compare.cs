@@ -66,7 +66,7 @@ internal sealed class DBSchemaCompare
         _initSchema();
         _initCode();
 
-        using (WriterHelper writer = new WriterHelper(fileName)) {
+        using (var writer = new WriterHelper(fileName)) {
             CompareDefaults       .Report(this, writer, "defaults");
             CompareRules          .Report(this, writer, "rules");
             CompareTypes          .Report(this, writer, "datatypes");
@@ -85,12 +85,12 @@ internal sealed class DBSchemaCompare
         using (var writer = new SqlFileWriter(fileName)) {
 
         // Init
-            using (WriterHelper wr = new WriterHelper()) {
+            using (var wr = new WriterHelper()) {
                 if (CompareTables.HasDropTable()) {
                     wr.Write(SqlScript.Resource.GetScriptString("DropAllCode.sql"));
                 }
 
-                using (WriterHelper initwr = new WriterHelper()) {
+                using (var initwr = new WriterHelper()) {
                     foreach (var compareTable in CompareTables.Items) {
                         compareTable.Constraints.Init(initwr);
                     }
@@ -114,7 +114,7 @@ internal sealed class DBSchemaCompare
             }
 
         // Refactor
-            using (WriterHelper wr = new WriterHelper()) {
+            using (var wr = new WriterHelper()) {
                 if (!create) {
                     CompareTypes.Refactor(wr);
                     CompareDefaults.Refactor(wr);
@@ -131,8 +131,8 @@ internal sealed class DBSchemaCompare
 
         // Copy data
             if (!create) {
-                using (WriterHelper wr = new WriterHelper()) {
-                    foreach (CompareTable compareTable in CompareTables.Items) {
+                using (var wr = new WriterHelper()) {
+                    foreach (var compareTable in CompareTables.Items) {
                         compareTable.ProcessCopyData(this, wr);
                     }
 
@@ -141,7 +141,7 @@ internal sealed class DBSchemaCompare
             }
 
         // Cleanup
-            using (WriterHelper wr = new WriterHelper()) {
+            using (var wr = new WriterHelper()) {
                 CompareTables  .Cleanup(wr);
                 CompareTypes   .Cleanup(wr);
                 CompareRules   .Cleanup(wr);
@@ -149,19 +149,19 @@ internal sealed class DBSchemaCompare
                 writer.WriteSection("04-cleanup.sql", "cleanup old objects.", wr);
             }
 
-            using (WriterHelper wr = new WriterHelper()) {
+            using (var wr = new WriterHelper()) {
                 // Process checks
-                foreach (CompareTable compareTable in CompareTables.Items) {
+                foreach (var compareTable in CompareTables.Items) {
                     compareTable.ProcessChecks(this, wr);
                 }
 
                 // Process indexes
-                foreach (CompareTable compareTable in CompareTables.Items) {
+                foreach (var compareTable in CompareTables.Items) {
                     compareTable.ProcessIndexes(this, wr);
                 }
 
                 // Process references
-                foreach (CompareTable compareTable in CompareTables.Items) {
+                foreach (var compareTable in CompareTables.Items) {
                     compareTable.ProcessReferences(this, wr);
                 }
 
@@ -169,16 +169,16 @@ internal sealed class DBSchemaCompare
             }
 
 
-            using (WriterHelper wr = new WriterHelper()) {
+            using (var wr = new WriterHelper()) {
             // Process roles
-                using (WriterHelper roleswr = new WriterHelper()) {
+                using (var roleswr = new WriterHelper()) {
                     CompareRoles.Process(this, roleswr);
                     wr.WriteSqlSection("update roles.", roleswr);
                 }
 
             // Process table permissions
-                using (WriterHelper permissionswr = new WriterHelper()) {
-                    foreach (CompareTable compareTable in CompareTables.Items) {
+                using (var permissionswr = new WriterHelper()) {
+                    foreach (var compareTable in CompareTables.Items) {
                         compareTable.ProcessPermissions(this, permissionswr);
                     }
                     wr.WriteSqlSection("update table permissions.", permissionswr);
@@ -188,7 +188,7 @@ internal sealed class DBSchemaCompare
             }
 
         // Update diagrams
-            using (WriterHelper wr = new WriterHelper()) {
+            using (var wr = new WriterHelper()) {
                 if (CompareDiagram.hasChange()) {
                     wr.WriteLine("IF NOT EXISTS (SELECT * FROM sys.objects WHERE [object_id] = OBJECT_ID('dbo.[sysdiagrams]'))");
                     wr.WriteLine("BEGIN");
@@ -207,7 +207,7 @@ internal sealed class DBSchemaCompare
                     wr.WriteSqlGo();
                 }
 
-                foreach (CompareDiagram compareDiagram in CompareDiagram.Items)
+                foreach (var compareDiagram in CompareDiagram.Items)
                     compareDiagram.Process(this, wr);
 
                 writer.WriteSection("10-diagrams.sql", "update diagrams.", wr);
@@ -215,7 +215,7 @@ internal sealed class DBSchemaCompare
 
             // Write refactor
             if (!create && Options.Refactor) {
-                using (WriterHelper wr = new WriterHelper()) {
+                using (var wr = new WriterHelper()) {
                     foreach (var i in CompareDefaults.Items)
                         i.New?.WriteRefactor(wr);
 
@@ -240,7 +240,7 @@ internal sealed class DBSchemaCompare
         _initSchema();
         _initCode();
 
-        using (WriterHelper writer = new WriterHelper(fileName)) {
+        using (var writer = new WriterHelper(fileName)) {
             CompareTypeCodeObject.CodeUpdate(this, writer);
         }
     }

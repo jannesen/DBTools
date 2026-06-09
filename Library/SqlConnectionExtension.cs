@@ -51,7 +51,7 @@ internal static class SqlConnectionExtension
         else
             connectString += ";Integrated Security=true";
 
-        SqlConnection sqlConnection = new SqlConnection(connectString);
+        var sqlConnection = new SqlConnection(connectString);
 
         try {
             sqlConnection.Open();
@@ -70,16 +70,13 @@ internal static class SqlConnectionExtension
     }
     public  static      void                    ExecuteScript(this SqlConnection sqlConnection, string fileName, Stream steam)
     {
-        using (StreamReader textReader = new StreamReader(steam,
-                                                            System.Text.Encoding.UTF8,
-                                                            true,
-                                                            4096,
-                                                            true))
+        using (var textReader = new StreamReader(steam, Encoding.UTF8, true, 4096, true))
         {
+            var lineNumber = 0;
+            var lineOffset = 0;
+            var cmdText    = new StringBuilder(64000);
+
             string          line;
-            int             lineNumber = 0;
-            int             lineOffset = 0;
-            StringBuilder   cmdText = new StringBuilder(64000);
 
             do {
                 line = textReader.ReadLine();
@@ -89,7 +86,7 @@ internal static class SqlConnectionExtension
                     (line.Length >= 2 && (line[0] == 'G' || line[0] == 'g') && string.Equals(line.Trim(), "GO", StringComparison.OrdinalIgnoreCase)))
                 {
                     if (cmdText.Length > 0) {
-                        while (cmdText.Length > 0 && cmdText[cmdText.Length - 1] == '\n')
+                        while (cmdText.Length > 0 && cmdText[^1] == '\n')
                             --cmdText.Length;
 
                         if (cmdText.Length > 0) {

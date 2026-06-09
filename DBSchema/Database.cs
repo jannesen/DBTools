@@ -61,11 +61,11 @@ internal sealed class DBSchemaDatabase
     }
     public              void                                LoadFromDatabase(string databaseName)
     {
-        using (SqlConnection sqlConnection = SqlConnectionExtension.NewConnection(databaseName)) {
+        using (var sqlConnection = SqlConnectionExtension.NewConnection(databaseName)) {
             sqlConnection.ExecuteSqlScriptResource("DBSchemaExportToXml-pre.sql");
 
             using (var sqlCmd = new SqlCommand(_DBSchemaExportToXml(Options), sqlConnection) { CommandType = System.Data.CommandType.Text, CommandTimeout = 60000 }) {
-                using (XmlReader xmlReader = sqlCmd.ExecuteXmlReader()) {
+                using (var xmlReader = sqlCmd.ExecuteXmlReader()) {
                     _parseDatabase(xmlReader);
                 }
             }
@@ -79,17 +79,17 @@ internal sealed class DBSchemaDatabase
     }
     public  static      void                                ExportToFile(Options options, string serverDatabaseName, string fileName)
     {
-        using (SqlConnection sqlConnection = SqlConnectionExtension.NewConnection(serverDatabaseName)) {
+        using (var sqlConnection = SqlConnectionExtension.NewConnection(serverDatabaseName)) {
             sqlConnection.ExecuteSqlScriptResource("DBSchemaExportToXml-pre.sql");
 
             using (var sqlCmd = new SqlCommand(_DBSchemaExportToXml(options), sqlConnection) { CommandType = System.Data.CommandType.Text, CommandTimeout = 60000 }) {
-                using (XmlReader xmlReader = sqlCmd.ExecuteXmlReader()) {
-                    using (XmlWriter writer = XmlWriter.Create(fileName, new XmlWriterSettings() {
-                                                                                CloseOutput = true,
-                                                                                Encoding    = System.Text.Encoding.UTF8,
-                                                                                Indent      = true,
-                                                                                IndentChars = "\t"
-                                                                            }))
+                using (var xmlReader = sqlCmd.ExecuteXmlReader()) {
+                    using (var writer = XmlWriter.Create(fileName, new XmlWriterSettings() {
+                                                                       CloseOutput = true,
+                                                                       Encoding    = System.Text.Encoding.UTF8,
+                                                                       Indent      = true,
+                                                                       IndentChars = "\t"
+                                                                   }))
                             writer.WriteNode(xmlReader, true);
                 }
             }
@@ -99,7 +99,7 @@ internal sealed class DBSchemaDatabase
     }
     public              void                                CodeGrep(string pattern)
     {
-        Regex   regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        var regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
         CodeObjects.CodeGrep(regex);
     }

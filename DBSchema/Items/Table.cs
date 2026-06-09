@@ -91,7 +91,7 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
 
     public  override    CompareFlags                        CompareNewCur(DBSchemaCompare compare, ICompareTable compareTable)
     {
-        CompareFlags    rtnFlags = CompareFlags.None;
+        var rtnFlags = CompareFlags.None;
 
         if (Cur.Name != New.Name) {
             rtnFlags = CompareFlags.Refactor;
@@ -100,9 +100,9 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
         if (Cur.Columns.Count != New.Columns.Count)
             return CompareFlags.Rebuild;
 
-        bool hasComputedColumn = false;
+        var hasComputedColumn = false;
 
-        for (int i = 0 ; i < Cur.Columns.Count ; ++i) {
+        for (var i = 0 ; i < Cur.Columns.Count ; ++i) {
             var curColumn = Cur.Columns[i];
             var newColumn = New.Columns[i];
 
@@ -163,7 +163,7 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
     }
     public  override    void                                ReportUpdate(DBSchemaCompare compare, WriterHelper reportWriter)
     {
-        bool    report = false;
+        var report = false;
 
         using (var writer = new WriterHelper()) {
             writer.Write("------------------------------------------------------------------------------------------------------------------------");
@@ -293,7 +293,7 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
                 writer.WriteSqlGo();
             }
 
-            for (int i = 0 ; i < Cur.Columns.Count ; ++i) {
+            for (var i = 0 ; i < Cur.Columns.Count ; ++i) {
                 var curColumn = Cur.Columns[i];
                 var newColumn = New.Columns[i];
 
@@ -324,7 +324,7 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
             New.Columns.WriteColumns(writer);
 
             {
-                SchemaIndex     primaryKey = New.Indexes.PrimaryKey;
+                var primaryKey = New.Indexes.PrimaryKey;
 
                 if (primaryKey != null) {
                     writer.Write(',');
@@ -335,7 +335,7 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
             }
 
             {
-                foreach (SchemaIndex index in New.Indexes) {
+                foreach (var index in New.Indexes) {
                     if (index.Function == SchemaIndexFunction.Constraint) {
                         writer.Write(',');
                         writer.WriteNewLine();
@@ -350,7 +350,7 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
             writer.WriteNewLine();
 
             {
-                foreach (SchemaIndex index in New.Indexes) {
+                foreach (var index in New.Indexes) {
                     if (index.Function == SchemaIndexFunction.Index && index.Type == SchemaIndexType.Clustered)
                         index.WriteCreate(writer, New.Name, false);
                 }
@@ -359,9 +359,9 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
         }
 
         if ((Flags & CompareFlags.Update) != 0) {
-            bool    alterTable = false;
+            var alterTable = false;
 
-            for (int i = 0 ; i < New.Columns.Count ; ++i) {
+            for (var i = 0 ; i < New.Columns.Count ; ++i) {
                 var c = Cur.Columns[i];
                 var n = New.Columns[i];
 
@@ -405,7 +405,7 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
 
             writer.Write("      (");
                 n = false;
-                for(int c=0 ; c < New.Columns.Count ; ++c) {
+                for(var c=0 ; c < New.Columns.Count ; ++c) {
                     if (!New.Columns[c].isComputed) {
                         if (n)
                             writer.Write(", ");
@@ -418,14 +418,15 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
                 writer.Write(")");
                 writer.WriteNewLine();
 
-            int count = New.Columns.Count;
+            var count = New.Columns.Count;
             while (count > 0 && New.Columns[count - 1].isComputed)
                 --count;
 
-            for(int c=0 ; c < count ; ++c) {
-                SchemaColumn    newColumn = New.Columns[c];
+            for(var c=0 ; c < count ; ++c) {
+                var newColumn = New.Columns[c];
+
                 if (!New.Columns[c].isComputed) {
-                    SchemaColumn    oldColumn = Cur.Columns.Find(newColumn.GetOrgName(compare));
+                    var oldColumn = Cur.Columns.Find(newColumn.GetOrgName(compare));
 
                     writer.Write((c == 0) ? "SELECT " : "       ");
                     writer.WriteWidth(WriterHelper.QuoteName(newColumn.Name), 40);
@@ -466,7 +467,7 @@ internal sealed class CompareTable: CompareItem<SchemaTable,SqlEntityName>, ICom
                 writer.Write(New.Name);
 
             writer.Write(" (");
-                for(int c=0 ; c < New.Columns.Count ; ++c) {
+                for(var c=0 ; c < New.Columns.Count ; ++c) {
                     if (c > 0)
                         writer.Write(", ");
 
