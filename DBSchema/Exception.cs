@@ -12,4 +12,3 @@ internal sealed class DBSchemaException: Exception
     {
     }
 }
-

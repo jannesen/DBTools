@@ -1,4 +1,4 @@
-﻿select [@name]         = schema_name([principal_id]) + '.' + quotename([name]),
+select [@name]         = schema_name([principal_id]) + '.' + quotename([name]),
        [@version]      = [version],
        [*]             = [definition]
   from sysdiagrams

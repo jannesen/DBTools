@@ -1,4 +1,4 @@
-﻿select [@name]      = schema_name([schema_id]) + '.' + quotename([name]),
+select [@name]      = schema_name([schema_id]) + '.' + quotename([name]),
        [@orgname]   = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 6 and z.[major_id] = t.[user_type_id] and z.[name] = 'refactor:orgname'),
        [@collation] = case when t.[collation_name] is not null
                             and t.[collation_name] <> convert(nvarchar(128), databasepropertyex(db_name(), 'Collation'))

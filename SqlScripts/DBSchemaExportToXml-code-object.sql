@@ -1,4 +1,4 @@
-﻿select [@type]                  = [type_desc],
+select [@type]                  = [type_desc],
        [@name]                  = schema_name([schema_id]) + '.' + quotename([name]),
        [@table-name]            = case when [parent_object_id] <> 0 then (select schema_name(z.[schema_id]) + '.' + quotename(z.[name]) from sys.objects z where z.[object_id] = o.[parent_object_id]) end,
        [@opt-ansi_nulls]        = objectpropertyex(o.[object_id], N'ExecIsAnsiNullsOn'),

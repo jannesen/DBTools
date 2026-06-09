@@ -144,4 +144,3 @@ internal sealed class CompareRoleCollection: CompareItemCollection<CompareRole,S
     {
     }
 }
-

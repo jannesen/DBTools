@@ -171,4 +171,3 @@ internal sealed class CompareReferenceCollection: CompareItemCollection<CompareR
     {
     }
 }
-

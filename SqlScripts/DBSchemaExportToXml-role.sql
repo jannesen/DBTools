@@ -1,4 +1,4 @@
-﻿select [@name]    = r.[name],
+select [@name]    = r.[name],
        [@orgname] = (select convert(sysname, [value]) from sys.extended_properties z where z.[class] = 4 and z.[major_id] = r.[principal_id] and z.[name] = 'refactor:orgname'),
        (
             select p.[name]
