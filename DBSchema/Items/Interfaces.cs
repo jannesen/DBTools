@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Jannesen.Tools.DBTools.DBSchema.Item
+namespace Jannesen.Tools.DBTools.DBSchema.Item;
+
+interface ICompareTable
 {
-    interface ICompareTable
-    {
-        bool        EqualColumn(DBSchemaCompare compare, string thisName, string otherName);
-    }
+    bool        EqualColumn(DBSchemaCompare compare, string thisName, string otherName);
 }
