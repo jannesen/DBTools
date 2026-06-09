@@ -43,7 +43,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
 
             writer.Write(" CHECK ");
 
-            if (Definition.StartsWith("(", StringComparison.Ordinal) && Definition.EndsWith(")", StringComparison.Ordinal)) {
+            if (Definition.StartsWith('(') && Definition.EndsWith(')')) {
                 writer.Write(Definition);
             }
             else {

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
 using System.Text;
+using Microsoft.Data.SqlClient;
 
 namespace Jannesen.Tools.DBTools.Library
 {
@@ -19,29 +17,32 @@ namespace Jannesen.Tools.DBTools.Library
             var     s = datasource;
             int     i;
 
-            if ((i = s.IndexOf("@", StringComparison.Ordinal)) > 0) {
+            if ((i = s.IndexOf('@', StringComparison.Ordinal)) > 0) {
                 var userPasswd = s.Substring(0, i);
                 s = s.Substring(i + 1);
 
-                if ((i = userPasswd.IndexOf(":", StringComparison.Ordinal)) <= 0)
+                if ((i = userPasswd.IndexOf(':', StringComparison.Ordinal)) <= 0)
                     throw new FormatException("Invalid username:passwd in datasource '" + datasource + "'");
 
                 username = userPasswd.Substring(0, i);
                 passwd   = userPasswd.Substring(i + 1);
             }
 
-            if ((i = s.LastIndexOf("\\", StringComparison.Ordinal)) <= 0)
+            if ((i = s.LastIndexOf('\\')) <= 0)
                 throw new FormatException("Invalid datasource '" + datasource + "'");
 
             serverInstanceName = s.Substring(0, i);
             databaseName       = s.Substring(i + 1);
 
-            var connectString = "Server="    + serverInstanceName       +
-                                ";Database=" + databaseName     +
-                                ";Application Name=TypedTSql"   +
-                                ";Current Language=us_english"  +
-                                ";Connect Timeout=5"            +
-                                ";Pooling=false";
+            var connectString = "Server="    + serverInstanceName            +
+                                ";Database=" + databaseName                  +
+                                ";Application Name=Jannesen.Tools.DBTools"   +
+                                ";Current Language=us_english"               +
+                                ";Connect Timeout=5"                         +
+                                ";Connect Retry Count=0"                     +
+                                ";Pooling=false"                             +
+                                ";Integrated Security=true"                  +
+                                ";Trust Server Certificate=true";
 
             if (username != null) {
                 connectString += ";User ID="  + username +
@@ -116,7 +117,6 @@ namespace Jannesen.Tools.DBTools.Library
         }
     }
 
-    [Serializable]
     public class SqlScriptException: Exception
     {
         public          string                  FileName                { get; private set; }
@@ -131,23 +131,6 @@ namespace Jannesen.Tools.DBTools.Library
             LineNo     = lineOffset + sqlException.LineNumber - 1;
             LineOffset = lineOffset;
             Errors     = sqlException.Errors;
-        }
-
-        protected                               SqlScriptException(SerializationInfo info,  StreamingContext context): base(info, context)
-        {
-            FileName   = info.GetString("FileName");
-            LineNo     = info.GetInt32("LineNo");
-            LineOffset = info.GetInt32("LineOffset");
-            Errors     = (SqlErrorCollection)info.GetValue("Errors", typeof(SqlErrorCollection));
-        }
-        [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void                    GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("FileName",   FileName);
-            info.AddValue("LineNo",     LineNo);
-            info.AddValue("LineOffset", LineOffset);
-            info.AddValue("Errors",     Errors);
         }
     }
 }

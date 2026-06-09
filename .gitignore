@@ -1,5 +1,6 @@
 **/.vs
 **/bin
 **/obj
-**/*.csproj.user
+**/*.user
+output/**/*
 /Properties/launchSettings.json

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Xml;
-using Jannesen.Tools.DBTools.DBSchema;
 using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item

@@ -16,7 +16,7 @@ namespace Jannesen.Tools.DBTools
                 var args = new List<string>(aargs);
                 var options = new Options();
 
-                while (args.Count > 1 && args[0].StartsWith("-", StringComparison.Ordinal)) {
+                while (args.Count > 1 && args[0].StartsWith('-')) {
                     switch(args[0]) {
                     case "--refactor":
                         options.Refactor = true;

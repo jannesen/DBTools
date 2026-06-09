@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Xml;
-using Jannesen.Tools.DBTools.DBSchema;
 using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
@@ -127,9 +123,9 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     rtnFlags |= CompareFlags.Update;
                 }
 
-                if ((                             curColumn.Type   .EndsWith("]", StringComparison.Ordinal) && (compare.CompareTypes   .FindByCurName(new SqlEntityName(curColumn.Type   )).Flags & CompareFlags.Create) != 0) ||
-                    (curColumn.Default != null && curColumn.Default.EndsWith("]", StringComparison.Ordinal) && (compare.CompareDefaults.FindByCurName(new SqlEntityName(curColumn.Default)).Flags & CompareFlags.Create) != 0) ||
-                    (curColumn.Rule    != null && curColumn.Rule   .EndsWith("]", StringComparison.Ordinal) && (compare.CompareRules   .FindByCurName(new SqlEntityName(curColumn.Rule   )).Flags & CompareFlags.Create) != 0) )
+                if ((                             curColumn.Type   .EndsWith(']') && (compare.CompareTypes   .FindByCurName(new SqlEntityName(curColumn.Type   )).Flags & CompareFlags.Create) != 0) ||
+                    (curColumn.Default != null && curColumn.Default.EndsWith(']') && (compare.CompareDefaults.FindByCurName(new SqlEntityName(curColumn.Default)).Flags & CompareFlags.Create) != 0) ||
+                    (curColumn.Rule    != null && curColumn.Rule   .EndsWith(']') && (compare.CompareRules   .FindByCurName(new SqlEntityName(curColumn.Rule   )).Flags & CompareFlags.Create) != 0) )
                     return CompareFlags.Rebuild;
 
                 if (newColumn.isComputed) {

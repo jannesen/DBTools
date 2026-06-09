@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
-using Jannesen.Tools.DBTools.DBSchema;
 using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
@@ -97,7 +95,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         }
         public              void                                WriteCreate(DBSchemaCompare compare, WriterHelper writer)
         {
-            string code = Code.Replace("\r\n", "\n").Replace("\n", "\r\n");
+            string code = Code.Replace("\r\n", "\n", StringComparison.Ordinal).Replace("\n", "\r\n", StringComparison.Ordinal);
 
             writer.WriteSqlPrint("create: " + Name);
 
@@ -110,7 +108,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
             }
             writer.Write(code);
 
-            if (!code.EndsWith("\n", StringComparison.Ordinal))
+            if (!code.EndsWith('\n'))
                 writer.WriteNewLine();
 
             writer.WriteSqlGo();
@@ -154,7 +152,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
         private             void                                _stripAndNormalizeCode()
         {
             if (Code.StartsWith("--@", StringComparison.Ordinal)) {
-                Code = Code.Substring(Code.IndexOf("\n", StringComparison.Ordinal)+1);
+                Code = Code.Substring(Code.IndexOf('\n', StringComparison.Ordinal)+1);
             }
 
             while (Code.EndsWith("\r\n\r\n", StringComparison.Ordinal)) {
@@ -165,12 +163,12 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                 Code = Code.Substring(0, Code.Length - 1);
             }
 
-            if (!Code.EndsWith("\r\n", StringComparison.Ordinal) && !Code.EndsWith("\n", StringComparison.Ordinal)) {
-                if (Code.IndexOf("\r\n", StringComparison.Ordinal)>=0) {
+            if (!Code.EndsWith("\r\n", StringComparison.Ordinal) && !Code.EndsWith('\n')) {
+                if (Code.Contains("\r\n", StringComparison.Ordinal)) {
                     Code += "\r\n";
                 }
                 else
-                if (Code.IndexOf("\n", StringComparison.Ordinal)>=0) {
+                if (Code.Contains('\n', StringComparison.Ordinal)) {
                     Code += "\n";
                 }
                 else {
@@ -250,8 +248,8 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                             writer.WriteNewLine();
                         }
 
-                        string[]    curLines = cmp.Cur.Code.Replace("\r", "").Split('\n');
-                        string[]    newLines = cmp.New.Code.Replace("\r", "").Split('\n');
+                        string[]    curLines = cmp.Cur.Code.Replace("\r", "", StringComparison.Ordinal).Split('\n');
+                        string[]    newLines = cmp.New.Code.Replace("\r", "", StringComparison.Ordinal).Split('\n');
 
                         Diff.Item[] diffs    = Diff.DiffText(curLines, newLines);
 

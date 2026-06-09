@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Xml;
+using Microsoft.Data.SqlClient;
 using Jannesen.Tools.DBTools.Library;
 using Jannesen.Tools.DBTools.SqlScript;
 using Jannesen.Tools.DBTools.DBSchema.Item;
-using System.Collections.Generic;
 
 namespace Jannesen.Tools.DBTools.DBSchema
 {

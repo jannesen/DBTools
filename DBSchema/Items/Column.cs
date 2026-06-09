@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Xml;
 using Jannesen.Tools.DBTools.Library;
 

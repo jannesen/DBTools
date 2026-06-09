@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.SqlScript

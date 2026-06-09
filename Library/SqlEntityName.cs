@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 
 namespace Jannesen.Tools.DBTools.Library
@@ -74,8 +73,8 @@ namespace Jannesen.Tools.DBTools.Library
         public      override    int             GetHashCode()
         {
             if (!_hashcode.HasValue) {
-                _hashcode = Name.ToLowerInvariant().GetHashCode() ^
-                            (Schema   != null ? Schema.ToLowerInvariant().GetHashCode() : 0);
+                _hashcode = Name.GetHashCode(StringComparison.InvariantCultureIgnoreCase) ^
+                            (Schema   != null ? Schema.GetHashCode(StringComparison.InvariantCultureIgnoreCase) : 0);
             }
 
             return _hashcode.Value;

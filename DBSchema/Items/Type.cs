@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using System.Text;
-using Jannesen.Tools.DBTools.DBSchema;
 using Jannesen.Tools.DBTools.Library;
 
 namespace Jannesen.Tools.DBTools.DBSchema.Item
@@ -31,7 +29,7 @@ namespace Jannesen.Tools.DBTools.DBSchema.Item
                     if (xmlReader.NodeType != XmlNodeType.EndElement)
                         throw new XmlReaderException("Invalid XML: Unexpected node "+xmlReader.NodeType+" expect EndElement.");
 
-                    NativeType = (rtn != null) ? rtn.Replace("\r\n", "\n") : "";
+                    NativeType = (rtn != null) ? rtn.Replace("\r\n", "\n", StringComparison.Ordinal) : "";
                 }
                 else if (xmlReader.NodeType == XmlNodeType.Element) {
                     NativeType = "TABLE";

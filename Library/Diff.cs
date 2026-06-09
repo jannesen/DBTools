@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Text;
 using System.Text.RegularExpressions;
 
 #pragma warning disable IDE0059 // Unnecessary assignment of a value

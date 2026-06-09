@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using Jannesen.Tools.DBTools.DBSchema;
 using Jannesen.Tools.DBTools.DBSchema.Item;
 
 namespace Jannesen.Tools.DBTools.DBSchema
@@ -28,11 +26,11 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         public              string                              NativeCurType(string type)
         {
-            return type.EndsWith("]", StringComparison.Ordinal) ? CompareTypes.FindByCurName(new Library.SqlEntityName(type)).Cur.NativeType : type;
+            return type.EndsWith(']') ? CompareTypes.FindByCurName(new Library.SqlEntityName(type)).Cur.NativeType : type;
         }
         public              string                              NativeNewType(string type)
         {
-            return type.EndsWith("]", StringComparison.Ordinal) ? CompareTypes.FindByNewName(new Library.SqlEntityName(type)).New.NativeType : type;
+            return type.EndsWith(']') ? CompareTypes.FindByNewName(new Library.SqlEntityName(type)).New.NativeType : type;
         }
         public              bool                                EqualType(string curType, string newType)
         {
@@ -40,7 +38,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                 return true;
             }
 
-            if (curType.EndsWith("]", StringComparison.Ordinal) && newType.EndsWith("]", StringComparison.Ordinal)) {
+            if (curType.EndsWith(']') && newType.EndsWith(']')) {
                 return CompareTypes.FindByNewName(new Library.SqlEntityName(newType)).New?.GetOrgName(this) == new Library.SqlEntityName(curType);
             }
 
@@ -48,11 +46,11 @@ namespace Jannesen.Tools.DBTools.DBSchema
         }
         public              bool                                EqualNativeType(string curType, string newType)
         {
-            if (curType.EndsWith("]", StringComparison.Ordinal)) {
+            if (curType.EndsWith(']')) {
                 curType = CurSchema.Types.Find(new Library.SqlEntityName(curType)).NativeType;
             }
 
-            if (newType.EndsWith("]", StringComparison.Ordinal)) {
+            if (newType.EndsWith(']')) {
                 newType = NewSchema.Types.Find(new Library.SqlEntityName(newType)).NativeType;
             }
 
@@ -300,7 +298,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             foreach(var tables in CompareTables.Items) {
                 if (tables.Cur != null) {
                     foreach(var colums in tables.Cur.Columns) {
-                        if (colums.Type.EndsWith("]", StringComparison.Ordinal)) {
+                        if (colums.Type.EndsWith(']')) {
                             if (!usedTypes.Contains(colums.Type)) {
                                 usedTypes.Add(colums.Type);
                             }

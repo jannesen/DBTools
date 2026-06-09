@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using Jannesen.Tools.DBTools.Library;
-using Jannesen.Tools.DBTools.DBSchema.Item;
 
 namespace Jannesen.Tools.DBTools.DBSchema
 {
@@ -14,9 +10,9 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         public                                          SqlFileWriter(string fileName)
         {
-            _filename = fileName.Replace("/", "\\");
+            _filename = fileName.Replace("/", "\\", StringComparison.Ordinal);
 
-            if (!fileName.EndsWith("\\", StringComparison.Ordinal)) {
+            if (!fileName.EndsWith('\\')) {
                 _writer = _createFile(fileName);
             }
             else {
@@ -81,7 +77,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
                     writer.Write("--==============================================================================");
                     writer.Write(WriterHelper.NewLine);
                     writer.Write("PRINT '# ");
-                    writer.Write(description.Replace("'", "''"));
+                    writer.Write(description.Replace("'", "''", StringComparison.Ordinal));
                     writer.Write("'");
                     writer.Write(WriterHelper.NewLine);
                     writer.Write("GO");

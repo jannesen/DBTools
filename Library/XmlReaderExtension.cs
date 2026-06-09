@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.Serialization;
 using System.Xml;
 
 namespace Jannesen.Tools.DBTools.Library
@@ -54,7 +52,7 @@ namespace Jannesen.Tools.DBTools.Library
                     break;
 
                 case XmlNodeType.EndElement:
-                    return (rtn != null) ? rtn.Replace("\r\n", "\n") : "";
+                    return (rtn != null) ? rtn.Replace("\r\n", "\n", StringComparison.Ordinal) : "";
 
                 default:
                     throw new XmlReaderException("Invalid XML: Unexpected node "+xmlReader.NodeType+".");
@@ -157,16 +155,12 @@ namespace Jannesen.Tools.DBTools.Library
         }
     }
 
-    [Serializable]
     public class XmlReaderException: Exception
     {
         public                              XmlReaderException(string message): base(message)
         {
         }
         public                              XmlReaderException(string message, Exception innerException): base(message, innerException)
-        {
-        }
-        protected                           XmlReaderException(SerializationInfo info,  StreamingContext context): base(info, context)
         {
         }
     }

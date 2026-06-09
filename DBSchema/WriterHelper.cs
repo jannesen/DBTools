@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Jannesen.Tools.DBTools.Library;
-using Jannesen.Tools.DBTools.DBSchema.Item;
 
 namespace Jannesen.Tools.DBTools.DBSchema
 {
@@ -123,7 +121,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         public                  void                    WriteQuoteName(string s)
         {
             Write('[');
-            Write(s.Replace("]", "]]"));
+            Write(s.Replace("]", "]]", StringComparison.Ordinal));
             Write(']');
         }
         public                  void                    WriteQuoteName(SqlEntityName n)
@@ -133,7 +131,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
         public                  void                    WriteString(string s)
         {
             Write('\'');
-            Write(s.Replace("'", "''"));
+            Write(s.Replace("'", "''", StringComparison.Ordinal));
             Write('\'');
         }
         public                  void                    WriteString(SqlEntityName n)
@@ -159,7 +157,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
             Write("--==============================================================================");
             WriteNewLine();
             Write("PRINT '# ");
-            Write(s.Replace("'", "''"));
+            Write(s.Replace("'", "''", StringComparison.Ordinal));
             Write("'");
             WriteNewLine();
             Write("GO");
@@ -223,7 +221,7 @@ namespace Jannesen.Tools.DBTools.DBSchema
 
         public  static          string                  QuoteName(string s)
         {
-            return "[" + s.Replace("]", "]]") + "]";
+            return "[" + s.Replace("]", "]]", StringComparison.Ordinal) + "]";
         }
         public  static          string                  QuoteName(object n)
         {
