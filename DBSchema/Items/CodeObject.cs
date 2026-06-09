@@ -145,7 +145,7 @@ internal sealed class SchemaCodeObject: SchemaItemEntity<SchemaCodeObject>
         case "TF":  case "SQL_TABLE_VALUED_FUNCTION":           return SqlCodeObjectType.SqlTableValueFunction;
         case "P":   case "SQL_STORED_PROCEDURE":                return SqlCodeObjectType.SqlStoredProcedure;
         case "TR":  case "SQL_TRIGGER":                         return SqlCodeObjectType.SqlTrigger;
-        default:    throw new Exception("Unknown type '" + s + "'.");
+        default:    throw new InvalidOperationException("Unknown type '" + s + "'.");
         }
     }
 

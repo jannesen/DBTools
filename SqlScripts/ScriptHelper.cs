@@ -12,7 +12,7 @@ namespace Jannesen.Tools.DBTools.SqlScript
             Stream  stream = typeof(Resource).Assembly.GetManifestResourceStream("Jannesen.Tools.DBTools.SqlScripts." + name);
 
             if (stream == null)
-                throw new Exception("Can't GetString '" + name + "'");
+                throw new InvalidOperationException("Can't GetString '" + name + "'");
 
             return stream;
         }

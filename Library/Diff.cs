@@ -76,7 +76,7 @@ namespace Jannesen.Tools.DBTools.Library;
 internal static class Diff
 {
     /// <summary>details of one difference.</summary>
-    public struct Item
+    internal struct Item
     {
         /// <summary>Start Line number in Data A.</summary>
         public int StartA;
@@ -332,7 +332,7 @@ internal static class Diff
 
         } // for D
 
-        throw new ApplicationException("the algorithm should never come here.");
+        throw new InvalidOperationException("the algorithm should never come here.");
     } // SMS
 
     /// <summary>

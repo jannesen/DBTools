@@ -58,7 +58,7 @@ internal sealed class SchemaPermission: SchemaItemName<SchemaPermission>
                 case "insert":      rtn |= SqlPermissions.Insert;       break;
                 case "update":      rtn |= SqlPermissions.Update;       break;
                 case "delete":      rtn |= SqlPermissions.Delete;       break;
-                default:            throw new Exception("Unknown permission '" + s + "'.");
+                default:            throw new InvalidOperationException("Unknown permission '" + s + "'.");
                 }
             }
         }

@@ -86,7 +86,7 @@ internal static class SqlConnectionExtension
                 ++lineNumber;
 
                 if (line == null ||
-                    (line.Length >= 2 && (line[0] == 'G' || line[0] == 'g') && string.Compare(line.Trim(), "GO", StringComparison.OrdinalIgnoreCase) == 0))
+                    (line.Length >= 2 && (line[0] == 'G' || line[0] == 'g') && string.Equals(line.Trim(), "GO", StringComparison.OrdinalIgnoreCase)))
                 {
                     if (cmdText.Length > 0) {
                         while (cmdText.Length > 0 && cmdText[cmdText.Length - 1] == '\n')

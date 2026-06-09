@@ -225,7 +225,7 @@ internal sealed class SchemaIndex: SchemaItemNameRename<SchemaIndex>
         case "constraint":      return  SchemaIndexFunction.Constraint;
         case "index":           return  SchemaIndexFunction.Index;
         case "stat":            return  SchemaIndexFunction.PrimaryKey;
-        default:                throw new Exception("Unknown function '" + s + "'.");
+        default:                throw new InvalidOperationException("Unknown function '" + s + "'.");
         }
     }
     private static      SchemaIndexType                     _strToIndexType(string s)
@@ -233,7 +233,7 @@ internal sealed class SchemaIndex: SchemaItemNameRename<SchemaIndex>
         switch(s) {
         case "clustered":       return  SchemaIndexType.Clustered;
         case "nonclustered":    return  SchemaIndexType.Nonclustered;
-        default:                throw new Exception("Unknown type '" + s + "'.");
+        default:                throw new InvalidOperationException("Unknown type '" + s + "'.");
         }
     }
 }
