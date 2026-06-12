@@ -22,7 +22,7 @@
         <DebugSymbols>false</DebugSymbols>
 
         <StripSymbols>true</StripSymbols>
-        <PublishDir>output\</PublishDir>
+        <PublishDir>..\output\</PublishDir>
 
         <Company>Jannesen B.V.</Company>
         <Version>1.11.00.000</Version>
