@@ -2,5 +2,5 @@
 **/bin
 **/obj
 **/*.user
-output/**/*
-/Properties/launchSettings.json
+output/
+src/Properties/launchSettings.json
