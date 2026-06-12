@@ -1,3 +1,13 @@
 <Solution>
-  <Project Path="DBTools.csproj" />
+  <Folder Name="/files/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="build.cmd" />
+    <File Path="build.ps1" />
+    <File Path="CleanupSources.cmd" />
+    <File Path="LICENSE.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="src\DBTools.csproj" />
 </Solution>
