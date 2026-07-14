@@ -10,7 +10,9 @@
 
         <Nullable>Disable</Nullable>
 
-        <IsPublishable>true</IsPublishable>
+		<OutputPath>bin\</OutputPath>
+
+		<IsPublishable>true</IsPublishable>
         <PublishSelfContained>true</PublishSelfContained>
         <PublishSingleFile>true</PublishSingleFile>
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
@@ -18,9 +20,6 @@
         <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>full</TrimMode>
         <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
-        <DebugType>none</DebugType>
-        <DebugSymbols>false</DebugSymbols>
-        <StripSymbols>true</StripSymbols>
         <PublishDir>..\output\</PublishDir>
 
         <Company>Jannesen B.V.</Company>
@@ -42,20 +41,17 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
-        <OutputPath>bin\</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <DebugType>none</DebugType>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>bin\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
+		<DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
