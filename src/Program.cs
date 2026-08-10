@@ -10,13 +10,12 @@ namespace Jannesen.Tools.DBTools;
 
 internal sealed class Program
 {
-    static      void        Main(string[] aargs)
+    static      void        Main(string[] args)
     {
         try {
-            var args = new List<string>(aargs);
             var options = new Options();
 
-            while (args.Count > 1 && args[0].StartsWith('-')) {
+            while (args.Length > 1 && args[0].StartsWith('-')) {
                 switch(args[0]) {
                 case "--refactor":
                     options.Refactor = true;
@@ -30,82 +29,77 @@ internal sealed class Program
                     throw new Exception("Syntax error, unknown option '" + args[0] + "'.");
                 }
 
-                args.RemoveAt(0);
+                args = args[1..];
             }
 
-            if (args.Count < 1) {
+            if (args.Length < 1) {
                 CmdHelp();
                 return;
             }
 
-            var p = 0;
+            switch(args[0]) {
+            case "help":
+                CmdHelp();
+                break;
 
-            while (p < args.Count) {
-                switch(args[p]) {
-                case "help":
-                    CmdHelp();
-                    p += 1;
-                    break;
+            case "export":
+                if (args.Length < 3)
+                    throw new Exception("Syntax error, missing argument.");
 
-                case "export":
-                    if (args.Count - p < 3)
-                        throw new Exception("Syntax error, missing argument.");
+                CmdExport(options, args[1], args[2]);
+                break;
 
-                    CmdExport(options, args[p + 1], args[p + 2]);
-                    p += 3;
-                    break;
+            case "compare-report":
+                if (args.Length < 4)
+                    throw new Exception("Syntax error, missing argument.");
 
-                case "compare-report":
-                    if (args.Count - p < 4)
-                        throw new Exception("Syntax error, missing argument.");
+                CmdCompareReport(options, args[1], args[2], args[3], false);
+                break;
 
-                    CmdCompareReport(options, args[p + 1], args[p + 2], args[p + 3], false);
-                    p += 4;
-                    break;
+            case "compare-diff":
+                if (args.Length < 4)
+                    throw new Exception("Syntax error, missing argument.");
 
-                case "compare-diff":
-                    if (args.Count - p < 4)
-                        throw new Exception("Syntax error, missing argument.");
+                CmdCompareReport(options, args[1], args[2], args[3], true);
+                break;
 
-                    CmdCompareReport(options, args[p + 1], args[p + 2], args[p + 3], true);
-                    p += 4;
-                    break;
+            case "schema-create":
+                if (args.Length < 3)
+                    throw new Exception("Syntax error, missing argument.");
 
-                case "schema-create":
-                    if (args.Count - p < 3)
-                        throw new Exception("Syntax error, missing argument.");
+                CmdSchemaCreate(options, args[1], args[2]);
+                break;
 
-                    CmdSchemaCreate(options, args[p + 1], args[p + 2]);
-                    p += 3;
-                    break;
+            case "schema-update":
+                if (args.Length < 4)
+                    throw new Exception("Syntax error, missing argument.");
 
-                case "schema-update":
-                    if (args.Count - p < 4)
-                        throw new Exception("Syntax error, missing argument.");
+                CmdSchemaUpdate(options, args[1], args[2], args[3]);
+                break;
 
-                    CmdSchemaUpdate(options, args[p + 1], args[p + 2], args[p + 3]);
-                    p += 4;
-                    break;
+            case "code-update":
+                if (args.Length < 4)
+                    throw new Exception("Syntax error, missing argument.");
 
-                case "code-update":
-                    if (args.Count - p < 4)
-                        throw new Exception("Syntax error, missing argument.");
+                CmdCodeUpdate(options, args[1], args[2], args[3]);
+                break;
 
-                    CmdCodeUpdate(options, args[p + 1], args[p + 2], args[p + 3]);
-                    p += 4;
-                    break;
+            case "code-grep":
+                if (args.Length < 3)
+                    throw new Exception("Syntax error, missing argument.");
 
-                case "code-grep":
-                    if (args.Count - p < 3)
-                        throw new Exception("Syntax error, missing argument.");
+                CmdCodeGrep(options, args[1], args[2]);
+                break;
 
-                    CmdCodeGrep(options, args[p + 1], args[p + 2]);
-                    p += 3;
-                    break;
+            case "data-export":
+                if (args.Length < 4)
+                    throw new Exception("Syntax error, missing argument.");
 
-                default:
-                    throw new Exception("Syntax error, unknown command.");
-                }
+                CmdDataExport(options, args[1], args[2], args[3..]);
+                break;
+
+            default:
+                throw new Exception("Syntax error, unknown command.");
             }
         }
         catch(Exception err) {
@@ -194,5 +188,9 @@ internal sealed class Program
 
         schema.LoadFrom(schemaName);
         schema.CodeGrep(regex);
+    }
+    static      void        CmdDataExport(Options options, string datasource, string outputFileName, string[] tableName)
+    {
+        DataExport.Run(datasource, outputFileName, tableName);
     }
 }

@@ -51,4 +51,12 @@ add:                s.Append(c);
 
         return rtn.ToArray();
     }
+    public      static  string          QuoteString(string s)
+    {
+        return "'" + s.Replace("'", "''", StringComparison.Ordinal) + "'";
+    }
+    public      static  string          QuoteName(string s)
+    {
+        return "[" + s.Replace("]", "]]", StringComparison.Ordinal) + "]";
+    }
 }
