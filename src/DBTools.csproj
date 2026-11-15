@@ -55,8 +55,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
-    </ItemGroup>
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+
+		<!-- Workaround dat Microsoft.Data.SqlClient include 9.X versions -->
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.13" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+		<PackageReference Include="Microsoft.Bcl.Cryptography" Version="10.0.13" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.13" />
+		<!-- Workaround dat Microsoft.Data.SqlClient include 9.X versions -->
+	</ItemGroup>
 
     <ItemGroup>
         <TrimmerRootDescriptor Include="Linker.xml" />
